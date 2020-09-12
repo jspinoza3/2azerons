@@ -1,0 +1,1 @@
+To use, import azeron-profiles.json into the azeron software. Load "workType" onto your left (i.e. right-handed) Azeron and "workMouse" onto your right (i.e. left-handed) Azeron. Then run longpressify.ahk and mouse.ahk
