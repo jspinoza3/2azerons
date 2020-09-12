@@ -123,7 +123,7 @@ if you have defined button behaviour for a button on the numpad, then avoid togg
 			}
 			class insert extends longCandid
 			{
-				short := "prtscn"
+				short := "printscreen"
 			}
 			class end extends shortCandid
 			{
