@@ -1,6 +1,5 @@
 ﻿/*
-usage notes
-if you have defined button behaviour for a button on the numpad, then avoid toggling numlock while that key is held down, because doing so may cause the up event not to fire.
+- With longpressify.ahk relatively set in stone, this file serves as a place to customize what actions are associated with various physical button presses see readme.txt for details
 */
 
 
