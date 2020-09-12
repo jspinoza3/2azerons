@@ -46,7 +46,7 @@ LP_setUp()
 class LP_longpressable
 {
 	static LP_buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",seven:"7",eight:"8",nine:"9",zero:"0"}
-	LP_initialize(classname, modeName, parentClassInstance)
+	LP_initialize(classname, modeName, containingClassInstance)
 	{
 		global LP_modeHeldDownFromByScanCode
 		if (!this.hasKey("LP_button"))
@@ -64,7 +64,7 @@ class LP_longpressable
 			msgbox, ruhoh %button% appears to be not a valid button
 		}	
 		this.LP_modeName := modeName
-		this.LP_parentClassInstance:=parentClassInstance
+		this.LP_containingClassInstance:=containingClassInstance
 		;msgbox %modeName%
 		this.LP_scanCode := getKeySC(button)
 		LP_modeHeldDownFromByScanCode[this.LP_scanCode] := null
@@ -140,7 +140,7 @@ class LP_chordingGroup
 			this.LP_downStatusByButton[k] := true
 			chord := this.LP_chords[this.LP_flags]
 			chord.LP_downTime := A_TickCount
-			chord.LP_longLongTime := chord.LP_downTime + chord.LP_longDuration + chord.LP_longLongDuration
+			chord.LP_longLongTime := chord.LP_downTime + chord.LP_longDuration + chord.LP_repeatDuration
 			fn:=ObjBindMethod(this,"LP_timeout",chord)
 			this.LP_timer := fn
 			longDuration := chord.LP_longDuration
@@ -156,7 +156,7 @@ class LP_chordingGroup
 				if (chord.LP_shortRepeat)
 					chord.LP_shortRepeat()
 			}
-			else if (chord.LP_longLongDuration == null )
+			else if (chord.LP_repeatDuration == null )
 			{
 				if (chord.LP_longRepeat)
 					chord.LP_longRepeat()
@@ -166,8 +166,8 @@ class LP_chordingGroup
 				if (chord.LP_longRepeat)
 					chord.LP_longRepeat()
 			}
-			else if (chord.LP_longLongRepeat)
-				chord.LP_longLongRepeat()
+			else if (chord.LP_repeat)
+				chord.LP_repeat()
 		}
 	}
 
@@ -213,10 +213,10 @@ class LP_chordingGroup
 			chord.LP_held()
 	}
 	
-	LP_initialize(className, modeName, parentClassInstance)
+	LP_initialize(className, modeName, containingClassInstance)
 	{
 		this.LP_modeName := modeName
-		this.LP_parentClassInstance := parentClassInstance
+		this.LP_containingClassInstance := containingClassInstance
 		arr:={}
 		
 		l := this.LP_Buttons.maxIndex()
@@ -318,11 +318,11 @@ class LP_chord
 {
 
 	LP_longDuration := 400
-	LP_longLongDuration := 600
+	LP_repeatDuration := 600
 	;static LP_isChord := true
-	LP_initialize(parentClassInstance)
+	LP_initialize(containingClassInstance)
 	{
-		this.LP_parentClassInstance := parentClassInstance
+		this.LP_containingClassInstance := containingClassInstance
 		if (this.LP_init)
 			this.LP_init()
 	}
@@ -367,7 +367,7 @@ LP_onDown(buttonBehaviourParadigm)
 	{
 			buttonBehaviourParadigm.downsSinceLastPress := 0
 			buttonBehaviourParadigm.LP_downTime := A_TickCount
-			buttonBehaviourParadigm.LP_longLongTime := buttonBehaviourParadigm.LP_downTime + buttonBehaviourParadigm.LP_longDuration + buttonBehaviourParadigm.LP_longLongDuration
+			buttonBehaviourParadigm.LP_longLongTime := buttonBehaviourParadigm.LP_downTime + buttonBehaviourParadigm.LP_longDuration + buttonBehaviourParadigm.LP_repeatDuration
 			mode := buttonBehaviourParadigm.LP_modeName
 			LP_modeHeldDownFromByScanCode[sc]  := mode
 			buttonBehaviourParadigm.LP_isDown := true
@@ -386,7 +386,7 @@ LP_onDown(buttonBehaviourParadigm)
 			if (buttonBehaviourParadigm.LP_shortRepeat)
 				buttonBehaviourParadigm.LP_shortRepeat()
 		}
-		else if (buttonBehaviourParadigm.LP_longLongDuration == null )
+		else if (buttonBehaviourParadigm.LP_repeatDuration == null )
 		{
 			if (buttonBehaviourParadigm.LP_longRepeat)
 				buttonBehaviourParadigm.LP_longRepeat()
@@ -396,8 +396,8 @@ LP_onDown(buttonBehaviourParadigm)
 			if (buttonBehaviourParadigm.LP_longRepeat)
 				buttonBehaviourParadigm.LP_longRepeat()
 		}
-		else if (buttonBehaviourParadigm.LP_longLongRepeat)
-			buttonBehaviourParadigm.LP_longLongRepeat()
+		else if (buttonBehaviourParadigm.LP_repeat)
+			buttonBehaviourParadigm.LP_repeat()
 	}
 	buttonBehaviourParadigm.LP_downsSinceLastPress++
 	if (!buttonBehaviourParadigm.LP_timer)
@@ -444,5 +444,5 @@ LP_timeout(buttonBehaviourParadigm)
 
 
 
-#include userDefined.ahk
+
 
