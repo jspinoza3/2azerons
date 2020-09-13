@@ -115,7 +115,7 @@ class LP_chordingGroup
 	}
 	
 	
-	LP_down(k,p)
+	LP_onDown(k,p)
 	{
 		global LP_modeHeldDownFromByScanCode
 		fn:=this.LP_timer
@@ -134,7 +134,9 @@ class LP_chordingGroup
 					LP_modeHeldDownFromByScanCode[sc] := this.modeName
 				}
 			}
-			
+			chord := this.LP_chords[this.LP_flags]
+			if (chord.LP_over)
+				chord.LP_over()
 			this.LP_flagAsDown(p)
 			this.LP_armed := true
 			this.LP_downStatusByButton[k] := true
@@ -171,7 +173,7 @@ class LP_chordingGroup
 		}
 	}
 
-	LP_up(k,p)
+	LP_onUp(k,p)
 	{
 		
 		global LP_modeHeldDownFromByScanCode
@@ -265,12 +267,12 @@ class LP_chordingGroup
 			fn := ObjBindMethod(this, "LP_shouldFireDown", button)
 			Hotkey If, % fn
 			;msgbox, %binaryPosition%
-			fn := ObjBindMethod(this, "LP_down", button, binaryPosition)  
+			fn := ObjBindMethod(this, "LP_onDown", button, binaryPosition)  
 			hotkey, % "*" button, % fn
 			
 			fn := ObjBindMethod(this, "LP_shouldFireUp", button)
 			Hotkey If, % fn
-			fn := ObjBindMethod(this, "LP_up", button, binaryPosition)  
+			fn := ObjBindMethod(this, "LP_onUp", button, binaryPosition)  
 			hotkey, % "*" button " up", % fn
 			this.LP_downStatusByButton[button] := false
 			sc := getKeySC(button)
