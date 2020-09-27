@@ -708,7 +708,7 @@
         "isSoftware": true
     },
     {
-        "id": 19,
+        "id": 20,
         "name": "workCursor",
         "buttons": [
             {
@@ -1159,7 +1159,7 @@
                     0
                 ],
                 "keyValues": [
-                    0,
+                    "93",
                     0,
                     0,
                     0
@@ -1168,7 +1168,7 @@
                     18,
                     255
                 ],
-                "buttonType": 6,
+                "buttonType": 1,
                 "macro": []
             },
             {

@@ -1,5 +1,32 @@
 ﻿#Persistent  ; Keep this script running until the user explicitly exits it.
 f:=1
+down:=false
+
+press()
+{
+	global down
+	if(!down)
+		toggle()
+	down:=true
+}
+
+release()
+{
+	global down
+	down:=false
+	toggle()
+}
+
+hotkey,pause, press
+
+
+hotkey, pause up, release
+
+hotkey, AppsKey, toggle
+
+
+
+
 SetTimer, WatchAxis, 20
 return
 
@@ -43,13 +70,17 @@ return
 pgup::WheelUp
 pgdn::WheelDown
 
-pause::
-	f:=1
-return
 
-pause up::
-	f:=3
-return
+
+toggle()
+{
+	global f
+	if (f==1)
+		f:=3
+	else
+		f:=1
+}
+
 ~!#.::
 ExitApp
 return
