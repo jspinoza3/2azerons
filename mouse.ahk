@@ -27,14 +27,14 @@ if (x>40)
 	x:=40
 if (x<-40)
 	x:=-40
-
+   
 if (Abs(x)>0)
 	x:=(x/Abs(x))*1.11**Abs(x) ;x:=(x*(Abs(x)**(1/3)))
 if (Abs(y)>0)
 	y:=(y/Abs(y))*1.11**Abs(y) ;y:=(y*(Abs(y)**(1/3)))
 */
-x:=x/f
-y:=y/f
+x:=f*x/4
+y:=f*y/4
 SetMouseDelay, -1
 DllCall("mouse_event",uint,1,int, x ,int, y,uint,0,int,0)
 return
@@ -44,12 +44,12 @@ pgup::WheelUp
 pgdn::WheelDown
 
 pause::
-if (f==1)
-	f:=4
-else
 	f:=1
 return
 
+pause up::
+	f:=3
+return
 ~!#.::
 ExitApp
 return
