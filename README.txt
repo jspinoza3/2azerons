@@ -4,7 +4,7 @@ Usage:
 3. run mouse.ahk 
 4. plug the right handed Azeron back in
 5. run 2azerons.ahk 
-- The result is your Azerons will function as shown in 2Azerons.png 
+- The result is your Azerons will function as shown in https://docs.google.com/drawings/d/1J0TGq8c7ay8VvnnXzxw-0XywEEVH48xgGWWT8ssfDr8/edit 
 To exit the script, press Win+Alt+.
 =============Troubleshooting===========
 - In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run mouse.ahk and the cursor doesn't move with the joystick. Either way proceed with the following.
@@ -21,11 +21,12 @@ To exit the script, press Win+Alt+.
 - --- these educational examples resemble 2azerons.ahk in essential structure, but the code and functionality is greatly stripped down.
 - --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the hello_world folder and run it. Like 2azerons.ahk, they also work with regular keyboards, so you can skip the Azeron profile step. In fact you don't even need an Azeron to use the scripts.
 - --- note that all of these example scripts, like 2azerons.ahk, consist of these 5 parts:
-- --- --- 1. an include statement referencing longpressify.ahk at the top
-- --- --- 2. miscellaneous hotkeys at the bottom
-- --- --- 3. a global class named "LP_modes" which is properly structured as detialed in section below
-- --- --- 4. a function named LP_getActiveMode
-- --- --- 5. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "_LP" prefix.
+
+- --- --- 1. a global class named "LP_modes" which is properly structured as detialed in section below
+- --- --- 2. a function named LP_getActiveMode
+- --- --- 3. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "_LP" prefix.
+- --- --- 4. an include statement referencing longpressify.ahk
+- --- --- 5. miscellaneous hotkeys at the bottom
 ============AHK Level customization general overview============
 - an outline of the structure of 2azerons.ahk is in the section below
 
@@ -41,7 +42,7 @@ To exit the script, press Win+Alt+.
 - --- --- --- Any nested class extending LP_chordingGroup will be interpretted to represent the behaviour you wish to define for a set of buttons that can be pressed in various combinations to produce different actions.
 - --- 4. LP_getActiveMode is a function you define which longpressify.ahk will use to dynamically determine what remapping mode is active. This function should return a name of a nested class inside of LP_modes. Whatever name is returned, longpressify.ahk will then enforce as the active mode.
 - --- 5. Miscellaneous hotkey definitions. Here you put whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for mode switching here, or perhaps a hotkey for terminating the script.
-- The order of code parts 2-4 above is not important, but part 1 is expected to go at the top and part 5 should go at the end of your script.
+- The order of code parts 1-3 above is not important, but part 4-5 are expected to go at the end of your script.
 - also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that is not covered in this brief introduction.
 
 ============AHK Level customization: high level structure of 2azerons.ahk========================
