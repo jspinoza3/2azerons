@@ -1,4 +1,4 @@
-﻿#include ..\longpressify.ahk
+﻿
 	
 class abstractChord extends LP_chord
 {
@@ -109,6 +109,7 @@ class LP_modes
  }
 }
 
+#include ..\longpressify.ahk
 
 *f1::
 if (active == "creatureMode")
