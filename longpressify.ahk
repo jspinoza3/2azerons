@@ -45,7 +45,7 @@ LP_setUp()
 
 class LP_longpressable
 {
-	static LP_buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",seven:"7",eight:"8",nine:"9",zero:"0"}
+	static LP_buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",seven:"7",eight:"8",nine:"9",zero:"0",grave:"``",accent:"``",hyphen:"-",dash:"-",equal:"=",equals:"=",openbracket:"[",closebracket:"]",comma:",",period:".",forwardslash:"/",backslash:"\",semicolon:";",quote:"'"}
 	LP_initialize(classname, modeName, containingClassInstance)
 	{
 		global LP_modeHeldDownFromByScanCode

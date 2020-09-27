@@ -1,6 +1,4 @@
-﻿#include longpressify.ahk
-
-class clay extends LP_longpressable
+﻿class clay extends LP_longpressable
 {
 	LP_longDuration := 400
 	LP_repeatDuration := 600
@@ -16,6 +14,7 @@ class longRepeat extends clay
 	}
 	LP_shortUp()
 	{
+		
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%
@@ -37,49 +36,42 @@ class longRepeat extends clay
 
 }
 
-class longRepeatChord extends LP_chord
+class longDontRepeatChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+		
+	}
+	LP_held()
+	{
+		
+		b := this.long
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+	}
+	LP_longUp()
+	{
+		b := this.long
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+	}
+}
+
+class longRepeatChord extends longDontRepeatChord
 {
 	LP_repeat()
 	{
 		this.LP_held()
 	}
-	LP_shortUp()
-	{
-		b := this.short
-		tosend := "{blind}{" . b . " down}"	
-		send %tosend%
-		tosend := "{blind}{" . b . " up}"	
-		send %tosend%
-	}
-	LP_held()
-	{
-		b := this.long
-		tosend := "{blind}{" . b . " down}"	
-		send %tosend%
-	}
-	LP_longUp()
-	{
-		b := this.long
-		tosend := "{blind}{" . b . " up}"	
-		send %tosend%
-	}
+
 }
 
-class phraseChord extends LP_chord
-{
-	LP_shortUp()
-	{
-		b := this.short
-		;tosend := "{blind}" . b	
-		send %b%
-	}
-	LP_held()
-	{
-		b := this.long
-		;tosend := "{blind}" . b	
-		send %b%
-	}	
-}
+
 
 class longCandid extends longRepeat
 {
@@ -97,6 +89,345 @@ class shortCandid extends longRepeat
 		this.short := this.LP_button
 	}
 } 
+
+class shortRepeatChord extends LP_chord
+{
+	LP_repeat()
+	{
+		this.LP_longRepeat()
+	}
+	LP_shortUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+		
+	}
+	LP_longRepeat()
+	{
+	
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%	
+	}
+	LP_longUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+	}
+}
+
+class dontRepeatChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+		
+	}
+	LP_held()
+	{
+	
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%	
+	}
+	LP_longUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+	}
+}
+
+parents := {}
+parents.longRepeat := {button:longRepeatChord, dontRepeat:longRepeatChord,word:shortWordLongRepeatChord,string:shortStringLongRepeatChord}
+parents.longWord := {button:longWordChord, dontRepeat:longWordChord,word:wordChord,string:shortStringLongWordChord}
+parents.longString := {button:longStringChord, dontRepeat:longStringChord,word:shortWordLongStringChord,string:stringChord}
+parents.longNull := {button:shortRepeatChord, dontRepeat:dontRepeatChord, word:shortWordChord,string:shortStringChord}
+parents.longDontRepeat := {button:longDontRepeatChord, dontRepeat:longDontRepeatChord,word:shortWordLongDontRepeatChord,string:shortStringLongDontRepeatChord}
+
+class orphanChord extends LP_chord
+{
+
+	
+	LP_init()
+	{
+		
+		global parents
+		this.setShortLong()
+		if(this.long==null)
+		{
+
+			b:=parents.longNull
+		}
+		else if (this.long.hasKey(1))
+		{
+
+				b:=parents.longWord
+
+		}
+		else if (this.long.haskey("string"))
+		{
+
+				b:=parents.longString
+				this.long := this.long.string
+		}
+		else if (this.long.hasKey("dontRepeat"))
+		{
+			b:=parents.longDontRepeat
+			this.long := this.long.dontRepeat
+		}
+		else
+		{
+			b:=parents.longRepeat
+		}
+		
+
+		if (this.short.hasKey(1))
+		{
+
+			b:=b.word
+
+		}
+		else if (this.short.hasKey("string"))
+		{
+
+			b:=b.string
+			this.short := this.short.string
+		}
+		else if (this.short.hasKey("dontRepeat"))
+		{
+			this.short := this.short.dontRepeat
+			b:=b.dontRepeat
+		}
+		else
+		{
+			b:=b.button
+		}
+		
+
+
+		this.base := b
+	}
+
+}
+
+class shortStringChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		send %b%
+	}
+	LP_held()
+	{
+		this.LP_shortUp()
+	}	
+}
+
+class shortWordChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		sendWord(this.short)
+	}
+	
+	LP_held()
+	{
+		sendWord(this.short)
+	}	
+}
+
+class longStringChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+		
+	}
+	LP_held()
+	{
+		b := this.long
+		send %b%
+	}
+
+}
+
+class longWordChord extends wordChord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+		
+	}
+}
+
+class shortWordLongStringChord extends wordChord
+{
+
+	LP_held()
+	{
+		b := this.long
+		;tosend := "{blind}" . b	
+		send %b%
+	}	
+}
+
+sendWord(w)
+{
+	if (getKeyState("ctrl")||getKeyState("alt")||getKeyState("win"))
+		return
+	if (getKeyState("shift"))
+	{
+		b:=w[1]
+		if(b.hasKey("string"))
+		{
+			b:=b.string
+			send %b%
+		}
+		else 
+		{
+			if (b.hasKey(1))
+			{
+				b:=b[1]
+			}
+			tosend := "{blind}" . b
+			send %tosend%
+		}
+
+		l:=w.maxIndex()
+		i:=2
+		while i<=l
+		{
+			v:=w[i]
+			if(v.hasKey("string"))
+			{
+				b:=v.string
+				send %b%
+			}
+			if (v.hasKey(1))
+			{
+				b := v[1]
+				b:= "{blind}" . b
+				send %b%
+			}
+			else
+			{
+				
+				send %v%
+			}
+			i++
+		}	
+		
+	}
+	else
+	{
+		for k,v in w
+		{
+			if(v.hasKey("string"))
+			{
+				v:=v.string
+				send %v%
+			}
+			else
+			{
+				if (v.hasKey(1))
+				{
+					v := v[1]
+				}
+
+				tosend := "{blind}" . v
+				send %tosend%
+			}
+		}
+	}	
+}
+
+class wordChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		sendWord(this.short)
+	}
+	
+	LP_held()
+	{
+		sendWord(this.long)
+	}	
+}
+
+class shortStringLongWordChord extends wordChord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		send %b%
+	}
+}
+
+class shortStringLongRepeatChord extends longRepeatChord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		send %b%
+	}
+}
+
+class shortStringLongDontRepeatChord extends longDontRepeatChord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		send %b%
+	}
+}
+
+class shortWordLongRepeatChord extends longRepeatChord
+{
+	LP_shortUp()
+	{
+		sendWord(this.short)
+	}
+}
+
+class shortWordLongDontRepeatChord extends longDontRepeatChord
+{
+	LP_shortUp()
+	{
+		sendWord(this.short)
+	}
+}
+
+class stringChord extends LP_chord
+{
+	LP_shortUp()
+	{
+		b := this.short
+		send %b%
+	}
+	LP_held()
+	{
+		b := this.long
+		;tosend := "{blind}" . b	
+		send %b%
+	}	
+}
 
 
 active:="default"
@@ -117,135 +448,60 @@ class LP_modes
 		{
 			long := "ScrollLock"
 		}
+
 		class insert extends longCandid
 		{
 			short := "printscreen"
 		}
+
 		class end extends shortCandid
 		{
 			long := "home"
 		}
+
 		class Esc extends shortCandid
 		{
 			long := "Del"
 		}
-		class r extends shortCandid
-		{
-			long := "j"
-		}
-		
-		class zero extends shortCandid
-		{
-			long := "["
-		}
-		class two extends shortCandid
-		{
-			long := "\"
-		}
-		class three extends shortCandid
-		{
-			long := "'"
-		}
-		class four extends shortCandid
-		{
-			long := ","
-		}
-		class five extends shortCandid
-		{
-			long := "."
-		}
-		class six extends shortCandid
-		{
-			long := "`"
-		}
-		class seven extends shortCandid
-		{
-			long := "/"
-		}
-		class nine extends shortCandid
-		{
-			long := "]"
-		}
-		
-		
-		class f1 extends shortCandid
-		{
-			long := "f7"
-		}
-		class f2 extends shortCandid
-		{
-			long := "f8"
-		}
-		class f3 extends shortCandid
-		{
-			long := "f9"
-		}
-		class f4 extends shortCandid
-		{
-			long := "f10"
-		}
-		class f5 extends shortCandid
-		{
-			long := "f11"
-		}
-		class f6 extends shortCandid
-		{
-			long := "f12"
-		}
-		
-		class home extends longCandid
-		{
-			short := "end"
-		}
-		
 
-		class leftIndexFinger extends LP_modes.default.leftMiddleFinger
-		{
-			LP_Buttons := ["s","n","t"]
-			longs := ["z", "l", "d"]
-			first2 := "-"
-			first2long := "--- "
-			last2 := "🐪"
-			last2long := "🐫"
-		}
-		
+
 		class leftMiddleFinger extends LP_chordingGroup
 		{
-			LP_Buttons := ["f","h","e"]
-			longs := ["v", "x", "y"]
-			first2 := "="
-			first2long := ";"
-			last2 := "🍣"
-			last2long := "🍑"
+			LP_Buttons := ["n","i","m"]
+			longs := [["n","e","v","e","r"], StrSplit("issue"), StrSplit("monitor")]
+			top2 := "-"
+			top2long := {string:"--- "}
+			bottom2 := {dontRepeat:"f3"}
+			bottom2long := {dontRepeat:"f9"}
 			
-			class ooi extends longRepeatChord
+			class ooi extends orphanChord
 			{
-				LP_init()
+				setShortLong()
 				{
 					this.long:=this.LP_containingClassInstance.longs[3]
 					this.short:=this.LP_containingClassInstance.LP_Buttons[3]
 				}
 			}	
-			class oio extends longRepeatChord
+			class oio extends orphanChord
 			{
-				LP_init()
+				setShortLong()
 				{
 					this.long:=this.LP_containingClassInstance.longs[2]
 					this.short:=this.LP_containingClassInstance.LP_Buttons[2]
 				}
 			}	
-			class oii extends LP_modes.default.leftMiddleFinger.iio
+			class oii extends orphanChord
 			{
 				setShortLong()
 				{
-					this.long:=this.LP_containingClassInstance.last2long
-					this.short:=this.LP_containingClassInstance.last2
+					this.long:=this.LP_containingClassInstance.bottom2long
+					this.short:=this.LP_containingClassInstance.bottom2
 				}
 			}	
-			class ioo extends longRepeatChord
+			class ioo extends orphanChord
 			{
 				
-				LP_init()
+				setShortLong()
 				{
 					this.long:=this.LP_containingClassInstance.longs[1]
 					this.short:=this.LP_containingClassInstance.LP_Buttons[1]
@@ -258,29 +514,12 @@ class LP_modes
 					send 5
 				}	
 			}	
-			class iio extends LP_chord
+			class iio extends orphanChord
 			{
-				LP_init()
-				{
-					
-					this.setShortLong()
-					if (strlen(this.long)>1)
-						this.base := phraseChord
-					else
-						this.base := longRepeatChord
-					if (strlen(this.short)>1)
-					{
-						this.LP_shortUp := phraseChord.LP_shortUp
-					}
-					else
-					{
-						this.LP_shortUp := longRepeatChord.LP_shortUp
-					}
-				}
 				setShortLong()
 				{
-					this.long:=this.LP_containingClassInstance.first2long
-					this.short:=this.LP_containingClassInstance.first2
+					this.long:=this.LP_containingClassInstance.top2long
+					this.short:=this.LP_containingClassInstance.top2
 				}
 			}
 			class iii extends LP_chord
@@ -293,33 +532,271 @@ class LP_modes
 
 		}
 		
+		class leftIndexFingerUpper extends LP_chordingGroup
+		{
+			LP_Buttons := ["8","4"]
+			longs := [null,null]
+			both := {string:"🦏"}
+			bothLong := {string:"🐘"}
+			
+			class oi extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.longs[2]
+					this.short:=this.LP_containingClassInstance.LP_Buttons[2]
+				}
+			}	
+			class io extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.longs[1]
+					this.short:=this.LP_containingClassInstance.LP_Buttons[1]
+				}
+			}	
+			class ii extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.bothLong
+					this.short:=this.LP_containingClassInstance.both
+				}
+			}
+
+		}
+		
+
+		
+		class leftMiddleFingerUpper extends LP_modes.default.leftIndexFingerUpper
+		{
+			LP_Buttons := ["7","3"]
+			longs := [null,null]
+			both := {string:"🐪"}
+			bothLong := {string:"🐫"}
+		}
+		
+		class rightMiddleFingerUpper extends LP_modes.default.leftIndexFingerUpper
+		{
+			LP_Buttons := ["0","6"]
+			longs := ["]",null]
+			both := {string:"🦎"}
+			bothLong := {string:"🐢"}
+		}
+		
+		class rightIndexFingerUpper extends LP_modes.default.leftIndexFingerUpper
+		{
+			LP_Buttons := ["9","5"]
+			longs := ["[",null]
+			both := {string:"🐸"}
+			bothLong := {string:"🐊"}
+		}
+		
 		class leftRingFinger extends LP_modes.default.leftMiddleFinger
 		{
-			LP_Buttons := ["m","c","a"]
-			longs := ["w", "k", "i"]
-			first2 := "🦏"
-			first2long := "🐘"
-			last2 := "🐜"
-			last2long := "🦂"
+			LP_Buttons := ["l","a","w"]
+			longs := [StrSplit("limit"), StrSplit("always"), StrSplit("works")]
+			top2 := "\"
+			top2long := {string:"\\"}
+			bottom2 := {dontRepeat:"f2"}
+			bottom2long := {dontRepeat:"f8"}
+
+		}
+		
+		
+		class rightMiddleFinger extends LP_modes.default.leftMiddleFinger
+		{
+			LP_Buttons := ["d","g","b"]
+			longs := ["j", StrSplit("good"), StrSplit("broken")]
+			top2 := "."
+			top2long := null
+			bottom2 := {dontRepeat:"f6"}
+			bottom2long := {dontRepeat:"f12"}
+
+		}
+		
+		class leftIndexFinger extends LP_modes.default.rightIndexFinger
+		{
+			LP_Buttons := ["s","e","f","y"]
+			longs := ["z", StrSplit("every"), "v", StrSplit("yesterday")]
+			top2 := "="
+			top2long := null
+			bottom2 := {dontRepeat:"f4"}
+			bottom2long := {dontRepeat:"f10"}
+			middle2 := ";"
+			middle2long := null
+			top3 := {string:"🐦"}
+			top3long := {string:"🐧"}
+			bottom3 := {string:"🕊"}
+			bottom3Long := {string:"🦅"}
+			topSide := {string:"🦢"}
+			topSideLong := {string:"🦉"}
+			bottomSide := {string:"🦩"}
+			bottomSideLong := {string:"🦚"}
+		}
+		
+		class rightIndexFinger extends LP_chordingGroup
+		{
+			LP_Buttons := ["t","c","p","h"]
+			longs := [StrSplit("tomorrow"), "k", StrSplit("permanent"), "x"]
+			top2 := ","
+			top2long := null
+			bottom2 := {dontRepeat:"f5"}
+			bottom2long := {dontRepeat:"f11"}
+			middle2 := "'"
+			middle2long := "``"
+			top3 := {string:"🦍"}
+			top3long := {string:"🐒"}
+			bottom3 := {string:"🐵"}
+			bottom3Long := {string:"🙊"}
+			topSide := {string:"🙉"}
+			topSideLong := {string:"🙈"}
+			bottomSide := {string:"🦧"}
+			bottomSideLong := {string:"🦧"}
+			
+			class oooi extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.longs[4]
+					this.short:=this.LP_containingClassInstance.LP_Buttons[4]
+				}
+			}	
+			class ooio extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.longs[3]
+					this.short:=this.LP_containingClassInstance.LP_Buttons[3]
+				}
+			}	
+			class ooii extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.bottomSideLong
+					this.short:=this.LP_containingClassInstance.bottomSide
+				}
+			}	
+			class oioo extends orphanChord
+			{
+				
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.longs[2]
+					this.short:=this.LP_containingClassInstance.LP_Buttons[2]
+				}
+			}		
+			class oioi extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.middle2long
+					this.short:=this.LP_containingClassInstance.middle2
+				}
+			}	
+			class oiio extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.bottom2long
+					this.short:=this.LP_containingClassInstance.bottom2
+				}
+			}
+			class oiii extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.bottom3long
+					this.short:=this.LP_containingClassInstance.bottom3
+				}
+			}
+			class iooo extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.longs[1]
+					this.short:=this.LP_containingClassInstance.LP_Buttons[1]
+				}
+			}
+			class iooi extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.topSidelong
+					this.short:=this.LP_containingClassInstance.topSide
+				}
+			}
+			class ioio extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=StrSplit("how the heck did you do that?")
+					this.short:=StrSplit("how the heck did you do that?")
+				}
+			}
+			class ioii extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=StrSplit("how the heck did you do that?")
+					this.short:=StrSplit("how the heck did you do that?")
+				}
+			}
+			class iioo extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.top2long
+					this.short:=this.LP_containingClassInstance.top2
+				}
+			}
+			class iioi extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=this.LP_containingClassInstance.top3long
+					this.short:=this.LP_containingClassInstance.top3
+				}
+			}
+			class iiio extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=StrSplit("how the heck did you do that?")
+					this.short:=StrSplit("how the heck did you do that?")
+				}
+			}
+			class iiii extends orphanChord
+			{
+				setShortLong()
+				{
+					this.long:=StrSplit("how the heck did you do that?")
+					this.short:=StrSplit("how the heck did you do that?")
+				}
+			}
+
 
 		}
 		
 		class leftPinky extends LP_modes.default.leftMiddleFinger
 		{
-			LP_Buttons := ["p","g","o"]
-			longs := ["b", "q", "u"]
-			first2 := "🦕"
-			first2long := "🦖"
-			last2 := "🐒"
-			last2long := "🦍"
+			LP_Buttons := ["r","o","u"]
+			longs := [StrSplit("restore"), StrSplit("object"), StrSplit("understand")]
+			top2 := "/"
+			top2long := {string:"🐗"}
+			bottom2 := {dontRepeat:"f1"}
+			bottom2long := {dontRepeat:"f7"}
 
 		}
-		
+	
 		
 	}
 	
 
 }
+
+#include longpressify.ahk
 
 /*
 f12::
