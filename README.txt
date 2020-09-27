@@ -1,13 +1,16 @@
 Usage:
-1. import azeron-profiles.json into the azeron software. Load "workType" onto your left (i.e. right-handed) Azeron and "workMouse" onto your right (i.e. left-handed) Azeron.  
-2. run 2azerons.ahk and mouse.ahk
+1. import azeron-profiles.json into the azeron software. Load "workClick" onto your left (i.e. right-handed) Azeron and "workCursor" onto your right (i.e. left-handed) Azeron.  
+2. unplug the right handed Azeron, leave the left handed Azeron plugged in
+3. run mouse.ahk 
+4. plug the right handed Azeron back in
+5. run 2azerons.ahk 
 - The result is your Azerons will function as shown in 2Azerons.png 
 To exit the script, press Win+Alt+.
 =============Troubleshooting===========
-In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000
-I'm not sure what the cause is, but one way to fix this is as follows:
-Device Manager >> View >> Devices By Container >> Expand the tree for Azeron >> right click the "USB composite device" >> uninstall
-Then you can unplug azeron, plug back in, restart the AHK script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
+- In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run mouse.ahk and the cursor doesn't move with the joystick. Either way proceed with the following.
+- --- I'm not sure what the cause is, but one way to fix this is as follows:
+- --- Device Manager >> View >> Devices By Container >> Expand the tree for Azeron >> right click the "USB composite device" >> uninstall
+- --- Then you can unplug azeron, plug back in, restart the AHK script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
 ===========Customization Overview============
 - longpressify.ahk is relatively set in stone and users have been given alot of customization power without the need to change this file.
 - There are two recommended places for making changes to customize behaviour:
