@@ -12,7 +12,7 @@ class longRepeat extends clay
 	{
 		this.LP_held()
 	}
-	LP_shortUp()
+	LP_shortUp() 
 	{
 		
 		b := this.short
@@ -607,7 +607,7 @@ class LP_modes
 		class rightMiddleFinger extends LP_modes.default.leftMiddleFinger
 		{
 			LP_Buttons := ["d","g","b"]
-			longs := ["j", StrSplit("good"), StrSplit("broken")]
+			longs := ["j", "q", StrSplit("broken")]
 			top2 := "."
 			top2long := null
 			bottom2 := {dontRepeat:"f6"}
