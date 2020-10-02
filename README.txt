@@ -30,11 +30,11 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 5. enjoy
 - --- Part C: deactivate remapping (where you turn off 2azerons, like when you want to use your Azerons or keyboard for something else)
 - --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the remappings as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example.
-- --- --- Option I: simply press Win+Alt+, to turn off 2azerons.ahk and leave cursor.ahk running
+- --- --- Option I: simply press Win+Alt+comma to turn off 2azerons.ahk and leave cursor.ahk running
 - --- --- --- use this option when you want to return your keyboard to normal behaviour while still leaving the thumbstick cursor control active.
 - --- --- --- note that cursor.ahk will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key
 - --- --- --- simply run 2azerons.ahk (as admin if possible) again when you are ready
-- --- --- Option II: simply press Win+Alt+. to turn off both 2azerons.ahk and cursor.ahk
+- --- --- Option II: simply press Win+Alt+period to turn off both 2azerons.ahk and cursor.ahk
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 =============Troubleshooting===========
 - In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run cursor.ahk and the cursor doesn't move at all with the joystick. Either way proceed with the following.
