@@ -1,3 +1,4 @@
+=================Usage=======================
 - Purpose: make your two azerons function as down in the diagram:
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - How-to overview:
@@ -28,6 +29,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- unplug the left Azeron and leave the right one plugged in.
 - --- Device Manager >> View >> Devices By Container >> Expand the tree for Azeron >> right click the "USB composite device" >> uninstall
 - --- Then you can unplug azeron, plug back in, restart the mouse.ahk script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
+
 ===========Customization Intro============
 - customization is possible, but involves editing source code in most cases. Here are some possible customizations, ranked roughly from least to most difficult:
 - --- move the action associated with a single standalone physical button (a button not connected to another by a magenta elipse in the google drawing) to a different standalone physical button. This can be done without editing source code. You just have to change the binding in the azeron software.
@@ -35,11 +37,13 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- change the longpress or shortpress actions associated with any key or chord. This will require you to have some understanding of how 2azerons.ahk is arranged and the syntax that you will need to use to specify the desired actions. If you want to define complex macros, it helps to have a experience writing functions in AHK.
 - --- define custom chording groups
 - --- define new modes and button(s) for mode switching
+
 ===========Customization Overview============
 - longpressify.ahk is relatively set in stone and users have been given alot of customization power without the need to change this file.
 - There are two recommended places for making changes to customize behaviour:
 - --- Profile Level: you may be able to relocate the actions shown in 2Azerons.png by moving bindings around in the Azeron profiles. However many customizations will require you make changes on the AHK level as well.
 - --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations
+
 ============AHK Level customization kinesthetic learning resources===============
 - since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "hello_world" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
 - --- these educational examples resemble 2azerons.ahk in essential structure, but the code and functionality is greatly stripped down.
@@ -51,6 +55,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 3. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "_LP" prefix.
 - --- --- 4. an include statement referencing longpressify.ahk
 - --- --- 5. miscellaneous hotkeys at the bottom
+
 ============AHK Level customization general overview============
 - an outline of the structure of 2azerons.ahk is in the section below
 
