@@ -1,11 +1,24 @@
-Usage:
-1. import azeron-profiles.json into the azeron software. Load "workClick" onto your left (i.e. right-handed) Azeron and "workCursor" onto your right (i.e. left-handed) Azeron.  
-2. unplug the Azeron on the left, leave the Azeron on the right plugged in
-3. run mouse.ahk 
-4. plug the right handed Azeron back in
-5. run 2azerons.ahk 
-- The result is your Azerons will function as shown in https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
-To exit the script, press Win+Alt+.
+- Purpose: make your two azerons function as down in the diagram:
+https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
+- How-to overview:
+- --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run mouse.ahk and 2azerons.ahk
+- How-to detailed steps:
+1. plug in your left (i.e. right-handed) Azeron
+2. make sure your right (i.e. left-handed) Azeron is unplugged
+3. launch Azeron software
+4. import azeron-profiles.json into the Azeron software. 
+5. Load "workClick" onto the Azeron 
+6. close Azeron software
+6. unplug the left Azeron
+7. plug in the right Azeron
+8. launch Azeron software
+9. load "workCursor" onto your right  Azeron.  
+10. (optional) you may now close Azeron software
+11. run mouse.ahk (as admin if possible)
+12. run 2azerons.ahk (as admin if possible)
+13. plug in the left Azeron
+14. enjoy
+15. To exit the script, press Win+Alt+.
 =============Troubleshooting===========
 - In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run mouse.ahk and the cursor doesn't move with the joystick. Either way proceed with the following.
 - --- I'm not sure what the cause is, but one way to fix this is as follows:
