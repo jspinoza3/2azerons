@@ -1,5 +1,5 @@
 =================Usage=======================
-- Purpose: make your two azerons function as down in this google drawing diagram:
+- Purpose: make your two azerons function as shown in this google drawing diagram:
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - How-to overview:
 - --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run mouse.ahk and 2azerons.ahk to activate software remappings which will enable longpress and chording abilities
