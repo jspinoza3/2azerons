@@ -12,17 +12,17 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 2. make sure your right (i.e. left-handed) Azeron is unplugged
 - --- --- 3. launch Azeron software
 - --- --- 4. import azeron-profiles.json into the Azeron software. 
-- --- --- 5. Load "workClick" onto the Azeron 
+- --- --- 5. in the Azeron software, select software profile "workClick" and then load it to on board memory on the Azeron 
 - --- --- 6. close Azeron software
 - --- --- 7. unplug the left Azeron
 - --- --- 8. plug in the right Azeron
 - --- --- 9. launch Azeron software
-- --- --- 10. load "workCursor" onto the  Azeron.  
+- --- --- 10. load "workCursor" onto the  Azeron, similar to step 5.  
 - --- --- 11. (optional) you may now close Azeron software
 - --- Part C: activate AHK remappings
 - --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
 - --- --- 1. run cursor.ahk (as admin if possible)
-- --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in  and your left Azeron unplugged.
+- --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in and your left Azeron unplugged.
 - --- --- 2. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (pulling your right ring finger speeds up the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
 - --- --- 3. run 2azerons.ahk (as admin if possible)
 - --- --- 4. plug in the left Azeron
