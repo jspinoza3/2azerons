@@ -1,35 +1,46 @@
+Thanks for you interest in 2azerons, a productivity tool that turns your two Azerons into an all in one keyboard/mouse replacement!
 =================Usage=======================
 - Purpose: make your two azerons function as shown in this google drawing diagram:
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
-- How-to overview:
+- Setup overview:
 - --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run mouse.ahk and 2azerons.ahk to activate software remappings which will enable longpress and chording abilities
-- How-to detailed steps:
-1. plug in your left (i.e. right-handed) Azeron
-2. make sure your right (i.e. left-handed) Azeron is unplugged
-3. launch Azeron software
-4. import azeron-profiles.json into the Azeron software. 
-5. Load "workClick" onto the Azeron 
-6. close Azeron software
-6. unplug the left Azeron
-7. plug in the right Azeron
-8. launch Azeron software
-9. load "workCursor" onto the  Azeron.  
-10. (optional) you may now close Azeron software
-11. run mouse.ahk (as admin if possible)
-- --- note: when you run mouse.ahk, only your right Azeron should be plugged in.
-12. run 2azerons.ahk (as admin if possible)
-13. plug in the left Azeron
-14. enjoy
-15. note that the software remapping also affects any other keyboards you have. To exit the script (disable software remapping), press Win+Alt+.
-16. return to step 11 whenever you want to enable software remapping again.
-
+- Setup: detailed steps: 
+- --- Part A: first you will need to get the source code (the entire folder containing this readme) on to your computer. 
+- --- Part B: initial setup (load profiles)
+- --- --- You only have to do this part once assuming you are ok with leaving the azeron profiles loaded on to your Azerons
+- --- --- 1. plug in your left (i.e. right-handed) Azeron
+- --- --- 2. make sure your right (i.e. left-handed) Azeron is unplugged
+- --- --- 3. launch Azeron software
+- --- --- 4. import azeron-profiles.json into the Azeron software. 
+- --- --- 5. Load "workClick" onto the Azeron 
+- --- --- 6. close Azeron software
+- --- --- 7. unplug the left Azeron
+- --- --- 8. plug in the right Azeron
+- --- --- 9. launch Azeron software
+- --- --- 10. load "workCursor" onto the  Azeron.  
+- --- --- 11. (optional) you may now close Azeron software
+- --- Part C: activate AHK remappings
+- --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
+- --- --- 1. run mouse.ahk (as admin if possible)
+- --- --- --- note: before you run mouse.ahk, your right Azeron should be plugged in  and your left Azeron unplugged.
+- --- --- 2. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (pulling your right ring finger speeds up the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
+- --- --- 3. run 2azerons.ahk (as admin if possible)
+- --- --- 4. plug in the left Azeron
+- --- --- 5. enjoy
+- --- Part D: deactivate remapping when you are done using 2azerons, like when you want to use your Azerons or keyboard for something else
+- --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the remappings as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example.
+- --- --- Option A: simply press Win+Alt+, to turn off 2azerons.ahk and leave mouse.ahk running
+- --- --- --- use this option when you want to return your keyboard to normal behaviour while still leaving the thumbstick cursor control active.
+- --- --- --- note that mouse.ahk will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key
+- --- --- --- simply run 2azerons.ahk (as admin if possible) again when you are ready
+- --- --- Option B: simply press Win+Alt+. to turn off both 2azerons.ahk and mouse.ahk
+- --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part C above whenever you are ready to use 2azerons again!
 =============Troubleshooting===========
-- In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run mouse.ahk and the cursor doesn't move with the joystick. Either way proceed with the following.
+- In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run mouse.ahk and the cursor doesn't move at all with the joystick. Either way proceed with the following.
 - --- I'm not sure what the cause is, but one way to fix this is as follows:
-- --- unplug the left Azeron and leave the right one plugged in.
+- --- the left Azeron should be unplugged and the right one plugged in.
 - --- Device Manager >> View >> Devices By Container >> Expand the tree for Azeron >> right click the "USB composite device" >> uninstall
-- --- Then you can unplug azeron, plug back in, restart the mouse.ahk script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
-
+- --- Then you can unplug  right azeron, plug back in, restart the mouse.ahk script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
 ===========Customization Intro============
 - customization is possible, but involves editing source code in most cases. Here are some possible customizations, ranked roughly from least to most difficult:
 - --- move the action associated with a single standalone physical button (a button not connected to another by a magenta elipse in the google drawing) to a different standalone physical button. This can be done without editing source code. You just have to change the binding in the azeron software.
