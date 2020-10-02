@@ -1,6 +1,6 @@
 ﻿class clay extends LP_longpressable
 {
-	LP_longDuration := 400
+	LP_longDuration := 300
 	LP_repeatDuration := 600
 	LP_prefix := "*"
 }
@@ -34,6 +34,32 @@ class longRepeat extends clay
 		send %tosend%
 	}
 
+}
+
+class longDontRepeat extends clay
+{
+	LP_shortUp()
+	{
+		b := this.short
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+		
+	}
+	LP_held()
+	{
+		
+		b := this.long
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+	}
+	LP_longUp()
+	{
+		b := this.long
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+	}
 }
 
 class longDontRepeatChord extends LP_chord
@@ -444,33 +470,118 @@ class LP_modes
 
 	class default
 	{
-		class NumLock extends shortCandid
-		{
-			long := "ScrollLock"
-		}
 
-		class insert extends longCandid
+
+		class numpadSub extends clay
 		{
 			short := "printscreen"
+			LP_shortUp()
+			{
+				b := this.short
+				tosend := "{blind}{" . b . " down}"	
+				send %tosend%
+				tosend := "{blind}{" . b . " up}"	
+				send %tosend%
+				
+			}
+			LP_held()
+			{
+				send {blind}^x
+			}
+
+		}
+		
+		class numpadMult extends clay
+		{
+			LP_shortUp()
+			{
+				send {LButton}{LButton}
+				send ^c
+			}
+			LP_held()
+			{
+				send {LButton}{LButton}{LButton}
+				send ^c
+			}
+
+
+			
+		}
+		
+		class numpadAdd extends clay
+		{
+			LP_shortUp()
+			{
+				send {blind}#v
+			}
+			LP_held()
+			{
+				send {blind}^v
+			}
+
+			LP_repeat()
+			{
+				this.LP_held()
+			}
+
+			
+		}
+		
+		class capslock extends clay
+		{
+			LP_shortUp()
+			{
+				SetCapsLockState % !GetKeyState("CapsLock", "T")
+			}
+	
+			LP_held()
+			{
+				send {blind}{insert down}
+			}
+			LP_longUp()
+			{
+				send {blind}{insert up}
+			}
+			
+
+			
+		}
+		
+		class numlock extends clay
+		{
+			LP_shortUp()
+			{
+				SetNumLockState % !GetKeyState("NumLock", "T")
+			}
+			LP_held()
+			{
+				SetScrollLockState % !GetKeyState("ScrollLock", "T")
+			}
+
+
+
+					
+		
+		
 		}
 
 		class end extends shortCandid
 		{
 			long := "home"
 		}
-
+/*
 		class Esc extends shortCandid
 		{
 			long := "Del"
 		}
-
+*/
 
 		class leftMiddleFinger extends LP_chordingGroup
 		{
 			LP_Buttons := ["n","i","m"]
 			longs := [["n","e","v","e","r"], StrSplit("issue"), StrSplit("monitor")]
-			top2 := "-"
-			top2long := {string:"--- "}
+			top2 := ","
+			top2long := null
 			bottom2 := {dontRepeat:"f3"}
 			bottom2long := {dontRepeat:"f9"}
 			
@@ -511,8 +622,12 @@ class LP_modes
 			{
 				LP_shortUp()
 				{
-					send 5
+					send wowzers
 				}	
+				LP_longUp()
+				{
+					send wowzers
+				}
 			}	
 			class iio extends orphanChord
 			{
@@ -526,7 +641,11 @@ class LP_modes
 			{
 				LP_shortUp()
 				{
-					send 7
+					send holy shnikes
+				}	
+				LP_longUp()
+				{
+					send holy shnikes
 				}
 			}
 
@@ -534,11 +653,10 @@ class LP_modes
 		
 		class leftIndexFingerUpper extends LP_chordingGroup
 		{
-			LP_Buttons := ["8","4"]
+			LP_Buttons := ["6","4"]
 			longs := [null,null]
-			both := {string:"🦏"}
-			bothLong := {string:"🐘"}
-			
+			both  := "."
+			bothLong := "\"
 			class oi extends orphanChord
 			{
 				setShortLong()
@@ -570,34 +688,34 @@ class LP_modes
 		
 		class leftMiddleFingerUpper extends LP_modes.default.leftIndexFingerUpper
 		{
-			LP_Buttons := ["7","3"]
+			LP_Buttons := ["5","3"]
 			longs := [null,null]
-			both := {string:"🐪"}
-			bothLong := {string:"🐫"}
+			both := ","
+			bothLong := "["
 		}
 		
 		class rightMiddleFingerUpper extends LP_modes.default.leftIndexFingerUpper
 		{
-			LP_Buttons := ["0","6"]
-			longs := ["]",null]
-			both := {string:"🦎"}
-			bothLong := {string:"🐢"}
+			LP_Buttons := ["0","8"]
+			longs := [null,null]
+			both := "="
+			bothLong := "]"
 		}
 		
 		class rightIndexFingerUpper extends LP_modes.default.leftIndexFingerUpper
 		{
-			LP_Buttons := ["9","5"]
-			longs := ["[",null]
-			both := {string:"🐸"}
-			bothLong := {string:"🐊"}
+			LP_Buttons := ["9","7"]
+			longs := [null,null]
+			both := "-"
+			bothLong := "/"
 		}
 		
 		class leftRingFinger extends LP_modes.default.leftMiddleFinger
 		{
 			LP_Buttons := ["l","a","w"]
 			longs := [StrSplit("limit"), StrSplit("always"), StrSplit("works")]
-			top2 := "\"
-			top2long := {string:"\\"}
+			top2 := ";"
+			top2long := null
 			bottom2 := {dontRepeat:"f2"}
 			bottom2long := {dontRepeat:"f8"}
 
@@ -608,7 +726,7 @@ class LP_modes
 		{
 			LP_Buttons := ["d","g","b"]
 			longs := ["j", "q", StrSplit("broken")]
-			top2 := "."
+			top2 := "="
 			top2long := null
 			bottom2 := {dontRepeat:"f6"}
 			bottom2long := {dontRepeat:"f12"}
@@ -619,40 +737,40 @@ class LP_modes
 		{
 			LP_Buttons := ["s","e","f","y"]
 			longs := ["z", StrSplit("every"), "v", StrSplit("yesterday")]
-			top2 := "="
+			top2 := "."
 			top2long := null
 			bottom2 := {dontRepeat:"f4"}
 			bottom2long := {dontRepeat:"f10"}
-			middle2 := ";"
+			middle2 := "["
 			middle2long := null
 			top3 := {string:"🐦"}
 			top3long := {string:"🐧"}
 			bottom3 := {string:"🕊"}
 			bottom3Long := {string:"🦅"}
-			topSide := {string:"🦢"}
-			topSideLong := {string:"🦉"}
-			bottomSide := {string:"🦩"}
-			bottomSideLong := {string:"🦚"}
+			topSide := "``"
+			topSideLong := null
+			bottomSide := "\"
+			bottomSideLong := null
 		}
 		
 		class rightIndexFinger extends LP_chordingGroup
 		{
 			LP_Buttons := ["t","c","p","h"]
 			longs := [StrSplit("tomorrow"), "k", StrSplit("permanent"), "x"]
-			top2 := ","
+			top2 := "-"
 			top2long := null
 			bottom2 := {dontRepeat:"f5"}
 			bottom2long := {dontRepeat:"f11"}
-			middle2 := "'"
-			middle2long := "``"
+			middle2 := "]"
+			middle2long := null
 			top3 := {string:"🦍"}
 			top3long := {string:"🐒"}
-			bottom3 := {string:"🐵"}
-			bottom3Long := {string:"🙊"}
-			topSide := {string:"🙉"}
-			topSideLong := {string:"🙈"}
-			bottomSide := {string:"🦧"}
-			bottomSideLong := {string:"🦧"}
+			bottom3 := {string:"🦧"}
+			bottom3Long := {string:"🦥"}
+			topSide := "'"
+			topSideLong := null
+			bottomSide := "/"
+			bottomSideLong := null
 			
 			class oooi extends orphanChord
 			{
@@ -783,8 +901,8 @@ class LP_modes
 		{
 			LP_Buttons := ["r","o","u"]
 			longs := [StrSplit("restore"), StrSplit("object"), StrSplit("understand")]
-			top2 := "/"
-			top2long := {string:"🐗"}
+			top2 := "\"
+			top2long := null
 			bottom2 := {dontRepeat:"f1"}
 			bottom2long := {dontRepeat:"f7"}
 

@@ -76,7 +76,7 @@ toggle()
 {
 	global f
 	if (f==1)
-		f:=4
+		f:=5
 	else
 		f:=1
 }

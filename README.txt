@@ -4,7 +4,7 @@ Usage:
 3. run mouse.ahk 
 4. plug the right handed Azeron back in
 5. run 2azerons.ahk 
-- The result is your Azerons will function as shown in https://docs.google.com/drawings/d/13SmH5E1vMvtkl0d5KJ8S3SAhQI8VKOedTiz9hrAwVg0/edit
+- The result is your Azerons will function as shown in https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 To exit the script, press Win+Alt+.
 =============Troubleshooting===========
 - In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run mouse.ahk and the cursor doesn't move with the joystick. Either way proceed with the following.
