@@ -12,7 +12,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 6. unplug the left Azeron
 7. plug in the right Azeron
 8. launch Azeron software
-9. load "workCursor" onto your right  Azeron.  
+9. load "workCursor" onto the  Azeron.  
 10. (optional) you may now close Azeron software
 11. run mouse.ahk (as admin if possible)
 12. run 2azerons.ahk (as admin if possible)
