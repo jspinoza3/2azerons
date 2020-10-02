@@ -36,19 +36,23 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- --- simply run 2azerons.ahk (as admin if possible) again when you are ready
 - --- --- Option II: simply press Win+Alt+period to turn off both 2azerons.ahk and cursor.ahk
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
+
 =============Troubleshooting===========
 - In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run cursor.ahk and the cursor doesn't move at all with the joystick. Either way proceed with the following.
 - --- I'm not sure what the cause is, but one way to fix this is as follows:
 - --- the left Azeron should be unplugged and the right one plugged in.
 - --- Device Manager >> View >> Devices By Container >> Expand the tree for Azeron >> right click the "USB composite device" >> uninstall
 - --- Then you can unplug  right azeron, plug back in, restart the cursor.ahk script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
+
 ===========Customization Intro============
 - customization is possible, but involves editing source code in most cases. Here are some possible customizations, ranked roughly from least to most difficult:
 - --- move the action associated with a single standalone physical button (a button not connected to another by a magenta elipse in the google drawing) to a different standalone physical button. This can be done without editing source code. You just have to change the binding in the azeron software.
-- --- move an entire chording group (set of buttons connected by magenta elipses in the google drawing) to a different finger that controls a congruent chording group. For example, swapping the behaviour of the left and right index finger or swapping the behaviour of any two fingers other than index fingers and thumb. This can also be achieved without editing source code.
-- --- change the longpress or shortpress actions associated with any key or chord. This will require you to have some understanding of how 2azerons.ahk is arranged and the syntax that you will need to use to specify the desired actions. If you want to define complex macros, it helps to have a experience writing functions in AHK.
-- --- define custom chording groups
+- --- move an entire set of key bindings associate with a chording group (set of buttons connected by magenta elipses in the google drawing) to a different finger that controls a congruent chording group. For example, swapping the behaviour of the left and right index finger or swapping the behaviour of any two fingers other than index fingers and thumb. This can also be achieved without editing source code.
+- --- change the binding of any button in the profile, mapping it to a previously unbound key. This will require editing source code because 2azerons.ahk performs actions based on key signals detected with ignorance to what physical button was pressed.
+- --- change the longpress or shortpress actions associated with any key or chord. This will require you to have some understanding of how 2azerons.ahk is arranged and the syntax that you will need to use to specify the desired actions. It helps to have a experience working with functions and classes in AHK.
+- --- selectively swapping the bindings of some the buttons between chording groups. Again, 2azerons has no way of knowing where key signals came from. It identifies chord presses by listening for combinations of signals. Therefore, if you change the signals that are bound to buttons in a chording group, then 2azerons will no longer interpret those physical chord presses appropriately.
 - --- define new modes and button(s) for mode switching
+- --- define custom chording groups, i.e. regrouping buttons, merging groups, etc.
 
 ===========Customization Overview============
 - longpressify.ahk is relatively set in stone and users have been given alot of customization power without the need to change this file.
