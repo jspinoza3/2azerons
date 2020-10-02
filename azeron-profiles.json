@@ -1,6 +1,686 @@
 [
     {
-        "id": 18,
+        "id": 24,
+        "name": "workCursor",
+        "buttons": [
+            {
+                "id": 1,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "20",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    26,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 2,
+                "metaKeys": [
+                    "SHIFT",
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    25,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 3,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "92",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    24,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 4,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "107",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    23,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 5,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "19",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    22,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 6,
+                "metaKeys": [
+                    "CTRL",
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    21,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 7,
+                "metaKeys": [
+                    "ALT",
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    20,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 8,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "106",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    19,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 9,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "66",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    27,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 10,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "71",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    0,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 11,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "68",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    1,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 12,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "56",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    2,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 13,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "48",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    3,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 14,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "80",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    4,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 15,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "67",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    5,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 16,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "84",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    8,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 17,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "55",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    9,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 18,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "57",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    10,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 19,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "72",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    11,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 20,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "109",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    12,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 21,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    14,
+                    13
+                ],
+                "buttonType": 2,
+                "macro": []
+            },
+            {
+                "id": 22,
+                "metaKeys": [],
+                "keyValues": [
+                    46
+                ],
+                "pins": [
+                    38,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 23,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "93",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    18,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 24,
+                "metaKeys": [
+                    276,
+                    20,
+                    15
+                ],
+                "keyValues": [
+                    "84",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 3,
+                "macro": []
+            },
+            {
+                "id": 25,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "32",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            },
+            {
+                "id": 26,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "66",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            },
+            {
+                "id": 27,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "8",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            },
+            {
+                "id": 28,
+                "metaKeys": [],
+                "keyValues": [
+                    9
+                ],
+                "pins": [
+                    42,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 29,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "8",
+                    0,
+                    0,
+                    0
+                ],
+                "pins": [
+                    43,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 30,
+                "metaKeys": [],
+                "keyValues": [
+                    13
+                ],
+                "pins": [
+                    44,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 31,
+                "metaKeys": [],
+                "keyValues": [
+                    32
+                ],
+                "pins": [
+                    45,
+                    255
+                ],
+                "buttonType": 1,
+                "macro": []
+            },
+            {
+                "id": 32,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "87",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            },
+            {
+                "id": 33,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "87",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            },
+            {
+                "id": 34,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "87",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            },
+            {
+                "id": 35,
+                "metaKeys": [
+                    0,
+                    0,
+                    0
+                ],
+                "keyValues": [
+                    "87",
+                    0,
+                    0,
+                    512
+                ],
+                "pins": [
+                    39,
+                    40
+                ],
+                "buttonType": 11,
+                "macro": []
+            }
+        ],
+        "isFavourite": true,
+        "isSoftware": true
+    },
+    {
+        "id": 28,
         "name": "workClick",
         "buttons": [
             {
@@ -245,16 +925,9 @@
             },
             {
                 "id": 13,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
+                "metaKeys": [],
                 "keyValues": [
-                    "55",
-                    0,
-                    0,
-                    0
+                    53
                 ],
                 "pins": [
                     3,
@@ -345,16 +1018,9 @@
             },
             {
                 "id": 18,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
+                "metaKeys": [],
                 "keyValues": [
-                    "56",
-                    0,
-                    0,
-                    0
+                    54
                 ],
                 "pins": [
                     10,
@@ -385,16 +1051,9 @@
             },
             {
                 "id": 20,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
+                "metaKeys": [],
                 "keyValues": [
-                    "27",
-                    0,
-                    0,
-                    0
+                    35
                 ],
                 "pins": [
                     12,
@@ -471,715 +1130,7 @@
                     15
                 ],
                 "keyValues": [
-                    "13",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 7,
-                "macro": []
-            },
-            {
-                "id": 25,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "32",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 8,
-                "macro": []
-            },
-            {
-                "id": 26,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "9",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 9,
-                "macro": []
-            },
-            {
-                "id": 27,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "8",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 10,
-                "macro": []
-            },
-            {
-                "id": 28,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    2,
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    42,
-                    255
-                ],
-                "buttonType": 15,
-                "macro": []
-            },
-            {
-                "id": 29,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "33",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    43,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 30,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    1,
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    44,
-                    255
-                ],
-                "buttonType": 15,
-                "macro": []
-            },
-            {
-                "id": 31,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "34",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    45,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 32,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "87",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 7,
-                "macro": []
-            },
-            {
-                "id": 33,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "87",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 8,
-                "macro": []
-            },
-            {
-                "id": 34,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "87",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 9,
-                "macro": []
-            },
-            {
-                "id": 35,
-                "metaKeys": [
-                    276,
-                    0,
-                    15
-                ],
-                "keyValues": [
-                    "87",
-                    0,
-                    0,
-                    512
-                ],
-                "pins": [
-                    39,
-                    40
-                ],
-                "buttonType": 10,
-                "macro": []
-            }
-        ],
-        "isFavourite": true,
-        "isSoftware": true
-    },
-    {
-        "id": 20,
-        "name": "workCursor",
-        "buttons": [
-            {
-                "id": 1,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "20",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    26,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 2,
-                "metaKeys": [
-                    "SHIFT",
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    25,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 3,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "92",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    24,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 4,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "192",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    23,
-                    255
-                ],
-                "buttonType": 6,
-                "macro": []
-            },
-            {
-                "id": 5,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "19",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    22,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 6,
-                "metaKeys": [
-                    "CTRL",
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    21,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 7,
-                "metaKeys": [
-                    "ALT",
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    20,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 8,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "192",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    19,
-                    255
-                ],
-                "buttonType": 6,
-                "macro": []
-            },
-            {
-                "id": 9,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "66",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    27,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 10,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "71",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    0,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 11,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "68",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    1,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 12,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "54",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    2,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 13,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "48",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    3,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 14,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "80",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    4,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 15,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "67",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    5,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 16,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "84",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    8,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 17,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "53",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    9,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 18,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "57",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    10,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 19,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "72",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    11,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 20,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    0,
-                    0,
-                    0,
-                    "45"
-                ],
-                "pins": [
-                    12,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 21,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    0,
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    14,
-                    13
-                ],
-                "buttonType": 2,
-                "macro": []
-            },
-            {
-                "id": 22,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "35",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
                     38,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 23,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
-                "keyValues": [
-                    "93",
-                    0,
-                    0,
-                    0
-                ],
-                "pins": [
-                    18,
-                    255
-                ],
-                "buttonType": 1,
-                "macro": []
-            },
-            {
-                "id": 24,
-                "metaKeys": [
-                    276,
-                    20,
-                    15
-                ],
-                "keyValues": [
-                    "84",
                     0,
                     0,
                     512
@@ -1188,18 +1139,18 @@
                     39,
                     40
                 ],
-                "buttonType": 3,
+                "buttonType": 7,
                 "macro": []
             },
             {
                 "id": 25,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
-                    "32",
+                    39,
                     0,
                     0,
                     512
@@ -1208,18 +1159,18 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 8,
                 "macro": []
             },
             {
                 "id": 26,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
-                    "66",
+                    40,
                     0,
                     0,
                     512
@@ -1228,18 +1179,18 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 9,
                 "macro": []
             },
             {
                 "id": 27,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
-                    "8",
+                    37,
                     0,
                     0,
                     512
@@ -1248,21 +1199,14 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 10,
                 "macro": []
             },
             {
                 "id": 28,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
+                "metaKeys": [],
                 "keyValues": [
-                    "38",
-                    0,
-                    0,
-                    0
+                    33
                 ],
                 "pins": [
                     42,
@@ -1279,7 +1223,7 @@
                     0
                 ],
                 "keyValues": [
-                    "37",
+                    1,
                     0,
                     0,
                     0
@@ -1288,21 +1232,14 @@
                     43,
                     255
                 ],
-                "buttonType": 1,
+                "buttonType": 15,
                 "macro": []
             },
             {
                 "id": 30,
-                "metaKeys": [
-                    0,
-                    0,
-                    0
-                ],
+                "metaKeys": [],
                 "keyValues": [
-                    "40",
-                    0,
-                    0,
-                    0
+                    34
                 ],
                 "pins": [
                     44,
@@ -1319,7 +1256,7 @@
                     0
                 ],
                 "keyValues": [
-                    "39",
+                    "2",
                     0,
                     0,
                     0
@@ -1328,15 +1265,15 @@
                     45,
                     255
                 ],
-                "buttonType": 1,
+                "buttonType": 15,
                 "macro": []
             },
             {
                 "id": 32,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
                     "87",
@@ -1348,15 +1285,15 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 7,
                 "macro": []
             },
             {
                 "id": 33,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
                     "87",
@@ -1368,15 +1305,15 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 8,
                 "macro": []
             },
             {
                 "id": 34,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
                     "87",
@@ -1388,15 +1325,15 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 9,
                 "macro": []
             },
             {
                 "id": 35,
                 "metaKeys": [
+                    276,
                     0,
-                    0,
-                    0
+                    15
                 ],
                 "keyValues": [
                     "87",
@@ -1408,7 +1345,7 @@
                     39,
                     40
                 ],
-                "buttonType": 11,
+                "buttonType": 10,
                 "macro": []
             }
         ],
