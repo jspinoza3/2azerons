@@ -33,7 +33,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- Option I: simply press Win+Alt+comma to turn off 2azerons.ahk and leave cursor.ahk running
 - --- --- --- use this option when you want to return your keyboard to normal behaviour while still leaving the thumbstick cursor control active.
 - --- --- --- note that cursor.ahk will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key
-- --- --- --- simply run 2azerons.ahk (as admin if possible) again when you are ready
+- --- --- --- simply run 2azerons.ahk again when you are ready to start using it again
 - --- --- Option II: simply press Win+Alt+period to turn off both 2azerons.ahk and cursor.ahk
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 
