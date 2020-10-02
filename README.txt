@@ -1,10 +1,10 @@
 Thanks for you interest in 2azerons, a productivity tool that turns your two Azerons into an all in one keyboard/mouse replacement!
-=================Usage=======================
-- Purpose: make your two azerons function as shown in this google drawing diagram:
+=================Usage Instructions=======================
+- Goal: make your two azerons function as shown in this google drawing diagram:
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
-- Setup overview:
+- How-to overview:
 - --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run cursor.ahk and 2azerons.ahk to activate software remappings which will enable longpress and chording abilities
-- Setup: detailed steps: 
+- How-to: detailed steps: 
 - --- Part A: first you will need to get the source code (the entire folder containing this readme) on to your computer. 
 - --- Part B: initial setup (load profiles)
 - --- --- You only have to do this part once assuming you are ok with leaving the azeron profiles loaded on to your Azerons
