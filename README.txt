@@ -20,7 +20,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 11. launch Azeron software
 - --- --- 12. load "workCursor" onto the  Azeron, similar to step 5.  
 - --- --- 13. (optional) you may now close Azeron software
-- --- Part B: activate AHK remappings (where you run some autohotkey scripts)
+- --- Part B: activate AHK remappings (where you run some autohotkey scripts and enjoy)
 - --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
 - --- --- 1. run cursor.ahk (as admin if possible)
 - --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in with the workCursor on board profile active, and your left Azeron should be unplugged.
