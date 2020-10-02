@@ -4,37 +4,38 @@ Thanks for you interest in 2azerons, a productivity tool that turns your two Aze
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - How-to overview:
 - --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run cursor.ahk and 2azerons.ahk to activate software remappings which will enable longpress and chording abilities
-- How-to: detailed steps: 
-- --- Part A: first you will need to get the source code (the entire folder containing this readme) on to your computer. 
-- --- Part B: initial setup (load profiles)
+- How-to: detailed steps:  
+- --- Part A: initial installation and setup (where you install some things on your computer and load some things on to your Azeron)
 - --- --- You only have to do this part once assuming you are ok with leaving the azeron profiles loaded on to your Azerons
-- --- --- 1. plug in your left (i.e. right-handed) Azeron
-- --- --- 2. make sure your right (i.e. left-handed) Azeron is unplugged
-- --- --- 3. launch Azeron software
-- --- --- 4. import azeron-profiles.json into the Azeron software. 
-- --- --- 5. in the Azeron software, select software profile "workClick" and then load it to on board memory on the Azeron 
-- --- --- 6. close Azeron software
-- --- --- 7. unplug the left Azeron
-- --- --- 8. plug in the right Azeron
-- --- --- 9. launch Azeron software
-- --- --- 10. load "workCursor" onto the  Azeron, similar to step 5.  
-- --- --- 11. (optional) you may now close Azeron software
-- --- Part C: activate AHK remappings
+- --- --- 1. Make sure AHK is installed on your computer. The latest version can be found at https://www.autohotkey.com/
+- --- --- 2. get the 2azerons source code (the entire folder containing this readme) on to your computer. In the steps that follow you will need to work directly with some of the files inside this folder
+- --- --- 3. plug in your left (i.e. right-handed) Azeron
+- --- --- 4. make sure your right (i.e. left-handed) Azeron is unplugged
+- --- --- 5. launch Azeron software
+- --- --- 6. import azeron-profiles.json into the Azeron software. 
+- --- --- 7. in the Azeron software, select software profile "workClick" and then load it to on board memory on the Azeron 
+- --- --- 8. close Azeron software
+- --- --- 9. unplug the left Azeron
+- --- --- 10. plug in the right Azeron
+- --- --- 11. launch Azeron software
+- --- --- 12. load "workCursor" onto the  Azeron, similar to step 5.  
+- --- --- 13. (optional) you may now close Azeron software
+- --- Part B: activate AHK remappings (where you run some autohotkey scripts)
 - --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
 - --- --- 1. run cursor.ahk (as admin if possible)
-- --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in and your left Azeron unplugged.
+- --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in with the workCursor on board profile active, and your left Azeron should be unplugged.
 - --- --- 2. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (pulling your right ring finger speeds up the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
 - --- --- 3. run 2azerons.ahk (as admin if possible)
 - --- --- 4. plug in the left Azeron
 - --- --- 5. enjoy
-- --- Part D: deactivate remapping when you are done using 2azerons, like when you want to use your Azerons or keyboard for something else
+- --- Part C: deactivate remapping (where you turn off 2azerons, like when you want to use your Azerons or keyboard for something else)
 - --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the remappings as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example.
-- --- --- Option A: simply press Win+Alt+, to turn off 2azerons.ahk and leave cursor.ahk running
+- --- --- Option I: simply press Win+Alt+, to turn off 2azerons.ahk and leave cursor.ahk running
 - --- --- --- use this option when you want to return your keyboard to normal behaviour while still leaving the thumbstick cursor control active.
 - --- --- --- note that cursor.ahk will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key
 - --- --- --- simply run 2azerons.ahk (as admin if possible) again when you are ready
-- --- --- Option B: simply press Win+Alt+. to turn off both 2azerons.ahk and cursor.ahk
-- --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part C above whenever you are ready to use 2azerons again!
+- --- --- Option II: simply press Win+Alt+. to turn off both 2azerons.ahk and cursor.ahk
+- --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 =============Troubleshooting===========
 - In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run cursor.ahk and the cursor doesn't move at all with the joystick. Either way proceed with the following.
 - --- I'm not sure what the cause is, but one way to fix this is as follows:
