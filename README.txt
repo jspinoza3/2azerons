@@ -38,7 +38,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 
 =============Troubleshooting===========
-- In my experience, which is on Windows, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run cursor.ahk and the cursor doesn't move at all with the joystick. Either way proceed with the following.
+- In my experience, the mouse cursor sometimes ends up getting stuck in the upper left corner of the screen due to AHK detecting constant joystick state of X000 Y000. Or maybe you run cursor.ahk and the cursor doesn't move at all with the joystick. Either way proceed with the following.
 - --- I'm not sure what the cause is, but one way to fix this is as follows:
 - --- the left Azeron should be unplugged and the right one plugged in.
 - --- Device Manager >> View >> Devices By Container >> Expand the tree for Azeron >> right click the "USB composite device" >> uninstall
@@ -66,64 +66,120 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the hello_world folder and run it. Like 2azerons.ahk, they also work with regular keyboards, so you can skip the Azeron profile step. In fact you don't even need an Azeron to use the scripts.
 - --- note that all of these example scripts, like 2azerons.ahk, consist of these 5 parts:
 
-- --- --- 1. a global class named "LP_modes" which is properly structured as detialed in section below
-- --- --- 2. a function named LP_getActiveMode
-- --- --- 3. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "_LP" prefix.
-- --- --- 4. an include statement referencing longpressify.ahk
+- --- --- 1. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "LP_" prefix.
+- --- --- 2. a global class named "LP_modes" which is properly structured as detialed in section below
+- --- --- 3. an include statement referencing longpressify.ahk
+- --- --- 4. a call to LP_activate(<modeName>), modeName being the name of a nested class in LP_modes
 - --- --- 5. miscellaneous hotkeys at the bottom
 
-============AHK Level customization general overview============
-- an outline of the structure of 2azerons.ahk is in the section below
 
-- the content of 2azerons.ahk can be broken down into 5 main parts
-- --- 1. at the top of 2azerons.ahk is an include statement that references longpressify.ahk
-- --- ---longpressify.ahk contains code that will process the behaviour definitions you make in 2azerons.ahk and bring them to life.
-- --- --- "LP_" is a reservered prefix. All the identifiers in longpressify.ahk are prefixed by "LP_". You will also need to use this prefix in specific locations, but as long as you use it exactly as directed in the documentation, you code should work beautifully. 
-- --- 2. the Inert Library which can contain whatever helper functions, global variables, or classes you desire. 
-- --- --- to avoid overwriting anything important, do not use the prefix LP_ in any of your identifiers in the inert library section
-- --- 3. LP_modes is a class definition which will contain one or more "modes", which are actually nested classes - one nested class for each mapping mode you wish to define.
-- --- --- within each mode are more nested classes.  
-- --- --- --- Any nested class extending LP_longressable will be interpretted to represent the behaviour you wish to define for a single stand-alone button
-- --- --- --- Any nested class extending LP_chordingGroup will be interpretted to represent the behaviour you wish to define for a set of buttons that can be pressed in various combinations to produce different actions.
-- --- 4. LP_getActiveMode is a function you define which longpressify.ahk will use to dynamically determine what remapping mode is active. This function should return a name of a nested class inside of LP_modes. Whatever name is returned, longpressify.ahk will then enforce as the active mode.
-- --- 5. Miscellaneous hotkey definitions. Here you put whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for mode switching here, or perhaps a hotkey for terminating the script.
-- The order of code parts 1-3 above is not important, but part 4-5 are expected to go at the end of your script.
-- also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that is not covered in this brief introduction.
-
-============AHK Level customization: high level structure of 2azerons.ahk========================
-Include <path to longpressify.ahk>
+============AHK Level customization: structure of 2azerons.ahk from a distance========================
 Inert Library
-LP_getActiveMode
-LP_modes 
-    mode1
-        button1
+class LP_modes 
+    class mode1
+        class button1
+			LP_longDuration
+			LP_repeatDuration
             LP_down
             LP_shortUp
             LP_hold
             LP_longUP
             LP_repeat
             ...
-        button2
+        class button2
             ...
         ...
-        chordingGroup1
-            chord1
+        class chordingGroup1
+			LP_Buttons
+            class ooi
+				LP_longDuration
+				LP_repeatDuration
                 LP_down
                 LP_shortUp
                 LP_hold
                 LP_longUP
                 LP_repeat
                 ...
-            chord2
-            ...
+            class oio
+				...
+            class oii
+				...
+			...
         chordingGroup2
-            chord1
-            chord2
-            ...
+            class ooi
+				...
+            class oio
+				...
+            class oii
+				...
+			...
         ...
     mode2
         ...
     ...
+#Include <path to longpressify.ahk>
+LP_activate(<modeName>)
 Miscellaneous hotkey definitions
+
+
+
+
+============AHK Level customization general overview============
+- an outline of the structure of 2azerons.ahk is in the section above
+
+- the content of 2azerons.ahk can be broken down into 5 main parts
+- --- 1. the Inert Library which can contain whatever helper functions, global variables, or classes you desire. 
+- --- --- to avoid overwriting anything important, do not use the prefix LP_ in any of your identifiers in the inert library section
+- --- 2. LP_modes is a class definition which will contain one or more "modes", which are actually nested classes - one nested class for each mapping mode you wish to define.
+- --- --- within each mode are more nested classes. Each is interpretted to describe a "behaviour paradigm" (i.e. how a single button or chording group should behave)
+- --- --- --- Any nested class for which the key/property "LP_Buttons" is undefined will be interpretted to represent the behaviour you wish to define for a single stand-alone button. See section titled "defining behaviour of stand-alone button" below
+- --- --- --- Any nested class for which the property "LP_buttons" (note this is distinct from "LP_button") is defined will be interpretted to represent the behaviour you wish to define for a set of buttons that can be pressed in various combinations to produce different actions. In this case LP_buttons should be an array of strings matching valid button/key names or scancodes as enumerated in the ahk keylist:  https://www.autohotkey.com/docs/KeyList.htm 
+- --- --- --- The detailed structure of a chording group definition is in the section "defining behaviour of a chording group" below
+- --- 3.  an include statement that references longpressify.ahk
+- --- ---longpressify.ahk contains code that will interpret the behaviour definitions you make LP_modes and bring them to life.  It will define two functions- LP_activate and LP_deactive- which you can use to control on-the-fly which remapping modes are active. The script longpressify.ahk will also define many other classes, functions, and variables, all prefixed with "LP_", many of which are not explained here as you will probably never need to reference them in your code. 
+- --- --- "LP_" is a reservered prefix. All the identifiers in longpressify.ahk are prefixed by "LP_". You will also need to use this prefix in specific locations in your code when necessary in order to communicate with longpressify.ahk, as detailed in later sections below.
+- --- 4. One or more calls to LP_activate is necessary to specify what mode you wish to be active in the beginning. This function is defined in longpressify.ahk, hence this call(s) comes after the include statement. The function takes one input, as string, which is the name of a nested class in LP_modes, representing the mode you wish to activate.
+- --- 5. Miscellaneous hotkey definitions. Here you put hotkeys used for mode control and whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for terminating the script.
+- --- --- Control which modes are active with calls to LP_activate and LP_deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
+- --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I'm not entirely sure what will happen. 
+- The order of code parts 1-2 above is not important, but part 3-5 are expected to go in order after 1-2.
+- also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that will be covered later.
+
+
+===================defining behaviour of a stand-alone button==================
+- any class defintion which is nested inside a mode and does not have the key/property, LP_buttons, will be interpretted as the desired behaviour of a stand-alone button.
+- You can use the name of the class to specify what button the paradigm pertains to. In this case the name of the class would be one of the following:
+- --- a scan code or the name of a button/key as listed in the ahk keylist: https://www.autohotkey.com/docs/KeyList.htm (eg. "sc050" "sc046" "a" "esc" "numpad1")
+- --- one of the acceptable aliases to certain buttons as enumerated in longpressify.ahk by the object LP_buttonByAlias. These aliases are provided because many keynames in autohotkey are not valid class names. (eg. "one", "two", "forwardslash", "openbracket" as class names would be interpretted as meaning the keys "1" "2" "/" "[")
+- it is also acceptable to name the class anything you want so long as the class has defined the property/key LP_button containing a string which belongs to one of the two categories above. (eg. LP_button := "a", LP_button := "sc046", LP_button := "1", "LP_button"="one")
+- the class can have any properties or methods you desire as long as they do not conflict with some reserved method and properties names which are prefixed with "LP_", which include, but are not limited to the following:
+- --- LP_longDuration: specifies the number of milliseconds the user has to release the button before entering the long press phase (see LP_held and LP_longRepeat below). If the user does not define this, a default value of several hundreds will be used
+- --- LP_repeatDuration: specifies the duration, in milliseconds, of the long press phase, after which the repeat phase begins if the button has not been released (see LP_repeat below). If the user does not define this, a default value of several hundreds will be used
+- --- LP_prefix: eg: "$", "*", "~", "". This string specifies the hotkey prefix that is to be used to control what what kind of key presses will activate the behaviour paradigm and whether or not the native behaviour of the button will be stifled. See https://www.autohotkey.com/docs/Hotkeys.htm for more details. Note that 2azerons has not been tested with modifier prefixes.
+- --- the following are some of the methods you can define to specify behaviour of the button
+- --- --- LP_down: called without delay on the button-down event. Only used in special circumstances
+- --- --- LP_shortUp: called if button is released prior to entering the long press phase
+- --- --- LP_held: called upon entering the long press phase
+- --- --- LP_longUP: called if button is released in the long press or repeat phase
+- --- --- LP_repeat: called if a repeat-down event fires during the repeat phase
+- --- --- LP_shortRepeat: called if a repeat-down event fires prior to the long press phase
+- --- --- LP_longRepeat: called if a repeat-down event fires during the long phase
+- --- you can define all, some, or none of the supported handler methods. However, there are no default handlers, except for the backend ones that merely store and update information. Some examples of that information, which you may find useful in coding complex behaviour:
+- --- --- LP_repeatPhaseRepeats
+- --- --- LP_longPhaseRepeats
+- --- --- LP_shortPhaseRepeats
+- --- the above are properties of the behaviour paradigm which are automatically updated to reflect how many repeat down events occur during each of the three phases of the button press.
+
+============defining behaviour of a chording group================
+- any class defintion which is nested inside a mode and has the key/property, LP_buttons, will be interpretted as the desired behaviour of a chording group, i.e. a set of buttons that when pressed in various combinations produce various actions.
+- The structure of a chording group is a bit more layered than that of a stand-alone button. 
+- the name of the class is not important.
+- it should have defined the property/key, LP_buttons, which should be an array of strings matching valid button/key names or scancodes as enumerated in the ahk keylist:  https://www.autohotkey.com/docs/KeyList.htm 
+- similar to stand-alone buttons detailed above, the class representing a chording group can have any properties and methods you desire as long as they do not conflict with some reserved method and properties names which are prefixed with "LP_". However one of the ways chording groups differ from stand alone buttons is that they must also contain nested classes which describe the desired behaviour of each chord you wish to define. These chord defintions will contain much of the same properties/keys and methods as stand-alone button definitions. However, one major distiction is that chords do not have LP_button defined and the name of a chord is not the name of a button. Instead, the name of a chord consists of a sequence of i's and o's, used to denote the binary representation of which buttons of the chording group make up that chord. For example, let's assume the chording group has LP_buttons=["a","s","d"], then the following are examples of how the names of nested classes would be used to denote various combinations of these three buttons:
+- --- a nested class named "iii" describes the actions associated with pressing all three buttons, a,s, and d at the same time
+- --- a nested class named "oii" describes the actions associated with pressing just the two buttons, s and d at the same time
+- --- a nested class named "oio" describes the actions associated with pressing just the one button, s 
+- --- ...
+
 ====================Other customization notes=======================
 if you have defined button behaviour for a button on the numpad, then avoid toggling numlock while that key is held down, because doing so may cause the up event not to fire.

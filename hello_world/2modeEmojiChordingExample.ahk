@@ -1,10 +1,4 @@
 ﻿
-	
-class abstractChord extends LP_chord
-{
-    LP_longDuration := 300 ;overrides default of 400
-    LP_repeatDuration := 400 ;overrides default of 600
-}
 
 active:="peopleMode"
 LP_getActiveMode()
@@ -14,17 +8,22 @@ LP_getActiveMode()
 	return active
 }
 	
-
+class abstractChord
+{
+	
+	LP_longDuration := 600 
+	LP_repeatDuration := 1200 
+}
    
 class LP_modes 
 {
 
   class creatureMode
   {
-		class leftMiddleFingerUpper extends LP_chordingGroup
+		class leftMiddleFingerUpper
 		{
 			LP_Buttons := ["f5","f4"]
-			
+
 			class oi extends abstractChord
 			{
 				LP_shortUp()
@@ -66,7 +65,7 @@ class LP_modes
  
   class peopleMode
   {
-		class leftMiddleFingerUpper extends LP_chordingGroup
+		class leftMiddleFingerUpper
 		{
 			LP_Buttons := ["f5","f4"]
 			
@@ -110,12 +109,18 @@ class LP_modes
 }
 
 #include ..\longpressify.ahk
-
+LP_activate("creatureMode")
 *f1::
-if (active == "creatureMode")
-	active := "peopleMode"
+if (LP_modes.LP_instance.creatureMode.LP_isActive)
+{
+	LP_deactivate("creatureMode")
+	LP_activate("peopleMode")
+}
 else
-	active := "creatureMode"
+{
+	LP_deactivate("peopleMode")
+	LP_activate("creatureMode")
+}
 return
 
 

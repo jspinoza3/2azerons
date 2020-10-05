@@ -1,4 +1,4 @@
-﻿class clay extends LP_longpressable
+﻿class clay
 {
 	LP_longDuration := 300
 	LP_repeatDuration := 600
@@ -62,7 +62,7 @@ class longDontRepeat extends clay
 	}
 }
 
-class longDontRepeatChord extends LP_chord
+class longDontRepeatChord
 {
 	LP_shortUp()
 	{
@@ -116,7 +116,7 @@ class shortCandid extends longRepeat
 	}
 } 
 
-class shortRepeatChord extends LP_chord
+class shortRepeatChord
 {
 	LP_repeat()
 	{
@@ -146,7 +146,7 @@ class shortRepeatChord extends LP_chord
 	}
 }
 
-class dontRepeatChord extends LP_chord
+class dontRepeatChord
 {
 	LP_shortUp()
 	{
@@ -179,7 +179,7 @@ parents.longString := {button:longStringChord, dontRepeat:longStringChord,word:s
 parents.longNull := {button:shortRepeatChord, dontRepeat:dontRepeatChord, word:shortWordChord,string:shortStringChord}
 parents.longDontRepeat := {button:longDontRepeatChord, dontRepeat:longDontRepeatChord,word:shortWordLongDontRepeatChord,string:shortStringLongDontRepeatChord}
 
-class orphanChord extends LP_chord
+class orphanChord
 {
 
 	
@@ -245,7 +245,7 @@ class orphanChord extends LP_chord
 
 }
 
-class shortStringChord extends LP_chord
+class shortStringChord
 {
 	LP_shortUp()
 	{
@@ -258,7 +258,7 @@ class shortStringChord extends LP_chord
 	}	
 }
 
-class shortWordChord extends LP_chord
+class shortWordChord
 {
 	LP_shortUp()
 	{
@@ -271,7 +271,7 @@ class shortWordChord extends LP_chord
 	}	
 }
 
-class longStringChord extends LP_chord
+class longStringChord
 {
 	LP_shortUp()
 	{
@@ -384,7 +384,7 @@ sendWord(w)
 	}	
 }
 
-class wordChord extends LP_chord
+class wordChord
 {
 	LP_shortUp()
 	{
@@ -440,7 +440,7 @@ class shortWordLongDontRepeatChord extends longDontRepeatChord
 	}
 }
 
-class stringChord extends LP_chord
+class stringChord
 {
 	LP_shortUp()
 	{
@@ -576,14 +576,14 @@ class LP_modes
 		}
 */
 
-		class leftMiddleFinger extends LP_chordingGroup
+		class leftMiddleFinger
 		{
 			LP_Buttons := ["n","i","m"]
 			longs := [["n","e","v","e","r"], StrSplit("issue"), StrSplit("monitor")]
 			top2 := ","
 			top2long := null
-			bottom2 := {dontRepeat:"f3"}
-			bottom2long := {dontRepeat:"f9"}
+			bottom2 := "f3"
+			bottom2long := "f9"
 			
 			class ooi extends orphanChord
 			{
@@ -651,7 +651,7 @@ class LP_modes
 
 		}
 		
-		class leftIndexFingerUpper extends LP_chordingGroup
+		class leftIndexFingerUpper
 		{
 			LP_Buttons := ["6","4"]
 			longs := [null,null]
@@ -716,8 +716,8 @@ class LP_modes
 			longs := [StrSplit("limit"), StrSplit("always"), StrSplit("works")]
 			top2 := ";"
 			top2long := null
-			bottom2 := {dontRepeat:"f2"}
-			bottom2long := {dontRepeat:"f8"}
+			bottom2 := "f2"
+			bottom2long := "f8"
 
 		}
 		
@@ -728,8 +728,8 @@ class LP_modes
 			longs := ["j", "q", StrSplit("broken")]
 			top2 := "="
 			top2long := null
-			bottom2 := {dontRepeat:"f6"}
-			bottom2long := {dontRepeat:"f12"}
+			bottom2 := "f6"
+			bottom2long := "f12"
 
 		}
 		
@@ -739,8 +739,8 @@ class LP_modes
 			longs := ["z", StrSplit("every"), "v", StrSplit("yesterday")]
 			top2 := "."
 			top2long := null
-			bottom2 := {dontRepeat:"f4"}
-			bottom2long := {dontRepeat:"f10"}
+			bottom2 := "f4"
+			bottom2long := "f10"
 			middle2 := "["
 			middle2long := null
 			top3 := {string:"🐦"}
@@ -753,14 +753,14 @@ class LP_modes
 			bottomSideLong := null
 		}
 		
-		class rightIndexFinger extends LP_chordingGroup
+		class rightIndexFinger
 		{
 			LP_Buttons := ["t","c","p","h"]
 			longs := [StrSplit("tomorrow"), "k", StrSplit("permanent"), "x"]
 			top2 := "-"
 			top2long := null
-			bottom2 := {dontRepeat:"f5"}
-			bottom2long := {dontRepeat:"f11"}
+			bottom2 := "f5"
+			bottom2long := "f11"
 			middle2 := "]"
 			middle2long := null
 			top3 := {string:"🦍"}
@@ -901,10 +901,10 @@ class LP_modes
 		{
 			LP_Buttons := ["r","o","u"]
 			longs := [StrSplit("restore"), StrSplit("object"), StrSplit("understand")]
-			top2 := "\"
+			top2 := "esc"
 			top2long := null
-			bottom2 := {dontRepeat:"f1"}
-			bottom2long := {dontRepeat:"f7"}
+			bottom2 := "f1"
+			bottom2long := "f7"
 
 		}
 	
@@ -915,7 +915,7 @@ class LP_modes
 }
 
 #include longpressify.ahk
-
+LP_activate("default")
 /*
 f12::
 if (active == "default")
