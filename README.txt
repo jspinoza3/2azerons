@@ -179,5 +179,13 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- a nested class named "oio" describes the actions associated with pressing just the one button, s 
 - --- ...
 
+======================Mode  Switching=============================
+- You can write code to control which modes are active with calls to LP_activate and LP_deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
+
+- If you define more than one mode, you should design the switching mechanism such that:
+- --- if two modes, say, A and B, have any overlap in the buttons they modify, and A is currently active, then A should be deactivated before activating B. This means that LP_deactivate("A") would need to be called at some point prior to LP_activate("B")
+- failure to enforce the above may result in unexpected button behaviour. 
+- In the design of the mode switching backend, I have forseen the possibility of the end user pressing a button to switch modes while still holding down some of the buttons involved in the previous mode. If this happens then any paradigm associated with those buttons will remain active until all the buttons of assocatied with that paradigm have been released. These paradigms are considered to be in a "pending" state. This provision avoids keys being virtually stuck down as a result of a paradigm being deactivated in the middle of being realized. If a new mode is activated while there are paradigms still pending deactivation, then if there are any paradigms of the new mode that conflict with the pending paradigms, these paradigms will enter a "waiting" state until the conflicting pending paradigms finally deactivate. However note that if a mode, M, is activated, with paradigm, P, modifying a button, B, which the end user is holding down, and B is not part of any pending paradigm (i.e. it was not a modified button prior to activation of M), then P will immediately go in to affect (i.e. it will not wait for the user to release B). This could have unexpected consequences, such as an unintended call P.LP_longUp(). Furture versions may remedy this by checking the down state of buttons prior to paradigm activation.
+
 ====================Other customization notes=======================
 if you have defined button behaviour for a button on the numpad, then avoid toggling numlock while that key is held down, because doing so may cause the up event not to fire.

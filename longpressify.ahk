@@ -1,6 +1,6 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
-;SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #HotkeyInterval 1000  ;  (milliseconds).
 #MaxHotkeysPerInterval 500
@@ -54,20 +54,26 @@ LP_augmentAndInitialize(modeName,mode,buttonBehaviourParadigmName,buttonBehaviou
 
 LP_activate(modeName)
 {
-	for name,p in LP_modes.LP_instance[modeName].LP_paradigms 
+	if (!LP_modes.LP_instance[modeName].LP_isActive)
 	{
-		p.LP_activate()
+		for name,p in LP_modes.LP_instance[modeName].LP_paradigms 
+		{
+			p.LP_activate()
+		}
+		LP_modes.LP_instance[modeName].LP_isActive := true
 	}
-	LP_modes.LP_instance[modeName].LP_isActive := true
 }
 
 LP_deactivate(modeName)
 {
-	for name,p in LP_modes.LP_instance[modeName].LP_paradigms 
+	if (LP_modes.LP_instance[modeName].LP_isActive)
 	{
-		p.LP_deactivate()
+		for name,p in LP_modes.LP_instance[modeName].LP_paradigms 
+		{
+			p.LP_deactivate()
+		}
+		LP_modes.LP_instance[modeName].LP_isActive := false
 	}
-	LP_modes.LP_instance[modeName].LP_isActive := false
 }
 
 LP_forEachKeyIn(obj, handler)
@@ -161,25 +167,13 @@ class LP_longpressable extends LP_behaviourParadigm
 	}
 	
 	
-	LP_activate()
-	{
-		button := this.LP_button
-		pre:=this.LP_prefix
-		this.LP_hotkeyOn(pre, button)
-	}
-	
-	LP_deactivate()
-	{
-		button := this.LP_button
-		pre:=this.LP_prefix
-		this.LP_hotkeyOff(pre, button)
-	}
+
 	
 	
 	LP_onDown()
 	{
 
-		alreadyDown := this.LP_isDown
+		alreadyDown := this.LP_alreadyDown
 		if (!alreadyDown)
 		{
 				this.LP_shortPhaseRepeats := 0
@@ -188,7 +182,7 @@ class LP_longpressable extends LP_behaviourParadigm
 				this.LP_downTime := A_TickCount
 				this.LP_repeatTime := this.LP_downTime + this.LP_longDuration + this.LP_repeatDuration
 				mode := this.LP_modeName
-				this.LP_isDown := true
+				this.LP_alreadyDown := true
 				fn := ObjBindMethod(this, "LP_timeout")
 				this.LP_timer := fn
 				longDuration := this.LP_longDuration
@@ -226,11 +220,55 @@ class LP_longpressable extends LP_behaviourParadigm
 			
 		
 	}
+	
+	
 
+	LP_doActivation()
+	{
+		this.LP_hotkeyOn(this.LP_prefix, this.LP_button)
+	}
+
+	LP_wait()
+	{
+		return LP_hotkeyAvailability.wait(this.LP_button, this)
+	}
+	
+	
+	LP_stopWaiting()
+	{
+		return LP_hotkeyAvailability.stopWaiting(this.LP_button, this)
+	}
+	
+	LP_reserve()
+	{
+		pre := this.LP_prefix
+		this.LP_reserveHotkey(pre, this.LP_button)
+	}
+	
+	LP_doDeactivation()
+	{
+		pre := this.LP_prefix
+		this.LP_hotkeyOff(pre,this.LP_button)	
+	}
+	
+
+	
+	LP_isDown()
+	{
+		return this.LP_alreadyDown
+	}
+	
+	LP_reportDeactivationComplete()
+	{
+		LP_hotkeyAvailability.reportDeactivationComplete(this.LP_button)
+	}	
+	
+	
+	
 	LP_onUp()
 	{
 
-		this.LP_isDown := false
+		this.LP_alreadyDown := false
 		fn := this.LP_timer
 		if (fn)
 		{
@@ -283,6 +321,51 @@ class LP_behaviourParadigm
 		hotkey, % pre button " up", off
 	}
 
+	
+	LP_reserveHotkey(pre, button)
+	{
+		LP_hotkeyAvailability.reportDelayedDeactivation(button, this)
+		hotkey, % pre button " up", off
+		fn := ObjBindMethod(this, "LP_onUpReserved", button)  
+		hotkey, % pre button " up", % fn, on
+	}
+	
+	
+	LP_deactivate()
+	{
+		if(this.LP_isDown())
+		{
+			this.LP_reserve()
+		}
+		else
+		{
+			if (!this.LP_stopWaiting())
+			{
+				this.LP_doDeactivation()
+			}
+						
+		}
+	}
+	
+	LP_activate()
+	{
+		if(!this.LP_wait())
+		{
+			this.LP_doActivation()
+		}
+	}
+	
+
+	
+	LP_onUpReserved(button)
+	{
+		this.LP_onUp(button)
+		if (!this.LP_isDown())
+		{
+			this.LP_doDeactivation()
+			this.LP_reportDeactivationComplete()
+		}
+	}
 }
 
 class LP_chord
@@ -459,6 +542,14 @@ class LP_chordingGroup extends LP_behaviourParadigm
 			this.LP_binaryPositionByButton[button] := l-i
 			this.LP_downStatusByButton[button] := false
 		}
+		if (!this.LP_prefixes)
+		{
+			this.LP_prefixes := []
+			for i,button in this.LP_Buttons
+			{
+				this.LP_prefixes[i] := "*"
+			}			
+		}
 
 		this.LP_chords := {}
 
@@ -470,54 +561,161 @@ class LP_chordingGroup extends LP_behaviourParadigm
 	
 	}
 	
+
 	
-	LP_activate()
+	LP_doActivation()
 	{
-			
+			for i,button in this.LP_Buttons
+			{
+
+				pre := this.LP_prefixes[i]
+				this.LP_hotkeyOn(pre,button)
+			}
+	}
+
+	LP_wait()
+	{
 		for i,button in this.LP_Buttons
 		{
-			this.LP_hotkeyOn("*",button)
+			if(LP_hotkeyAvailability.wait(button, this))
+			{
+				return true
+			}
 		}
 	}
 	
-	LP_deactivate()
+	
+	LP_stopWaiting()
+	{
+			for i,button in this.LP_Buttons
+			{
+				if (LP_hotkeyAvailability.stopWaiting(button, this))
+					return true
+			}
+	}
+	
+	LP_reserve()
+	{
+
+			for i,button in this.LP_Buttons
+			{
+				pre := this.LP_prefixes[i]
+				this.LP_reserveHotkey(pre, button)
+			}	
+	
+	}
+	
+	LP_doDeactivation()
 	{
 		for i,button in this.LP_Buttons
 		{
-			this.hotkeyOff("*",button)
-		}	
+			pre := this.LP_prefixes[i]
+			this.LP_hotkeyOff(pre,button)	
+		}
 	}
 	
+
+	
+	LP_isDown()
+	{
+		return this.LP_flags!=0
+	}
+	
+	LP_reportDeactivationComplete()
+	{
+			for i,button in this.LP_Buttons
+			{
+				LP_hotkeyAvailability.reportDeactivationComplete(button)
+			}	
+	}
+	
+
+
 	
 }
 
-
-
-
-
-
-/*
-LP_HotkeyShouldFireDown(buttonBehaviourParadigm, thisHotkey)
+class LP_hotkeyAvailability
 {
-	global LP_modeHeldDownFromByScanCode
-	modeName := buttonBehaviourParadigm.LP_modeName
-	sc:=buttonBehaviourParadigm.LP_scanCode
-
-	;heldDownFrom := LP_modeHeldDownFromByScanCode[buttonBehaviourParadigm.LP_scanCode] 
-	;yo:=LP_getActiveMode()
-		;send %modeName% 
-	return (buttonBehaviourParadigm.LP_isDown) || (  (LP_getActiveMode() == modeName) && LP_modeHeldDownFromByScanCode[s]==null)
+	static arr := {}
+	reportDelayedDeactivation(button, paradigm)
+	{
+		;msgbox huu
+		sc:=getKeySC(button)
+		if (!this.arr[sc])
+			this.arr[sc] := {pending:{},waiting:{}}
+		clean := this.cleanUpButtonName(button)
+		this.arr[sc].pending[clean] := paradigm
+	}
+	reportDeactivationComplete(button)
+	{
+		
+		sc:=getKeySC(button)
+		clean := this.cleanUpButtonName(button)
+		this.arr[sc].pending[clean] := null
+		if (!this.arr[sc].pending.ScanCode)
+		{
+			toact := {}
+			for buttonName,paradigm in this.arr[sc].waiting
+			{
+				if(paradigm)
+				{
+					this.arr[sc].waiting[buttonName] := null
+					toact[buttonName] := paradigm
+				}
+			}
+			for buttonName,paradigm in toact
+			{
+				paradigm.LP_activate()
+			}
+		}
+		
+	}
+	stopWaiting(button, paradigm)
+	{
+		sc:=getKeySC(button)
+		clean := this.cleanUpButtonName(button)
+		if (!this.arr[sc])
+			return false
+		if( this.arr[sc].waiting[clean] == paradigm)
+		{
+			this.arr[sc].waiting[clean] := null
+			return true
+		}
+	}
+	wait(button, paradigm)
+	{
+		
+		sc:=getKeySC(button)
+		clean := this.cleanUpButtonName(button)
+		if (!this.arr[sc])
+			return false
+		pendingCount:=0
+		for buttonName, pendingParadigm in this.arr[sc].pending
+		{
+			if (pendingParadigm)
+				pendingCount++
+		}
+		if (this.arr[sc].pending.ScanCode  || (clean == "ScanCode" &&  pendingCount>0 ) || this.arr[sc].pending[clean] )
+		{
+			this.arr[sc].waiting[clean] := paradigm
+			return true		
+		}
+		else
+			return false
+	}
+	cleanUpButtonName(button)
+	{
+		upper := Format("{:U}", button)
+		if (substr(upper,1,2)=="SC" && strLen(button)==5)
+			return "ScanCode"
+		else 
+			return getKeyName(button)
+	}
 }
 
-LP_HotkeyShouldFireUp(buttonBehaviourParadigm, thisHotkey)
-{
-	;global LP_modeHeldDownFromByScanCode
-	;return LP_modeHeldDownFromByScanCode[buttonBehaviourParadigm.LP_scanCode] == buttonBehaviourParadigm.LP_modeName
-	return buttonBehaviourParadigm.LP_isDown
-}
 
 
-*/
+
 
 
 

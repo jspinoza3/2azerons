@@ -565,6 +565,7 @@ class LP_modes
 		
 		}
 
+
 		class end extends shortCandid
 		{
 			long := "home"
@@ -910,21 +911,25 @@ class LP_modes
 	
 		
 	}
-	
 
 }
 
 #include longpressify.ahk
 LP_activate("default")
 /*
-f12::
-if (active == "default")
-	active := "mode2"
+*f1::
+if (LP_modes.LP_instance.default.LP_isActive)
+{
+	LP_deactivate("default")
+	LP_activate("other")
+}
 else
-	active := "default"
+{
+	LP_deactivate("other")
+	LP_activate("default")
+}
 return
 */
-
 ~!#.::
 ExitApp
 return 
