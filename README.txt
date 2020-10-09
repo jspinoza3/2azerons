@@ -78,8 +78,8 @@ Inert Library
 class LP_modes 
     class mode1
         class button1
-	    LP_longDuration
-	    LP_repeatDuration
+	        LP_longDuration
+	        LP_repeatDuration
             LP_down
             LP_shortUp
             LP_hold
@@ -90,10 +90,10 @@ class LP_modes
             ...
         ...
         class chordingGroup1
-	    LP_Buttons
+	        LP_Buttons
             class ooi
-		LP_longDuration
-		LP_repeatDuration
+		        LP_longDuration
+		        LP_repeatDuration
                 LP_down
                 LP_shortUp
                 LP_hold
@@ -114,7 +114,7 @@ class LP_modes
 		...
 	    ...
         ...
-    mode2
+    class mode2
         ...
     ...
 #Include <path to longpressify.ahk>
@@ -129,17 +129,15 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- 1. the Inert Library which can contain whatever helper functions, global variables, or classes you desire. 
 - --- --- to avoid overwriting anything important, do not use the prefix LP_ in any of your identifiers in the inert library section
 - --- 2. LP_modes is a class definition which will contain one or more "modes", which are actually nested classes - one nested class for each mapping mode you wish to define.
-- --- --- within each mode are more nested classes. Each is interpretted to describe a "behaviour paradigm" (i.e. how a single button or chording group should behave)
+- --- --- within each mode are more nested classes. Each is interpretted to describe a "behaviour paradigm" (i.e. how a single button or chording group should behave). Therefore if you want to define any helper/abstract classes you should not put them nested inside a mode because longpressify.ahk will try to activate them.
 - --- --- --- Any nested class for which the key/property "LP_Buttons" is undefined will be interpretted to represent the behaviour you wish to define for a single stand-alone button. See section titled "defining behaviour of stand-alone button" below
 - --- --- --- Any nested class for which the property "LP_buttons" (note this is distinct from "LP_button") is defined will be interpretted to represent the behaviour you wish to define for a set of buttons that can be pressed in various combinations to produce different actions. In this case LP_buttons should be an array of strings matching valid button/key names or scancodes as enumerated in the ahk keylist:  https://www.autohotkey.com/docs/KeyList.htm 
 - --- --- --- The detailed structure of a chording group definition is in the section "defining behaviour of a chording group" below
 - --- 3.  an include statement that references longpressify.ahk
-- --- ---longpressify.ahk contains code that will interpret the behaviour definitions you make LP_modes and bring them to life.  It will define two functions- LP_activate and LP_deactive- which you can use to control on-the-fly which remapping modes are active. The script longpressify.ahk will also define many other classes, functions, and variables, all prefixed with "LP_", many of which are not explained here as you will probably never need to reference them in your code. 
+- --- ---longpressify.ahk contains code that will iterate through the class definitions nested in LP_modes, performing a deep instantiation of them. Keep this in mind as you define behaviour paradigms- the handler methods you define inside a paradigm class will be called on an instance of the paradigm, and the instantiation is performed automatically. It will also define two functions- LP_activate and LP_deactive- which you can use to control, on-the-fly, which remapping modes are active (see "mode switching" section below). The script longpressify.ahk will also define many other classes, functions, and variables, all prefixed with "LP_", many of which are not explained here as you will probably never need to reference them in your code. 
 - --- --- "LP_" is a reservered prefix. All the identifiers in longpressify.ahk are prefixed by "LP_". You will also need to use this prefix in specific locations in your code when necessary in order to communicate with longpressify.ahk, as detailed in later sections below.
-- --- 4. One or more calls to LP_activate is necessary to specify what mode you wish to be active in the beginning. This function is defined in longpressify.ahk, hence this call(s) comes after the include statement. The function takes one input, as string, which is the name of a nested class in LP_modes, representing the mode you wish to activate.
-- --- 5. Miscellaneous hotkey definitions. Here you put hotkeys used for mode control and whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for terminating the script.
-- --- --- Control which modes are active with calls to LP_activate and LP_deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
-- --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I'm not entirely sure what will happen. 
+- --- 4. If you wish for a mode to be active immediately upon running the script, one or more calls to LP_activate is necessary to specify what mode you wish to be active in the beginning. The instantiations performed in longpressify.ahk are a prerequisite to mode activation,  hence the call(s) to LP_activate come after the include statement. The function takes one input, as string, which is the name of a nested class in LP_modes, representing the mode you wish to activate.
+- --- 5. Miscellaneous hotkey definitions. Here you put hotkeys used for mode control and whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for terminating the script. (see section titled "mode switching" for details)
 - The order of code parts 1-2 above is not important, but part 3-5 are expected to go in order after 1-2.
 - also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that will be covered later.
 
@@ -181,11 +179,10 @@ Miscellaneous hotkey definitions including those for mode switching
 
 ======================Mode  Switching=============================
 - You can write code to control which modes are active with calls to LP_activate and LP_deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
-
-- If you define more than one mode, you should design the switching mechanism such that:
-- --- if two modes, say, A and B, have any overlap in the buttons they modify, and A is currently active, then A should be deactivated before activating B. This means that LP_deactivate("A") would need to be called at some point prior to LP_activate("B")
+- multiple modes can be active at the same time, but as you design your modes and the mechanism for switching between them, you are expected to enforce the following:
+- --- if any two modes, say, A and B, have any overlap in the buttons they modify, and A is currently active, then A should be deactivated before activating B. This means that LP_deactivate("A") would need to be called at some point prior to LP_activate("B")
 - failure to enforce the above may result in unexpected button behaviour. 
-- In the design of the mode switching backend, I have forseen the possibility of the end user pressing a button to switch modes while still holding down some of the buttons involved in the previous mode. If this happens then any paradigm associated with those buttons will remain active until all the buttons of assocatied with that paradigm have been released. These paradigms are considered to be in a "pending" state. This provision avoids keys being virtually stuck down as a result of a paradigm being deactivated in the middle of being realized. If a new mode is activated while there are paradigms still pending deactivation, then if there are any paradigms of the new mode that conflict with the pending paradigms, these paradigms will enter a "waiting" state until the conflicting pending paradigms finally deactivate. However note that if a mode, M, is activated, with paradigm, P, modifying a button, B, which the end user is holding down, and B is not part of any pending paradigm (i.e. it was not a modified button prior to activation of M), then P will immediately go in to affect (i.e. it will not wait for the user to release B). This could have unexpected consequences, such as an unintended call P.LP_longUp(). Furture versions may remedy this by checking the down state of buttons prior to paradigm activation.
+- In the design of the mode switching backend, I have forseen the possibility of the end user pressing a button to deactivate a mode while still holding down some of the buttons involved in the mode. In this situation deactivation of the affected paradigms will be delayed- i.e. any paradigm associated with those still-pressed buttons will remain active until all the buttons assocatied with that paradigm have been released. These paradigms are considered to be in a "pending" state. This provision avoids keys being virtually stuck down as a result of a paradigm being deactivated in the middle of being played out. If a new mode is activated while there are paradigms still pending deactivation, then if there are any paradigms of the new mode that conflict with the pending paradigms, these paradigms will enter a "waiting" state until the conflicting pending paradigms finally deactivate. However note that if a mode, M, is activated, containing a paradigm paradigm, P, which modifies a button, B, which the end user is holding down, and B is not part of any pending paradigm (i.e. it was not a modified button prior to activation of M), then P will immediately go in to affect (i.e. it will not wait for the user to release B). This could have unexpected consequences, such as the native key assocatited with B getting stuck in the down state due to it's native up behaviour being overwritten mid-press.  Also there may be an unintended call(s) to event handlers of P. Furture versions may remedy this by checking the down state of buttons prior to paradigm activation.
 
 ====================Other customization notes=======================
 if you have defined button behaviour for a button on the numpad, then avoid toggling numlock while that key is held down, because doing so may cause the up event not to fire.

@@ -1,4 +1,4 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+﻿;#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -54,26 +54,24 @@ LP_augmentAndInitialize(modeName,mode,buttonBehaviourParadigmName,buttonBehaviou
 
 LP_activate(modeName)
 {
-	if (!LP_modes.LP_instance[modeName].LP_isActive)
-	{
+
 		for name,p in LP_modes.LP_instance[modeName].LP_paradigms 
 		{
 			p.LP_activate()
 		}
 		LP_modes.LP_instance[modeName].LP_isActive := true
-	}
+
 }
 
 LP_deactivate(modeName)
 {
-	if (LP_modes.LP_instance[modeName].LP_isActive)
-	{
+
 		for name,p in LP_modes.LP_instance[modeName].LP_paradigms 
 		{
 			p.LP_deactivate()
 		}
 		LP_modes.LP_instance[modeName].LP_isActive := false
-	}
+
 }
 
 LP_forEachKeyIn(obj, handler)
@@ -230,7 +228,7 @@ class LP_longpressable extends LP_behaviourParadigm
 
 	LP_wait()
 	{
-		return LP_hotkeyAvailability.wait(this.LP_button, this)
+		return LP_hotkeyAvailability.wait(this.LP_prefix,this.LP_button, this)
 	}
 	
 	
@@ -239,10 +237,10 @@ class LP_longpressable extends LP_behaviourParadigm
 		return LP_hotkeyAvailability.stopWaiting(this.LP_button, this)
 	}
 	
-	LP_reserve()
+	LP_delayDeactivation()
 	{
 		pre := this.LP_prefix
-		this.LP_reserveHotkey(pre, this.LP_button)
+		this.LP_delayHotkeyDeactivation(pre, this.LP_button)
 	}
 	
 	LP_doDeactivation()
@@ -307,7 +305,8 @@ class LP_behaviourParadigm
 
 	LP_hotkeyOn(pre, button)
 	{
-	
+		
+		;msgbox, % pre button
 		fn := ObjBindMethod(this, "LP_onDown", button) 
 		hotkey, % pre button, % fn, on
 		
@@ -322,30 +321,81 @@ class LP_behaviourParadigm
 	}
 
 	
-	LP_reserveHotkey(pre, button)
+	LP_delayHotkeyDeactivation(pre, button)
 	{
 		LP_hotkeyAvailability.reportDelayedDeactivation(button, this)
+		
 		hotkey, % pre button " up", off
-		fn := ObjBindMethod(this, "LP_onUpReserved", button)  
+		fn := ObjBindMethod(this, "LP_onUpWhileDelaying", button)  
 		hotkey, % pre button " up", % fn, on
+		
+		hotkey, % pre button, off
+		fn := ObjBindMethod(this, "LP_onDownWhileDelaying", button)  
+		hotkey, % pre button, % fn, on
+	}
+	
+	LP_shouldDelayDeactivation(isDown)
+	{
+		return isDown
+	}
+	
+	LP_defaultDelayPolicy(isDown)
+	{
+		return isDown
+	}
+	
+	LP_returnfalse()
+	{
+		return false
+	}
+	
+	LP_returntrue()
+	{
+		return true
+	}
+	LP_switchDelayPolicyForCurrentDeactivation(newPolicy=-1,waitForNextButtonEvent=-1)
+	{
+		
+		debugappend("...")
+		if (this.LP_isDelaying)
+		{
+			if newPolicy is integer
+			{
+				if (newPolicy<0)
+					this.LP_temporaryDelayPolicy := "LP_defaultDelayPolicy"
+				else if (newPolicy)
+					this.LP_temporaryDelayPolicy := "LP_returntrue"
+				else
+					this.LP_temporaryDelayPolicy := "LP_returnfalse"
+			}
+			else if(newPolicy)
+				this.LP_temporaryDelayPolicy := newPolicy
+			else
+				this.LP_temporaryDelayPolicy := "LP_defaultDelayPolicy"
+			temp:=this.LP_temporaryDelayPolicy
+			debugappend("temp policy is: " . temp)
+			if(!(waitForNextButtonEvent>0))
+				this.LP_applyTemporaryDelayPolicyNow("change")
+		}
 	}
 	
 	
 	LP_deactivate()
 	{
-		if(this.LP_isDown())
+		if(!this.LP_stopWaiting())
 		{
-			this.LP_reserve()
-		}
-		else
-		{
-			if (!this.LP_stopWaiting())
+			if(this.LP_shouldDelayDeactivation(this.LP_isDown(),"mode"))
 			{
-				this.LP_doDeactivation()
+				this.LP_isDelaying := true
+				this.LP_delayDeactivation()
 			}
-						
+			else
+			{
+				this.LP_doDeactivation()		
+			}
 		}
 	}
+	
 	
 	LP_activate()
 	{
@@ -355,15 +405,48 @@ class LP_behaviourParadigm
 		}
 	}
 	
-
-	
-	LP_onUpReserved(button)
+	LP_deactivateDelaying()
 	{
+		
+		this.LP_isDelaying := false
+		this.LP_temporaryDelayPolicy := null
+		this.LP_doDeactivation()
+		this.LP_reportDeactivationComplete()
+	}
+	LP_applyTemporaryDelayPolicyNow(timing)
+	{
+				if (!(this[this.LP_temporaryDelayPolicy])(this.LP_isDown(),timing))
+					this.LP_deactivateDelaying()
+	}
+	
+	LP_onUpWhileDelaying(button)
+	{
+		debugappend("babaganoosdh LP_onDown flags: " . f . " of " . yep)
 		this.LP_onUp(button)
-		if (!this.LP_isDown())
+		if(this.LP_temporaryDelayPolicy)
 		{
-			this.LP_doDeactivation()
-			this.LP_reportDeactivationComplete()
+			this.LP_applyTemporaryDelayPolicyNow("up")
+		}
+		else if (!this.LP_shouldDelayDeactivation(this.LP_isDown(), "up"))
+		{
+			this.LP_deactivateDelaying()
+		}
+	}
+	
+	LP_onDownWhileDelaying(button)
+	{
+		f:=this.LP_flags
+		debugappend("before flags: " . f . " of " . yep)
+		this.LP_onDown(button)
+		f:=this.LP_flags
+		debugappend("after flags: " . f . " of " . yep)
+		if(this.LP_temporaryDelayPolicy)
+		{
+			this.LP_applyTemporaryDelayPolicyNow("down")
+		}
+		else if (!this.LP_shouldDelayDeactivation(this.LP_isDown(),"down"))
+		{
+			this.LP_deactivateDelaying()
 		}
 	}
 }
@@ -372,6 +455,7 @@ class LP_chord
 {
 	static LP_longDuration :=  400
 	static LP_repeatDuration := 500
+
 }
 
 class LP_chordingGroup extends LP_behaviourParadigm
@@ -397,9 +481,14 @@ class LP_chordingGroup extends LP_behaviourParadigm
 	
 	LP_onDown(button)
 	{
+		
+		yep:=this.LP_modeName
+		debugappend("LP_onDown: " . button . " of " . yep)
 		fn:=this.LP_timer
 		if (!this.LP_downStatusByButton[button])
 		{
+			f:=this.LP_flags
+			debugappend("babaganoosdh LP_onDown flags: " . f . " of " . yep)
 			if (fn)
 			{
 				SetTimer, %fn%, off
@@ -462,6 +551,8 @@ class LP_chordingGroup extends LP_behaviourParadigm
 	LP_onUp(button)
 	{
 		
+				yep:=this.LP_modeName
+		debugappend("LP_onUp: " . button . " of " . yep)
 		if (this.LP_armed)
 		{
 			this.LP_armed := false
@@ -482,6 +573,7 @@ class LP_chordingGroup extends LP_behaviourParadigm
 			
 		}
 		this.LP_flagAsUp(button)
+		/*
 		if(this.LP_flags==0)
 		{
 			for button,isDown in this.LP_downStatusByButton
@@ -489,6 +581,7 @@ class LP_chordingGroup extends LP_behaviourParadigm
 				sc := this.LP_scanCodes[button]
 			}
 		}
+		*/
 	}
 	
 	LP_timeout(chord)
@@ -577,7 +670,7 @@ class LP_chordingGroup extends LP_behaviourParadigm
 	{
 		for i,button in this.LP_Buttons
 		{
-			if(LP_hotkeyAvailability.wait(button, this))
+			if(LP_hotkeyAvailability.wait(this.LP_prefixes[i],button, this))
 			{
 				return true
 			}
@@ -594,13 +687,13 @@ class LP_chordingGroup extends LP_behaviourParadigm
 			}
 	}
 	
-	LP_reserve()
+	LP_delayDeactivation()
 	{
 
 			for i,button in this.LP_Buttons
 			{
 				pre := this.LP_prefixes[i]
-				this.LP_reserveHotkey(pre, button)
+				this.LP_delayHotkeyDeactivation(pre, button)
 			}	
 	
 	}
@@ -634,25 +727,27 @@ class LP_chordingGroup extends LP_behaviourParadigm
 	
 }
 
+
 class LP_hotkeyAvailability
 {
 	static arr := {}
 	reportDelayedDeactivation(button, paradigm)
 	{
+		debugappend("reportDelayedDeactivation: " . button)
 		;msgbox huu
 		sc:=getKeySC(button)
 		if (!this.arr[sc])
-			this.arr[sc] := {pending:{},waiting:{}}
+			this.arr[sc] := {delaying:{},waiting:{},waitingOnRogue:{}}
 		clean := this.cleanUpButtonName(button)
-		this.arr[sc].pending[clean] := paradigm
+		this.arr[sc].delaying[clean] := paradigm
 	}
 	reportDeactivationComplete(button)
 	{
-		
+		debugappend("reportDeactivationComplete: " . button)
 		sc:=getKeySC(button)
 		clean := this.cleanUpButtonName(button)
-		this.arr[sc].pending[clean] := null
-		if (!this.arr[sc].pending.ScanCode)
+		this.arr[sc].delaying[clean] := null
+		if (!this.arr[sc].delaying.ScanCode)
 		{
 			toact := {}
 			for buttonName,paradigm in this.arr[sc].waiting
@@ -672,6 +767,7 @@ class LP_hotkeyAvailability
 	}
 	stopWaiting(button, paradigm)
 	{
+		debugappend("stopWaiting: " . button)
 		sc:=getKeySC(button)
 		clean := this.cleanUpButtonName(button)
 		if (!this.arr[sc])
@@ -681,35 +777,78 @@ class LP_hotkeyAvailability
 			this.arr[sc].waiting[clean] := null
 			return true
 		}
+		if( this.arr[sc].waitingOnRogue[button] == paradigm)
+		{
+			this.arr[sc].waitingOnRogue[button] := null
+			return true
+		}
 	}
-	wait(button, paradigm)
+	wait(pre, button, paradigm)
 	{
-		
+		debugappend("wait: " . button)
 		sc:=getKeySC(button)
 		clean := this.cleanUpButtonName(button)
 		if (!this.arr[sc])
-			return false
-		pendingCount:=0
-		for buttonName, pendingParadigm in this.arr[sc].pending
+			this.arr[sc] := {delaying:{},waiting:{},waitingOnRogue:{}}
+		delayingCount:=0
+		
+		for buttonName, delayingParadigm in this.arr[sc].delaying
 		{
-			if (pendingParadigm)
-				pendingCount++
+			if (delayingParadigm)
+				delayingCount++
 		}
-		if (this.arr[sc].pending.ScanCode  || (clean == "ScanCode" &&  pendingCount>0 ) || this.arr[sc].pending[clean] )
+		
+		if (this.arr[sc].delaying.ScanCode  || (clean == "ScanCode" &&  delayingCount>0 ) || this.arr[sc].delaying[clean] )
 		{
 			this.arr[sc].waiting[clean] := paradigm
 			return true		
 		}
-		else
+		if InStr(pre, "~")
 			return false
+		if ( getKeyState(button, "P")) 
+		{
+			;msgbox %button%
+			this.arr[sc].waitingOnRogue[button] := paradigm
+			fn:= ObjBindMethod(this,"rogueUp",button,sc)
+			;nothing:=ObjBindMethod(this,"nothing")
+			;hotkey, % "~" button, %nothing%
+			hotkey, % "~" button " up", %fn%, on
+			return true
+		}
+		
+		return false
 	}
 	cleanUpButtonName(button)
 	{
+		
 		upper := Format("{:U}", button)
 		if (substr(upper,1,2)=="SC" && strLen(button)==5)
 			return "ScanCode"
 		else 
 			return getKeyName(button)
+	}
+	rogueUp(button,sc)
+	{
+		debugappend("rogueUp: " . button)
+		;hotkey, % "~" button, off
+		hotkey, % "~" button " up", off
+		toact := {}
+		for buttonName,paradigm in this.arr[sc].waitingOnRogue
+		{
+			if(paradigm)
+			{
+				toact[buttonName] := paradigm
+			}
+		}
+		this.arr[sc].waitingOnRogue :={}
+		for buttonName,paradigm in toact
+		{
+			paradigm.LP_activate()
+		}
+	}
+	nothing()
+	{
+	
 	}
 }
 
@@ -717,8 +856,25 @@ class LP_hotkeyAvailability
 
 
 
+Gui, Add, Edit, Readonly x10 y10 w400 h1500 vDebug
+Gui, Show, w420 h1500, Debug Window
 
 
+
+debugappend(Data)
+{
+;Data:=LP_modes.LP_instance.creatureMode.leftMiddleFingerUpper.LP_flags
+
+GuiControlGet, Debug
+GuiControl,, Debug, %Debug%%Data%`r`n
+}
+
+hotkey, f12, clear
+
+clear()
+{
+GuiControl,, Debug, cleared
+}
 
 
 

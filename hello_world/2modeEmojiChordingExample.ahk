@@ -1,28 +1,23 @@
 ﻿
-
-active:="peopleMode"
-LP_getActiveMode()
-{
-	global active
-	
-	return active
-}
 	
 class abstractChord
 {
 	
 	LP_longDuration := 600 
 	LP_repeatDuration := 1200 
+
+
 }
    
 class LP_modes 
 {
 
+
   class creatureMode
   {
 		class leftMiddleFingerUpper
 		{
-			LP_Buttons := ["f5","f4"]
+			LP_Buttons := ["o","p"]
 
 			class oi extends abstractChord
 			{
@@ -62,13 +57,16 @@ class LP_modes
 		}
 		
  }
- 
+
   class peopleMode
   {
 		class leftMiddleFingerUpper
 		{
-			LP_Buttons := ["f5","f4"]
-			
+			LP_Buttons := ["o","p"]
+			LP_shouldDelayDeactivation(isDown,timing) ;up,down, change policy, mode
+			{
+				return true
+			}
 			class oi extends abstractChord
 			{
 				LP_shortUp()
@@ -91,12 +89,13 @@ class LP_modes
 				  send 👩
 				}
 			}	
-				
+			
 			class ii extends abstractChord
 			{
 				LP_shortUp()
 				{
 				  send 💕
+				  this.LP_containingClassInstance.LP_switchDelayPolicyForCurrentDeactivation()
 				}
 				LP_held()
 				{
@@ -105,11 +104,48 @@ class LP_modes
 			}	
 
 		}
+		
+	/*	
+		class numpad4
+		{
+
+				LP_down()
+				{
+				  send eah
+				}
+				LP_shortUp()
+				{
+				  send budd
+				}
+
+				LP_longUp()
+				{
+				  send budd
+				}
+		}
+		class numpadleft
+		{
+				LP_down()
+				{
+				  send ohhhh
+				}
+				LP_shortUp()
+				{
+				  send shit
+				}
+
+				LP_longUp()
+				{
+				  send shit
+				}
+		}
+		*/
  }
 }
 
 #include ..\longpressify.ahk
 LP_activate("creatureMode")
+LP_activate("persist")
 *f1::
 if (LP_modes.LP_instance.creatureMode.LP_isActive)
 {
