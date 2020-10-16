@@ -1,33 +1,32 @@
 ﻿class clay
 {
-	LP_longDuration := 300
-	LP_repeatDuration := 600
+	LP_msTillLong := 300
+	LP_msTillRepeat := 600
 	LP_prefix := "*"
 }
 
 class longRepeat extends clay
 {
 	
-	LP_repeat()
+	LP_repeat(button)
 	{
-		this.LP_held()
+		this.LP_held(button)
 	}
-	LP_shortUp() 
+	LP_shortUp(button) 
 	{
-		
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%
 		tosend := "{blind}{" . b . " up}"	
 		send %tosend%
 	}
-	LP_held()
+	LP_held(button)
 	{
 		b := this.long
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%
 	}
-	LP_longUp()
+	LP_longUp(button)
 	{
 		b := this.long
 		tosend := "{blind}{" . b . " up}"	
@@ -38,7 +37,7 @@ class longRepeat extends clay
 
 class longDontRepeat extends clay
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
@@ -47,14 +46,14 @@ class longDontRepeat extends clay
 		send %tosend%
 		
 	}
-	LP_held()
+	LP_held(button)
 	{
 		
 		b := this.long
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%
 	}
-	LP_longUp()
+	LP_longUp(button)
 	{
 		b := this.long
 		tosend := "{blind}{" . b . " up}"	
@@ -64,7 +63,7 @@ class longDontRepeat extends clay
 
 class longDontRepeatChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
@@ -73,14 +72,14 @@ class longDontRepeatChord
 		send %tosend%
 		
 	}
-	LP_held()
+	LP_held(button)
 	{
 		
 		b := this.long
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%
 	}
-	LP_longUp()
+	LP_longUp(button)
 	{
 		b := this.long
 		tosend := "{blind}{" . b . " up}"	
@@ -90,9 +89,9 @@ class longDontRepeatChord
 
 class longRepeatChord extends longDontRepeatChord
 {
-	LP_repeat()
+	LP_repeat(button)
 	{
-		this.LP_held()
+		this.LP_held(button)
 	}
 
 }
@@ -118,11 +117,11 @@ class shortCandid extends longRepeat
 
 class shortRepeatChord
 {
-	LP_repeat()
+	LP_repeat(button)
 	{
-		this.LP_longRepeat()
+		this.LP_longRepeat(button)
 	}
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
@@ -131,14 +130,14 @@ class shortRepeatChord
 		send %tosend%
 		
 	}
-	LP_longRepeat()
+	LP_longRepeat(button)
 	{
 	
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%	
 	}
-	LP_longUp()
+	LP_longUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " up}"	
@@ -148,7 +147,7 @@ class shortRepeatChord
 
 class dontRepeatChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
@@ -157,14 +156,14 @@ class dontRepeatChord
 		send %tosend%
 		
 	}
-	LP_held()
+	LP_held(button)
 	{
 	
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
 		send %tosend%	
 	}
-	LP_longUp()
+	LP_longUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " up}"	
@@ -179,14 +178,17 @@ parents.longString := {button:longStringChord, dontRepeat:longStringChord,word:s
 parents.longNull := {button:shortRepeatChord, dontRepeat:dontRepeatChord, word:shortWordChord,string:shortStringChord}
 parents.longDontRepeat := {button:longDontRepeatChord, dontRepeat:longDontRepeatChord,word:shortWordLongDontRepeatChord,string:shortStringLongDontRepeatChord}
 
+
+
 class orphanChord
 {
 
 	
 	LP_init()
 	{
-		
-		global parents
+
+	global parents
+
 		this.setShortLong()
 		if(this.long==null)
 		{
@@ -195,13 +197,10 @@ class orphanChord
 		}
 		else if (this.long.hasKey(1))
 		{
-
 				b:=parents.longWord
-
 		}
 		else if (this.long.haskey("string"))
 		{
-
 				b:=parents.longString
 				this.long := this.long.string
 		}
@@ -238,8 +237,6 @@ class orphanChord
 			b:=b.button
 		}
 		
-
-
 		this.base := b
 	}
 
@@ -247,25 +244,25 @@ class orphanChord
 
 class shortStringChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		send %b%
 	}
-	LP_held()
+	LP_held(button)
 	{
-		this.LP_shortUp()
+		this.LP_shortUp(button)
 	}	
 }
 
 class shortWordChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		sendWord(this.short)
 	}
 	
-	LP_held()
+	LP_held(button)
 	{
 		sendWord(this.short)
 	}	
@@ -273,7 +270,7 @@ class shortWordChord
 
 class longStringChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
@@ -282,7 +279,7 @@ class longStringChord
 		send %tosend%
 		
 	}
-	LP_held()
+	LP_held(button)
 	{
 		b := this.long
 		send %b%
@@ -292,7 +289,7 @@ class longStringChord
 
 class longWordChord extends wordChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		tosend := "{blind}{" . b . " down}"	
@@ -306,7 +303,7 @@ class longWordChord extends wordChord
 class shortWordLongStringChord extends wordChord
 {
 
-	LP_held()
+	LP_held(button)
 	{
 		b := this.long
 		;tosend := "{blind}" . b	
@@ -386,12 +383,12 @@ sendWord(w)
 
 class wordChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		sendWord(this.short)
 	}
 	
-	LP_held()
+	LP_held(button)
 	{
 		sendWord(this.long)
 	}	
@@ -399,7 +396,7 @@ class wordChord
 
 class shortStringLongWordChord extends wordChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		send %b%
@@ -408,7 +405,7 @@ class shortStringLongWordChord extends wordChord
 
 class shortStringLongRepeatChord extends longRepeatChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		send %b%
@@ -417,7 +414,7 @@ class shortStringLongRepeatChord extends longRepeatChord
 
 class shortStringLongDontRepeatChord extends longDontRepeatChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		send %b%
@@ -426,7 +423,7 @@ class shortStringLongDontRepeatChord extends longDontRepeatChord
 
 class shortWordLongRepeatChord extends longRepeatChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		sendWord(this.short)
 	}
@@ -434,7 +431,7 @@ class shortWordLongRepeatChord extends longRepeatChord
 
 class shortWordLongDontRepeatChord extends longDontRepeatChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		sendWord(this.short)
 	}
@@ -442,12 +439,12 @@ class shortWordLongDontRepeatChord extends longDontRepeatChord
 
 class stringChord
 {
-	LP_shortUp()
+	LP_shortUp(button)
 	{
 		b := this.short
 		send %b%
 	}
-	LP_held()
+	LP_held(button)
 	{
 		b := this.long
 		;tosend := "{blind}" . b	
@@ -584,7 +581,7 @@ class LP_modes
 			top2long := null
 			bottom2 := "f3"
 			bottom2long := "f9"
-			
+		
 			class ooi extends orphanChord
 			{
 				setShortLong()
@@ -593,6 +590,11 @@ class LP_modes
 					this.short:=this.LP_containingClassInstance.LP_Buttons[3]
 				}
 			}	
+			
+
+					
+			
+			
 			class oio extends orphanChord
 			{
 				setShortLong()
@@ -618,13 +620,13 @@ class LP_modes
 					this.short:=this.LP_containingClassInstance.LP_Buttons[1]
 				}
 			}		
-			class ioi extends LP_chord
+			class ioi
 			{
-				LP_shortUp()
+				LP_shortUp(button)
 				{
 					send wowzers
 				}	
-				LP_longUp()
+				LP_longUp(button)
 				{
 					send wowzers
 				}
@@ -637,13 +639,13 @@ class LP_modes
 					this.short:=this.LP_containingClassInstance.top2
 				}
 			}
-			class iii extends LP_chord
+			class iii 
 			{
-				LP_shortUp()
+				LP_shortUp(button)
 				{
 					send holy shnikes
 				}	
-				LP_longUp()
+				LP_longUp(button)
 				{
 					send holy shnikes
 				}
@@ -911,19 +913,39 @@ class LP_modes
 		
 	}
 	
+	
+	class test
+	{
+		class p
+		{
+			LP_down()
+			{
+				send this is a test
+			}
+		}
+	}
+	
 
 }
 
 #include longpressify.ahk
-LP_activate("default")
+LP_.activate("default")
+
 /*
-f12::
-if (active == "default")
-	active := "mode2"
+*f12::
+if (LP_modes.LP_instance.default.LP_isActive)
+{
+	LP_.deactivate("default")
+	LP_.activate("test")
+}
 else
-	active := "default"
+{
+	LP_.deactivate("test")
+	LP_.activate("default")
+}
 return
 */
+
 
 ~!#.::
 ExitApp

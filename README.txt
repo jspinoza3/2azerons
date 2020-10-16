@@ -52,18 +52,18 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- change the longpress or shortpress actions associated with any key or chord. This will require you to have some understanding of how 2azerons.ahk is arranged and the syntax that you will need to use to specify the desired actions. It helps to have a experience working with functions and classes in AHK.
 - --- selectively swapping the bindings of some the buttons between chording groups. Again, 2azerons has no way of knowing where key signals came from. It identifies chord presses by listening for combinations of signals. Therefore, if you change the signals that are bound to buttons in a chording group, then 2azerons will no longer interpret those physical chord presses appropriately.
 - --- define new modes and button(s) for mode switching
-- --- define custom chording groups, i.e. regrouping buttons, merging groups, etc.
+- --- define custom chording groups, i.e. regrouping buttons, merging groups, splitting groups etc.
 
 ===========Customization Overview============
 - longpressify.ahk is relatively set in stone and users have been given alot of customization power without the need to change this file.
 - There are two recommended places for making changes to customize behaviour:
 - --- Profile Level: you may be able to relocate the actions shown in 2Azerons.png by moving bindings around in the Azeron profiles. However many customizations will require you make changes on the AHK level as well.
-- --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations
+- --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. 
 
 ============AHK Level customization kinesthetic learning resources===============
 - since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "hello_world" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
 - --- these educational examples resemble 2azerons.ahk in essential structure, but the code and functionality is greatly stripped down.
-- --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the hello_world folder and run it. Like 2azerons.ahk, they also work with regular keyboards, so you can skip the Azeron profile step. In fact you don't even need an Azeron to use the scripts.
+- --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the hello_world folder and run it. At the top of the code will will see a link to a diagram showing what the code does. Like 2azerons.ahk, these educational scripts also work with regular keyboards, so you dont need an Azeron to use the scripts.
 - --- note that all of these example scripts, like 2azerons.ahk, consist of these 5 parts:
 
 - --- --- 1. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "LP_" prefix.
@@ -72,7 +72,29 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 4. a call to LP_activate(<modeName>), modeName being the name of a nested class in LP_modes
 - --- --- 5. miscellaneous hotkeys at the bottom
 
+============AHK Level customization: Theory: handlers and the state machine that calls them===============
+At the heart of your ability to customize 2azerons, is the ability to associate custom handlers with buttons and chording groups (groups of buttons that can be pressed in various combinations). There are many different types of handlers (listed in this section below), and each one is called at a specific time in relation to the user's press, hold, and release of buttons. 
+- What happens inside of handlers is entirely up to you. Send keystrokes, change variables, gui manipulations, etc...
+- Where you define these handlers is detailed in the sections below. 
+- When these handlers are called is determined by the theoretical state machines shown in the diagram linked here:
+https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/edit
 
+These 9 handlers can be used for stand alone buttons and chording groups:
+- LP_down
+- LP_shortRepeat
+- LP_shortUp
+- LP_held
+- LP_longRepeat
+- LP_longUp
+- LP_enterRepeatPhase
+- LP_repeat
+- LP_repeatUp
+
+These 3 handlers can also be used for chording groups:
+- LP_shortOver
+- LP_longOver
+- LP_repeatOver
+	
 ============AHK Level customization: structure of 2azerons.ahk from a distance========================
 Inert Library
 class LP_modes 
@@ -139,7 +161,7 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- 4. One or more calls to LP_activate is necessary to specify what mode you wish to be active in the beginning. This function is defined in longpressify.ahk, hence this call(s) comes after the include statement. The function takes one input, as string, which is the name of a nested class in LP_modes, representing the mode you wish to activate.
 - --- 5. Miscellaneous hotkey definitions. Here you put hotkeys used for mode control and whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for terminating the script.
 - --- --- Control which modes are active with calls to LP_activate and LP_deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
-- --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I'm not entirely sure what will happen. 
+- --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I make no garantee as to the practicality of attempting to activate one without deactivating the other.
 - The order of code parts 1-2 above is not important, but part 3-5 are expected to go in order after 1-2.
 - also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that will be covered later.
 
@@ -148,12 +170,12 @@ Miscellaneous hotkey definitions including those for mode switching
 - any class defintion which is nested inside a mode and does not have the key/property, LP_buttons, will be interpretted as the desired behaviour of a stand-alone button.
 - You can use the name of the class to specify what button the paradigm pertains to. In this case the name of the class would be one of the following:
 - --- a scan code or the name of a button/key as listed in the ahk keylist: https://www.autohotkey.com/docs/KeyList.htm (eg. "sc050" "sc046" "a" "esc" "numpad1")
-- --- one of the acceptable aliases to certain buttons as enumerated in longpressify.ahk by the object LP_buttonByAlias. These aliases are provided because many keynames in autohotkey are not valid class names. (eg. "one", "two", "forwardslash", "openbracket" as class names would be interpretted as meaning the keys "1" "2" "/" "[")
+- --- one of the acceptable aliases to certain buttons as enumerated in longpressify.ahk by the object LP_.buttonByAlias. These aliases are provided because many keynames in autohotkey are not valid class names. (eg. "one", "two", "forwardslash", "openbracket" as class names would be interpretted as meaning the keys "1" "2" "/" "[")
 - it is also acceptable to name the class anything you want so long as the class has defined the property/key LP_button containing a string which belongs to one of the two categories above. (eg. LP_button := "a", LP_button := "sc046", LP_button := "1", "LP_button"="one")
 - the class can have any properties or methods you desire as long as they do not conflict with some reserved method and properties names which are prefixed with "LP_", which include, but are not limited to the following:
-- --- LP_longDuration: specifies the number of milliseconds the user has to release the button before entering the long press phase (see LP_held and LP_longRepeat below). If the user does not define this, a default value of several hundreds will be used
-- --- LP_repeatDuration: specifies the duration, in milliseconds, of the long press phase, after which the repeat phase begins if the button has not been released (see LP_repeat below). If the user does not define this, a default value of several hundreds will be used
-- --- LP_prefix: eg: "$", "*", "~", "". This string specifies the hotkey prefix that is to be used to control what what kind of key presses will activate the behaviour paradigm and whether or not the native behaviour of the button will be stifled. See https://www.autohotkey.com/docs/Hotkeys.htm for more details. Note that 2azerons has not been tested with modifier prefixes.
+- --- LP_msTillLong: specifies the number of milliseconds the user has to release the button before entering the long press phase (see LP_held and LP_longRepeat below). If the user does not define this, a default value of several hundreds will be used
+- --- LP_msTillRepeat: specifies the duration, in milliseconds, of the long press phase, after which the repeat phase begins if the button has not been released (see LP_repeat below). If the user does not define this, a default value of several hundreds will be used
+- --- LP_prefix: eg: "$", "*", "~". This string specifies the hotkey prefix that is to be used to control what what kind of key presses will activate the behaviour paradigm and whether or not the native behaviour of the button will be stifled. See https://www.autohotkey.com/docs/Hotkeys.htm for more details. Note that 2azerons has not been tested with modifier prefixes.
 - --- the following are some of the methods you can define to specify behaviour of the button
 - --- --- LP_down: called without delay on the button-down event. Only used in special circumstances
 - --- --- LP_shortUp: called if button is released prior to entering the long press phase
@@ -163,9 +185,9 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- --- LP_shortRepeat: called if a repeat-down event fires prior to the long press phase
 - --- --- LP_longRepeat: called if a repeat-down event fires during the long phase
 - --- you can define all, some, or none of the supported handler methods. However, there are no default handlers, except for the backend ones that merely store and update information. Some examples of that information, which you may find useful in coding complex behaviour:
-- --- --- LP_repeatPhaseRepeats
-- --- --- LP_longPhaseRepeats
-- --- --- LP_shortPhaseRepeats
+- --- --- LP_eventProcessor.repeatPhaseRepeats
+- --- --- LP_eventProcessor.longPhaseRepeats
+- --- --- LP_eventProcessor.shortPhaseRepeats
 - --- the above are properties of the behaviour paradigm which are automatically updated to reflect how many repeat down events occur during each of the three phases of the button press.
 
 ============defining behaviour of a chording group================
@@ -178,6 +200,7 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- a nested class named "oii" describes the actions associated with pressing just the two buttons, s and d at the same time
 - --- a nested class named "oio" describes the actions associated with pressing just the one button, s 
 - --- ...
+- Chording groups define LP_prefixes (array of strings) instead of LP_prefix
 
 ====================Other customization notes=======================
 if you have defined button behaviour for a button on the numpad, then avoid toggling numlock while that key is held down, because doing so may cause the up event not to fire.

@@ -1,0 +1,36 @@
+In this commit, within longpressify.ahk I have implemented mode switching using a queue. The end coder makes calls to LP_.deactivate(<mode name>) and LP_.activate(<mode name>) to control modes. The de/activations are processed in order of call. If any of the paradigms of a mode report to be not ready when queried for deactivation readiness, then the mode will not deactivate until all paradigms report ready. Readiness means all of the buttons of the paradigm are up. The listening for readiness is automated and the end coder only needs to call LP_.deactivate once. Execution of subsequence activations/deactivations will be blocked until the current one completes. 
+
+There are shortcomings associated with this implementation
+- some modes are mutually exclusive, so there is no harm in processing these de/activations asyncronously. However the current implementation does not take advantage of this
+- mode switching from a user's perspective often comes in the form of toggling on and off with the same button. If a mode is waiting to deactivate, then to the end user, it appears as though deactivate was not called on it the user may press a button to deactivate it again. The result we be that when ready, it would deactivate but then immediately after reactivate due to the second queued command sent by the user. This is probably not desirable. 
+- --- claim 1: The behaviour of LP_.deactivate/activate perhaps should depend on whether the mode is actually deactivated. 
+- perhps it would be desirable to allow partial activations- activate the paradigms that are ready and wait for the ones that are not
+
+Alternatives:
+- allow end coder to pass a callback, so that they can enforce sequential processing of dependent modes when necessary. 
+
+More remarks about claim 1
+-a sigle button press is often associated with at least 1 deactivate plus 1 activate, so the resulting q: 
+[deactivate mode 1, activate mode 2]
+-
+
+seams to me modes should not wait to deactivate. This just doesnt make sense from a user perspective. Modes should either make a single attempt at full deactivation or they should partially deactivate. 
+
+
+Single Attempt Model:
+- a call to de/activate returns true or false
+- the end coder can use the return value to decide how to proceed. 
+- problem here is what if end coder wants to deactivate multiple modes in all or nothing fashion? Clearly, we need to allow the passing of multiple modes to the call. 
+
+Partial deactivation Model:
+- whatever paradigms are ready, get deactivated. The paradigms that are not ready go into pending deactivation
+- a subsequent activation of the mode cancels the pending deactivation.
+- anything that is trying to activate but uses a key that is not available due to being down or a part of an active paradigm, will go in to pending activation. 
+- note that anything pending activation needs to be registered as reserving the buttons
+-Implementation notes:
+- --- need a kind of generalized substitute for getKeyState, say LP_.getKeyState, to which one  can pass a callback to be alerted when the key becomes available. 
+- --- also need an LP_.reserveKey function. Whenever a paradigm activates or goes pending activation, it reserves its buttons. Perhaps we can kill two birds with one stone by automatically waiting for a key that is not reservable. 
+- --- when a mode is deactivated, its paradigms will release reservatiion of buttons or stop waiting where applicable. 
+- --- if a paradigm is pending deactivation and is then activated, it will be taken out of the pending state. 
+- --- since partial activation is supported in this Model, there is no need to check ahead for availability of the entire mode's buttons. 
+- --- Usage Expectation 1: This Model is designed with the expectation that the end coder will not activate any mode without first deactivating any conflicting modes. If and only if this assumption has been violated will an activating paradign need a button that is already both reserved and awaited, and in this case that paradigm would receive neither benefit. This may have unforseen results. We do not make any effort to garantee any practical results under these circumstances nor do we check ahead to avoid this circumstance. We simply execute the requested de/activations to the partial or full extent that is available. At this time, known practical applications of the mode activation system all adhere to this usage expectation.
