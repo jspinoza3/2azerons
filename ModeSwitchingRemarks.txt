@@ -1,8 +1,8 @@
-In this commit, within longpressify.ahk I have implemented mode switching using a queue. The end coder makes calls to LP_.deactivate(<mode name>) and LP_.activate(<mode name>) to control modes. The de/activations are processed in order of call. If any of the paradigms of a mode report to be not ready when queried for deactivation readiness, then the mode will not deactivate until all paradigms report ready. Readiness means all of the buttons of the paradigm are up. The listening for readiness is automated and the end coder only needs to call LP_.deactivate once. Execution of subsequence activations/deactivations will be blocked until the current one completes. 
+In this commit, within longpressify.ahk I have implemented mode switching using a queue. The end coder makes calls to LP_.deactivate(<mode name>) and LP_.activate(<mode name>) to control modes. The de/activations are processed in order of call. If any of the paradigms of a mode report to be not ready when queried for deactivation readiness, then the mode will not deactivate until all paradigms report ready. Readiness means all of the buttons of the paradigm are up. The listening for readiness is automated and the end coder only needs to call LP_.deactivate once. Execution of subsequent activations/deactivations will be blocked until the current one completes. 
 
 There are shortcomings associated with this implementation
 - some modes are mutually exclusive, so there is no harm in processing these de/activations asyncronously. However the current implementation does not take advantage of this
-- mode switching from a user's perspective often comes in the form of toggling on and off with the same button. If a mode is waiting to deactivate, then to the end user, it appears as though deactivate was not called on it the user may press a button to deactivate it again. The result we be that when ready, it would deactivate but then immediately after reactivate due to the second queued command sent by the user. This is probably not desirable. 
+- mode switching from a user's perspective often comes in the form of toggling on and off with the same button. If a mode is waiting to deactivate, then to the end user, it appears as though deactivate was not called on it the user may press a button to deactivate it again. The result will be that when ready, it would deactivate but then immediately after reactivate due to the second queued command sent by the user. This is probably not desirable. 
 - --- claim 1: The behaviour of LP_.deactivate/activate perhaps should depend on whether the mode is actually deactivated. 
 - perhps it would be desirable to allow partial activations- activate the paradigms that are ready and wait for the ones that are not
 
@@ -34,3 +34,25 @@ Partial deactivation Model:
 - --- if a paradigm is pending deactivation and is then activated, it will be taken out of the pending state. 
 - --- since partial activation is supported in this Model, there is no need to check ahead for availability of the entire mode's buttons. 
 - --- Usage Expectation 1: This Model is designed with the expectation that the end coder will not activate any mode without first deactivating any conflicting modes. If and only if this assumption has been violated will an activating paradign need a button that is already both reserved and awaited, and in this case that paradigm would receive neither benefit. This may have unforseen results. We do not make any effort to garantee any practical results under these circumstances nor do we check ahead to avoid this circumstance. We simply execute the requested de/activations to the partial or full extent that is available. At this time, known practical applications of the mode activation system all adhere to this usage expectation.
+
+========================================
+Dimension1: Atomic vs Partial
+Dimension2: Callback vs Queue
+Dimension3: Persist vs AttemptAndReport
+
+(Atomic, Callback, Persist): End coder submits a de/activation along with a callback. No de/activation is performed until the entire mode is ready. User can submit multiple de/activations. Order of completion depends on readiness. 
+
+(Atomic, Callback, AttemptAndReport): This one doesn't make a whole lot sense. Attempt and report doesn't really make sense with callbacks unless the attempt was a time limit thing. End coder submits a de/activation along with a callback. No de/activation is performed until the entire mode is ready. User can submit multiple de/activations. Order of completion depends on readiness. 
+
+(Atomic, Queue, Persist): Current system. End coder submits a de/activation. De/activations are completed in order of being received. One can not start before the previous one ends
+
+(Atomic, Queue, AttemptAndReport): AttemptAndReport doesn't make sense with the Queue either. If it is going to try once and report right back, then there is little reason for queing up commands unless you are really paranoid about new commands coming in before the first finishes, but even that doesn't make sense because why would the user submit commands that quickly? 
+
+(Partial, Callback, Persist): End coder submits a de/activation along with a callback. De/activation is performed one paradigm at a time. Any not-ready paradigms go into pending. User can submit multiple de/activations. Order of completion depends on readiness. there is only blocking of commands contained in callbacks. Seams nice but problem is it is still blocking, waiting for complete deactivation. does not implement what i had in mind, which is being able to activate even when deativations are pending - the ability for indivual paradigms to wait on others.
+
+(Partial, Callback, AttemptAndReport): This one doesn't make a whole lot sense. Attempt and report doesn't really make sense with partial activation. Why would I want it to partially activate a mode and then just stop trying? On top of that why would I need a callback if it is just a immediate attempt?
+
+(Partial, Queue, Persist): rather poitless. if command are in queue then they are atomic. 
+
+(Partial, Queue, AttemptAndReport): AttemptAndReport doesn't make sense with the Queue either. If it is going to try once and report right back, then there is little reason for the user to send multiple commands. 
+
