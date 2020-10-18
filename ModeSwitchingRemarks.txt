@@ -44,7 +44,7 @@ Dimension3: Persist vs AttemptAndReport
 
 (Atomic, Callback, AttemptAndReport): This one doesn't make a whole lot sense. Attempt and report doesn't really make sense with callbacks unless the attempt was a time limit thing. End coder submits a de/activation along with a callback. No de/activation is performed until the entire mode is ready. User can submit multiple de/activations. Order of completion depends on readiness. 
 
-(Atomic, Queue, Persist): Current system. End coder submits a de/activation. De/activations are completed in order of being received. One can not start before the previous one ends
+(Atomic, Queue, Persist): Current system. End coder submits a de/activation. De/activations are completed in order of being received. One can not start before the previous one ends. One can not be done partially. 
 
 (Atomic, Queue, AttemptAndReport): AttemptAndReport doesn't make sense with the Queue either. If it is going to try once and report right back, then there is little reason for queing up commands unless you are really paranoid about new commands coming in before the first finishes, but even that doesn't make sense because why would the user submit commands that quickly? 
 
@@ -52,7 +52,18 @@ Dimension3: Persist vs AttemptAndReport
 
 (Partial, Callback, AttemptAndReport): This one doesn't make a whole lot sense. Attempt and report doesn't really make sense with partial activation. Why would I want it to partially activate a mode and then just stop trying? On top of that why would I need a callback if it is just a immediate attempt?
 
-(Partial, Queue, Persist): rather poitless. if command are in queue then they are atomic. 
+(Partial, Queue, Persist): This differs from the current system in that it allows the mode to be partially deactivated. Howver it still requires full deactivation before proceeding to other de/activations
 
 (Partial, Queue, AttemptAndReport): AttemptAndReport doesn't make sense with the Queue either. If it is going to try once and report right back, then there is little reason for the user to send multiple commands. 
+==================================================
+https://docs.google.com/drawings/d/1spiEMK6N-KpJxdQVKuMkEOSmlfP3SWBjX5R-Mf4MdY0/edit
+=======================================================
+3 OPTIONS
+- 1. All or nothing look ahead
+- --- in this one, activate and deactivate commands are sent in one call. The system checks the readiness of all paradigms involved. If everyone is ready all the command get executed in order. This way we avoid the complexities and problems associated with partial de/activations. However we rely on the assumption that readiness is not going to change after we take the leap to start carrying out the de/activations.
+- 2. one paradigm at a time with conflict checks and waiting .
+- --- this one is a bit more complex but it has two advantages.
+- --- --- 1. don't need to worry so much about readiness changes because we don't require one uninterupted stream of de/activations. 
+- --- --- 2. we allow the user to hold down buttons that are being deactivated and wait for them to release, giving some flexibility.
+- 3. Stick with current system which is one mode at a time, waiting for all paradigms in the mode to be ready. Persisting until readiness is reached. That last part is important. It prevents a stream of commands from being aborted after the point of no return (after a mode or modes have already been de/activated).
 
