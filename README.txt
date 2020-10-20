@@ -67,8 +67,8 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 
 ============AHK Level customization: Theory: handlers and the state machine that calls them===============
 At the heart of your ability to customize 2azerons, is the ability to associate custom handlers with buttons and chording groups (groups of buttons that can be pressed in various combinations). There are many different types of handlers (listed in this section below), and each one is called at a specific time in relation to the user's press, hold, and release of buttons. 
-- What happens inside of handlers is entirely up to you. Send keystrokes, change variables, gui manipulations, etc...
-- Where you define these handlers is detailed in the sections below. 
+- These handles are defined using autohotkey code. What happens inside of handlers is entirely up to you. Send keystrokes, change variables, gui manipulations, etc...
+- You define these handlers as methods of behaviour paradigms as detailed in the sections below. 
 - When these handlers are called is determined by the state machines shown in the diagram linked here:
 https://docs.google.com/drawings/d/1cXL_eKtvFOJAiGCwTwez9lKrTEyWbkvl_wkg0dDBrS4/
 
