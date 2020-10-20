@@ -45,20 +45,13 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- Then you can unplug  right azeron, plug back in, restart the cursor.ahk script, and it should be detecting normal resting state for joystick (i.e. X050 Y050) and responding to manipulation appropriately
 
 ===========Customization Intro============
-- customization is possible, but involves editing source code in most cases. Here are some possible customizations, ranked roughly from least to most difficult:
-- --- move the action associated with a single standalone physical button (a button not connected to another by a magenta elipse in the google drawing) to a different standalone physical button. This can be done without editing source code. You just have to change the binding in the azeron software.
-- --- move an entire set of key bindings associate with a chording group (set of buttons connected by magenta elipses in the google drawing) to a different finger that controls a congruent chording group. For example, swapping the behaviour of the left and right index finger or swapping the behaviour of any two fingers other than index fingers and thumb. This can also be achieved without editing source code.
-- --- change the binding of any button in the profile, mapping it to a previously unbound key. This will require editing source code because 2azerons.ahk performs actions based on key signals detected with ignorance to what physical button was pressed.
-- --- change the longpress or shortpress actions associated with any key or chord. This will require you to have some understanding of how 2azerons.ahk is arranged and the syntax that you will need to use to specify the desired actions. It helps to have a experience working with functions and classes in AHK.
-- --- selectively swapping the bindings of some the buttons between chording groups. Again, 2azerons has no way of knowing where key signals came from. It identifies chord presses by listening for combinations of signals. Therefore, if you change the signals that are bound to buttons in a chording group, then 2azerons will no longer interpret those physical chord presses appropriately.
-- --- define new modes and button(s) for mode switching
-- --- define custom chording groups, i.e. regrouping buttons, merging groups, splitting groups etc.
+- The remainder of this readme is aimed at giving you an understanding of how you can edit 2azerons.ahk to customize how your 2 azerons act. 
 
 ===========Customization Overview============
 - longpressify.ahk is relatively set in stone and users have been given alot of customization power without the need to change this file.
 - There are two recommended places for making changes to customize behaviour:
 - --- Profile Level: you may be able to relocate the actions shown in 2Azerons.png by moving bindings around in the Azeron profiles. However many customizations will require you make changes on the AHK level as well.
-- --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. 
+- --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. You can also define custom chording groups, modes, and mode switching button. 
 
 ============AHK Level customization kinesthetic learning resources===============
 - since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "hello_world" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
@@ -76,8 +69,8 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 At the heart of your ability to customize 2azerons, is the ability to associate custom handlers with buttons and chording groups (groups of buttons that can be pressed in various combinations). There are many different types of handlers (listed in this section below), and each one is called at a specific time in relation to the user's press, hold, and release of buttons. 
 - What happens inside of handlers is entirely up to you. Send keystrokes, change variables, gui manipulations, etc...
 - Where you define these handlers is detailed in the sections below. 
-- When these handlers are called is determined by the theoretical state machines shown in the diagram linked here:
-https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/edit
+- When these handlers are called is determined by the state machines shown in the diagram linked here:
+https://docs.google.com/drawings/d/1cXL_eKtvFOJAiGCwTwez9lKrTEyWbkvl_wkg0dDBrS4/
 
 These 9 handlers can be used for stand alone buttons and chording groups:
 - LP_down
@@ -140,7 +133,7 @@ class LP_modes
         ...
     ...
 #Include <path to longpressify.ahk>
-LP_activate(<modeName>)
+LP_.activate(<modeName>)
 Miscellaneous hotkey definitions including those for mode switching 
 
 
@@ -160,8 +153,8 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- --- "LP_" is a reservered prefix. All the identifiers in longpressify.ahk are prefixed by "LP_". You will also need to use this prefix in specific locations in your code when necessary in order to communicate with longpressify.ahk, as detailed in later sections below.
 - --- 4. One or more calls to LP_activate is necessary to specify what mode you wish to be active in the beginning. This function is defined in longpressify.ahk, hence this call(s) comes after the include statement. The function takes one input, as string, which is the name of a nested class in LP_modes, representing the mode you wish to activate.
 - --- 5. Miscellaneous hotkey definitions. Here you put hotkeys used for mode control and whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for terminating the script.
-- --- --- Control which modes are active with calls to LP_activate and LP_deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
-- --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I make no garantee as to the practicality of attempting to activate one without deactivating the other.
+- --- --- Control which modes are active with calls to LP_.activate and LP_.deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
+- --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I make no garantee as to the practicality of attempting to activate one without deactivating the other first. However, there is a mechanism in place that will automatically handle the situation where a mode is activated which modifies a button that is already held down. In this case, the mode will be activated on all other buttons but not apply to the held down button until it is released. The same waiting principle is applied to deactivation of held down buttons as well.
 - The order of code parts 1-2 above is not important, but part 3-5 are expected to go in order after 1-2.
 - also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that will be covered later.
 

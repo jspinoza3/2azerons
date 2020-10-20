@@ -1,5 +1,5 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
+;#Warn  ; Enable warnings to assist with detecting common errors.
 ;SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #HotkeyInterval 1000  ;  (milliseconds).
@@ -15,6 +15,146 @@ LP_.setUp()
 
 class LP_
 {
+
+
+
+
+	class keyState
+	{
+		static occupationByScanCode := {}
+		
+		/*
+			PARAMS:
+			- ep: yep
+			- button:  (may also be a scan code)
+			Result:
+			- Prior to completing activation, an EventProcessor ep,  should call this to report intent to activate and receive confirmation that no other active EventProcessor is occupying the button, no other EventProcessors started waiting to occupy the button before ep, and the button is not currently down.  If  all those conditions are satisfied, the button becomes occupied by ep and the method returns true.  If the button is not available for immediate occupation, then ep will be added to the waiting list and alerted whenever occupation is acheived. Alert comes as a call to ep.receiveOccupationConfirmation(button)
+			- definition:  an EventProcessor is said to "explicitly occupy a button", if it is active and its paradigm explicity modifies the button (I.E. declares a hotkey using the button name or using the scancode if the button is a scancode). 
+			- definition:  an EventProcessor, ep, is said to "implicitly occupy a button" if one of the following is true:
+			- --- the button is a scancode and ep is active and its paradigm modifies a button that has that scancode
+			- --- the button is not a scancode and ep is active and its paradigm modifies the scancode of the button
+			Implementation remarks:
+			- example of de/activation dependencies
+				https://docs.google.com/drawings/d/12P7_ZwgnjDVV47tOwK6IlJ3isOzet8g8UaJhBbN13BA/edit
+			- if ep modifies a ScanCode explicitly (rather than specifying a button), then we must check if anyone is currently occupying button1 as well as button 2 as well as the scancode
+			- if no one occupies scan code than someone can wait on button 1 while someone else waits on button 2
+			-occupied status is organized like below. SC1 represents a Scancode and button1 and button2 represent button names associated with that scancode
+			--------------------------
+			-SC1 
+			- --- occupiers
+			- --- --- scancode:
+			- --- --- button1:
+			- --- --- button2:  
+			- --- waiters:
+			- --- --- scancode:
+			- --- --- button1:
+			- --- --- button2: 
+			------------------------------
+		*/
+		
+		reserve( button, ep)
+		{
+			sc:=getKeySC(button) 
+			fb:=this.format(button)
+			if(!this.occupationByScanCode[sc])
+				this.occupationByScanCode[sc] := {occupiers:{}, waiters:{}}
+			o:= {eventProcessor:ep,button:button}
+			
+			/*
+				series of if statements to determine if the button is available
+			*/
+			if(!this.occupationByScanCode[sc].occupiers.scancode) ;is the scancode available?
+			{
+				if( this.occupationByScanCode[sc].occupiers.count()==0 || (fb!="scancode" && !this.occupationByScanCode[sc].occupiers[fb])    )  ;is either everything unoccupied or at least the button not a scancode and unoccupied?
+				{
+					if(!getKeyState(button, "P"))
+					{
+						this.occupationByScanCode[sc].occupiers[fb] := o
+						return true
+					}
+					fn := objBindMethod(this,"freakout",sc,button)
+					hotkey, *%button% up, %fn%, on
+						
+				}
+			}
+			this.occupationByScanCode[sc].waiters[fb] := o
+			
+			
+		}
+		
+		
+		
+	
+		freakout(sc,button)
+		{
+			msgbox freaky
+			hotkey, *%button% up, off
+			this.checkWaiters(sc)
+		}
+	
+		
+		checkWaiters(sc)
+		{
+			if(!this.occupationByScanCode[sc].occupiers.scancode)
+			{
+				todelete:=[]
+				for i, v in this.occupationByScanCode[sc].waiters
+				{
+					button := v.button
+					if( this.occupationByScanCode[sc].occupiers.count()==0 || (i!="scancode" && !this.occupationByScanCode[sc].occupiers[i]))
+					{
+						if(!getKeyState(button, "P"))
+						{
+						
+							this.occupationByScanCode[sc].occupiers[i] := v
+							todelete.push(i)
+							v.eventProcessor.receiveOccupationConfirmation(button)
+						}
+						else
+						{
+							fn := objBindMethod(this,"freakout",sc,button)
+							hotkey, *%button% up, %fn%, on
+						}
+					}
+				}
+				for ii,vv in todelete
+					this.occupationByScanCode[sc].waiters.delete(vv)
+			}
+		}
+		
+		
+		format(button)
+		{
+			upper := Format("{:U}", button)
+			if (substr(upper,1,2)=="SC" && strLen(button)==5)
+				return "scancode"
+			else 
+				return getKeyName(button)
+		}
+
+		relinquish(button, ep)
+		{
+	
+			sc:=getKeySC(button) 
+			fb:=this.format(button)
+			if (this.occupationByScanCode[sc].occupiers[fb].eventProcessor==ep) ;is the supplied event processor occupying supplied button?
+			{
+				this.occupationByScanCode[sc].occupiers.delete(fb)
+				ep.receiveOccupationRelinquishedConfirmation(button)
+				this.checkWaiters(sc)
+			}
+			else  ; under usage assumptions, the supplied event processor is waiting on supplied button
+			{
+				this.occupationByScanCode[sc].waiters.delete(fb)
+			}
+		}
+
+
+	}
+
+
+
+
 	class activationQueue
 	{
 		static q:={}
@@ -74,10 +214,10 @@ class LP_
 	{
 		mode:=LP_modes.LP_instance[modeName]
 		mode.LP_isActive := true	
-		this.activationQueue.addTask(objBindMethod(this,"completeActivation",mode))
+		this.activationQueue.addTask(objBindMethod(this,"doActivation",mode))
 	}
 	
-	completeActivation(mode)
+	doActivation(mode)
 	{	
 		for name,p in mode.LP_paradigms 
 		{
@@ -92,27 +232,9 @@ class LP_
 		mode.LP_isActive := false
 		this.activationQueue.addTask(objBindMethod(this,"doDeactivation",mode))
 	}
-	
+
 	doDeactivation(mode)
 	{
-		
-		mode.LP_paradigmsNotReadyForDeactivation := 0
-		mode.LP_passedPointOfNoReturn:=false
-		for name,p in mode.LP_paradigms 
-		{
-			callback:=objBindMethod(this, "receiveDeactivationReadinessChangeReport", mode, p)
-			if(!p.LP_eventProcessor.prepareToDeactivate(callback))
-				mode.LP_paradigmsNotReadyForDeactivation++
-		}
-		
-		if(mode.LP_paradigmsNotReadyForDeactivation==0)
-			this.completeDeactivation(mode)
-	}	
-
-	completeDeactivation(mode)
-	{
-		
-		mode.LP_passedPointOfNoReturn:=true
 		for name,p in mode.LP_paradigms 
 		{
 			p.LP_eventProcessor.deactivate()
@@ -120,23 +242,7 @@ class LP_
 		this.activationQueue.taskComplete()
 	}
 
-	receiveDeactivationReadinessChangeReport(mode,paradigm,readiness)
-	{
-		if (readiness)
-		{
-			mode.LP_paradigmsNotReadyForDeactivation--
-		}
-		else
-			mode.LP_paradigmsNotReadyForDeactivation++
-			
-		p:=paradigm.__Class ;mode.LP_paradigmsNotReadyForDeactivation
-	
-		if(mode.LP_paradigmsNotReadyForDeactivation==0)
-		{
-			if(!mode.LP_passedPointOfNoReturn)
-				this.completeDeactivation(mode)
-		}
-	}
+
 
 	forEachKeyIn(obj, handler)
 	{
@@ -189,7 +295,10 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 
 
 
-
+/*
+implementation notes:
+https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/edit
+*/
 
 
 	class ButtonEventProcessor
@@ -225,97 +334,50 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 				paradigm.LP_init()
 			LP_.augment(paradigm,this.paradigmAugmentor)
 		}
-/*			
-		tryActivatingAgain()
-		{
-			this.dontTryActivatingAgain()
-			this.activate()
-		}
-		
-		dontTryActivatingAgain()
-		{
-			button := this.willTryActivatingAgain
-			if (button!=null)
-			{
-				hotkey, ~%button% up, off
-				this.willTryActivatingAgain := null
-				return true
-			}
-			return false
-		}
-		
-		tryActivatingAgainLater(button)
-		{
-			tryagain:=objBindMethod(this,"tryActivatingAgain")
-			hotkey, ~%button% up, %tryagain%, on
-			this.willTryActivatingAgain := button			
-		}
-		
-		activate()
-		{
-			readyToActivate:=true
-			for i,button in this.paradigm.LP_Buttons
-			{
-				if(getKeyState(button,"P"))
-				{
-					this.tryActivatingAgainLater()
-					readyToActivate:=false
-					break
-				}
-			}
-			if (readyToActivate)
-			{
-				for i,button in this.paradigm.LP_Buttons
-				{
-					this.LP_hotkeyOn(this.paradigm.LP_prefixes[i],button)
-				}				
-			}
-		}
-		
-		deactivate()
-		{
-		
-			if(!this.dontTryActivatingAgain())
-			{
-				for i,button in this.paradigm.LP_Buttons
-				{
-					this.hotkeyOff(this.paradigm.LP_prefixes[i],button)
-				}	
-			}
-		}
-*/
+
 
 
 		activate()
 		{
-			button := this.paradigm.LP_Button
-			pre:=this.paradigm.LP_prefix
-			this.hotkeyOn(pre, button)			
+			
+			if(LP_.keyState.reserve(this.paradigm.LP_Button, this))
+				this.hotkeyOn()			
 		}
 		
 		deactivate()
 		{
-			button := this.paradigm.LP_Button
-			pre:=this.paradigm.LP_prefix
-			this.hotkeyOff(pre, button)	
-			this.delete("down") 
-			this.delete("up")	
+			if(this.isUp)
+			{
+				LP_.keyState.relinquish(this.paradigm.LP_button, this)
+			}
+			else
+				this.up := this.upWhilePendingDeactivation
+		}
+		
+		
+		receiveOccupationConfirmation(button)	
+		{
+			
+			this.hotkeyOn()		
+		}
+		
+		
+		
+		receiveOccupationRelinquishedConfirmation(button)
+		{
+			
+			this.hotkeyOff()	
 		}
 		
 /*
 		when this is called, the eventProcessor must return whether it is ready to deactivate and also call the callback whenever this readiness changes
 */
-		prepareToDeactivate(callback)
-		{
-			this.deactivationReadinessChangeCallback := callback
-			this.down := this.downWhilePendingDeactivation
-			this.up := this.upWhilePendingDeactivation
-		
-			return this.isUp
-		}
 	
-		hotkeyOn(pre, button)
+	
+		hotkeyOn()
 		{
+			button := this.paradigm.LP_Button
+			pre:=this.paradigm.LP_prefix
 			processor:=objBindMethod(this,"down")
 			pusher:= objBindMethod(this,"add2Q", processor)
 			hotkey, %pre%%button%, %pusher%, on
@@ -326,8 +388,10 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 			hotkey, %pre%%button% up, %pusher%, on			
 		}
 		
-		hotkeyOff(pre, button)
+		hotkeyOff()
 		{	
+			button := this.paradigm.LP_Button
+			pre:=this.paradigm.LP_prefix
 			hotkey, % pre button, off
 			hotkey, % pre button " up", off
 		}
@@ -348,27 +412,13 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 				this.qIdle:=true
 			}
 		}
-	
-
-		downWhilePendingDeactivation()
-		{
-				if(this.isUp)
-				{
-						fn:=this.deactivationReadinessChangeCallback
-						%fn%(false)
-				}
-				this.base.down.call(this)	
-		}
 
 
-
-		
 		upWhilePendingDeactivation()
 		{
-				;tooltip, %A_tickcount%
-						fn:=this.deactivationReadinessChangeCallback
-						%fn%(true)
-				this.base.up.call(this)	
+			LP_.keyState.relinquish(this.paradigm.LP_button, this)
+			this.delete("flagAsUp")
+			this.base.up.call(this)	
 		}
 		
 		clearTimer()
@@ -634,7 +684,11 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 					this.paradigm.LP_prefixes[i]:="*"
 				}			
 			}
-
+			this.prefixByButton:=[]
+			for i,button in this.paradigm.LP_Buttons
+			{
+				this.prefixByButton[button] := this.paradigm.LP_prefixes[i]
+			}	
 			this.chords := {}
 
 			LP_.forEachKeyIn(this.paradigm,ObjBindMethod(this,"initializeChord"))
@@ -644,98 +698,49 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 			LP_.augment(this.paradigm,this.paradigmAugmentor)	
 			
 		}
-/*			
-		tryActivatingAgain()
-		{
-			this.dontTryActivatingAgain()
-			this.activate()
-		}
-		
-		dontTryActivatingAgain()
-		{
-			button := this.willTryActivatingAgain
-			if (button!=null)
-			{
-				hotkey, ~%button% up, off
-				this.willTryActivatingAgain := null
-				return true
-			}
-			return false
-		}
-		
-		tryActivatingAgainLater(button)
-		{
-			tryagain:=objBindMethod(this,"tryActivatingAgain")
-			hotkey, ~%button% up, %tryagain%, on
-			this.willTryActivatingAgain := button			
-		}
-		
+
+
 		activate()
 		{
-			readyToActivate:=true
+				for i,button in this.paradigm.LP_Buttons
+				{
+					if(LP_.keyState.reserve(button, this))
+					{
+						this.hotkeyOn(this.paradigm.LP_prefixes[i],button)
+					}
+				}				
+		}
+
+		deactivate()
+		{
 			for i,button in this.paradigm.LP_Buttons
 			{
-				if(getKeyState(button,"P"))
+				if (!this.downStatusByButton[button])
 				{
-					this.tryActivatingAgainLater()
-					readyToActivate:=false
-					break
+					
+					LP_.keyState.relinquish(button, this)
 				}
 			}
-			if (readyToActivate)
+			if(this.flags!=0)
 			{
-				for i,button in this.paradigm.LP_Buttons
-				{
-					this.LP_hotkeyOn(this.paradigm.LP_prefixes[i],button)
-				}				
+				this.flagAsUp := this.flagAsUpWhilePendingDeactivation
 			}
-		}
-		
-		deactivate()
-		{
-		
-			if(!this.dontTryActivatingAgain())
-			{
-				for i,button in this.paradigm.LP_Buttons
-				{
-					this.hotkeyOff(this.paradigm.LP_prefixes[i],button)
-				}	
-			}
-		}
-*/
-
-
-
-		
-
-		activate()
-		{
-				for i,button in this.paradigm.LP_Buttons
-				{
-					this.hotkeyOn(this.paradigm.LP_prefixes[i],button)
-				}				
-		}
-		
-		deactivate()
-		{
-				for i,button in this.paradigm.LP_Buttons
-				{
 				
-					this.hotkeyOff(this.paradigm.LP_prefixes[i],button)
-				}	
-				this.delete("processDown")
-				this.delete("flagAsUp")
 		}
 		
-/*
-		when this is called, the eventProcessor must return whether it is ready to deactivate and also call the callback whenever this readiness changes
-*/
-		prepareToDeactivate(callback)
+
+		receiveOccupationConfirmation(button)	
 		{
-			this.deactivationReadinessChangeCallback := callback
-			this.processDown := this.processDownWhilePendingDeactivation
-			this.flagAsUp := this.flagAsUpWhilePendingDeactivation
-			return this.flags == 0
+			
+			this.hotkeyOn(this.prefixByButton[button],button)		
+		}
+		
+		
+		
+		receiveOccupationRelinquishedConfirmation(button)
+		{
+			
+			this.hotkeyOff(this.prefixByButton[button],button)	
 		}
 		
 		
@@ -786,21 +791,6 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 				}
 		}
 
-		processDownWhilePendingDeactivation(button)
-		{
-				status:=this.downStatusByButton[button]
-				if(status)
-					this.repeat(button)
-				else
-				{
-					if (this.flags==0)
-					{
-						fn:=this.deactivationReadinessChangeCallback
-						%fn%(false)
-					}
-					this.down(button)	
-				}
-		}
 		
 		clearTimer()
 		{
@@ -870,12 +860,11 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 		
 		flagAsUpWhilePendingDeactivation(button)
 		{
-
+			LP_.keyState.relinquish(button, this) ;changed
 			this.base.flagAsUp.call(this,button)
 			if(this.flags==0)
 			{
-				fn:=this.deactivationReadinessChangeCallback
-				%fn%(true)
+				this.delete("flagAsUp")
 			}
 		}			
 
@@ -1185,7 +1174,7 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 			
 			LP_shortUp(button)
 			{
-				send sht
+				
 			}
 			LP_shortRepeat(button)
 			{

@@ -1,69 +1,107 @@
-In this commit, within longpressify.ahk I have implemented mode switching using a queue. The end coder makes calls to LP_.deactivate(<mode name>) and LP_.activate(<mode name>) to control modes. The de/activations are processed in order of call. If any of the paradigms of a mode report to be not ready when queried for deactivation readiness, then the mode will not deactivate until all paradigms report ready. Readiness means all of the buttons of the paradigm are up. The listening for readiness is automated and the end coder only needs to call LP_.deactivate once. Execution of subsequent activations/deactivations will be blocked until the current one completes. 
-
-There are shortcomings associated with this implementation
-- some modes are mutually exclusive, so there is no harm in processing these de/activations asyncronously. However the current implementation does not take advantage of this
-- mode switching from a user's perspective often comes in the form of toggling on and off with the same button. If a mode is waiting to deactivate, then to the end user, it appears as though deactivate was not called on it the user may press a button to deactivate it again. The result will be that when ready, it would deactivate but then immediately after reactivate due to the second queued command sent by the user. This is probably not desirable. 
-- --- claim 1: The behaviour of LP_.deactivate/activate perhaps should depend on whether the mode is actually deactivated. 
-- perhps it would be desirable to allow partial activations- activate the paradigms that are ready and wait for the ones that are not
-
-Alternatives:
-- allow end coder to pass a callback, so that they can enforce sequential processing of dependent modes when necessary. 
-
-More remarks about claim 1
--a sigle button press is often associated with at least 1 deactivate plus 1 activate, so the resulting q: 
-[deactivate mode 1, activate mode 2]
--
-
-seams to me modes should not wait to deactivate. This just doesnt make sense from a user perspective. Modes should either make a single attempt at full deactivation or they should partially deactivate. 
-
-
-Single Attempt Model:
-- a call to de/activate returns true or false
-- the end coder can use the return value to decide how to proceed. 
-- problem here is what if end coder wants to deactivate multiple modes in all or nothing fashion? Clearly, we need to allow the passing of multiple modes to the call. 
-
-Partial deactivation Model:
-- whatever paradigms are ready, get deactivated. The paradigms that are not ready go into pending deactivation
-- a subsequent activation of the mode cancels the pending deactivation.
-- anything that is trying to activate but uses a key that is not available due to being down or a part of an active paradigm, will go in to pending activation. 
-- note that anything pending activation needs to be registered as reserving the buttons
--Implementation notes:
-- --- need a kind of generalized substitute for getKeyState, say LP_.getKeyState, to which one  can pass a callback to be alerted when the key becomes available. 
-- --- also need an LP_.reserveKey function. Whenever a paradigm activates or goes pending activation, it reserves its buttons. Perhaps we can kill two birds with one stone by automatically waiting for a key that is not reservable. 
-- --- when a mode is deactivated, its paradigms will release reservatiion of buttons or stop waiting where applicable. 
-- --- if a paradigm is pending deactivation and is then activated, it will be taken out of the pending state. 
-- --- since partial activation is supported in this Model, there is no need to check ahead for availability of the entire mode's buttons. 
-- --- Usage Expectation 1: This Model is designed with the expectation that the end coder will not activate any mode without first deactivating any conflicting modes. If and only if this assumption has been violated will an activating paradign need a button that is already both reserved and awaited, and in this case that paradigm would receive neither benefit. This may have unforseen results. We do not make any effort to garantee any practical results under these circumstances nor do we check ahead to avoid this circumstance. We simply execute the requested de/activations to the partial or full extent that is available. At this time, known practical applications of the mode activation system all adhere to this usage expectation.
-
-========================================
-Dimension1: Atomic vs Partial
-Dimension2: Callback vs Queue
-Dimension3: Persist vs AttemptAndReport
-
-(Atomic, Callback, Persist): End coder submits a de/activation along with a callback. No de/activation is performed until the entire mode is ready. User can submit multiple de/activations. Order of completion depends on readiness. 
-
-(Atomic, Callback, AttemptAndReport): This one doesn't make a whole lot sense. Attempt and report doesn't really make sense with callbacks unless the attempt was a time limit thing. End coder submits a de/activation along with a callback. No de/activation is performed until the entire mode is ready. User can submit multiple de/activations. Order of completion depends on readiness. 
-
-(Atomic, Queue, Persist): Current system. End coder submits a de/activation. De/activations are completed in order of being received. One can not start before the previous one ends. One can not be done partially. 
-
-(Atomic, Queue, AttemptAndReport): AttemptAndReport doesn't make sense with the Queue either. If it is going to try once and report right back, then there is little reason for queing up commands unless you are really paranoid about new commands coming in before the first finishes, but even that doesn't make sense because why would the user submit commands that quickly? 
-
-(Partial, Callback, Persist): End coder submits a de/activation along with a callback. De/activation is performed one paradigm at a time. Any not-ready paradigms go into pending. User can submit multiple de/activations. Order of completion depends on readiness. there is only blocking of commands contained in callbacks. Seams nice but problem is it is still blocking, waiting for complete deactivation. does not implement what i had in mind, which is being able to activate even when deativations are pending - the ability for indivual paradigms to wait on others.
-
-(Partial, Callback, AttemptAndReport): This one doesn't make a whole lot sense. Attempt and report doesn't really make sense with partial activation. Why would I want it to partially activate a mode and then just stop trying? On top of that why would I need a callback if it is just a immediate attempt?
-
-(Partial, Queue, Persist): This differs from the current system in that it allows the mode to be partially deactivated. Howver it still requires full deactivation before proceeding to other de/activations
-
-(Partial, Queue, AttemptAndReport): AttemptAndReport doesn't make sense with the Queue either. If it is going to try once and report right back, then there is little reason for the user to send multiple commands. 
-==================================================
-https://docs.google.com/drawings/d/1spiEMK6N-KpJxdQVKuMkEOSmlfP3SWBjX5R-Mf4MdY0/edit
+In this branch, we implement option 2 of the the 3 options for mode switching detailed below
 =======================================================
 3 OPTIONS
 - 1. All or nothing look ahead
-- --- in this one, activate and deactivate commands are sent in one call. The system checks the readiness of all paradigms involved. If everyone is ready all the command get executed in order. This way we avoid the complexities and problems associated with partial de/activations. However we rely on the assumption that readiness is not going to change after we take the leap to start carrying out the de/activations.
+- --- in this one, activate and deactivate commands are sent in one call. The system checks the readiness of all paradigms involved. If everyone is ready all the commands get executed in order. This way we avoid the complexities and problems associated with partial de/activations. However we rely on the assumption that readiness is not going to change after we take the leap to start carrying out the de/activations.
 - 2. one paradigm at a time with conflict checks and waiting .
 - --- this one is a bit more complex but it has two advantages.
 - --- --- 1. don't need to worry so much about readiness changes because we don't require one uninterupted stream of de/activations. 
 - --- --- 2. we allow the user to hold down buttons that are being deactivated and wait for them to release, giving some flexibility.
-- 3. Stick with current system which is one mode at a time, waiting for all paradigms in the mode to be ready. Persisting until readiness is reached. That last part is important. It prevents a stream of commands from being aborted after the point of no return (after a mode or modes have already been de/activated).
+- 3. one mode at a time, waiting for all paradigms in the mode to be ready. Persisting until readiness is reached and de/activation complete. That last part is important. It prevents a stream of commands from being aborted after the point of no return (after a mode or modes have already been de/activated).
+==========================================================
+Optin 2 BLUEPRINT
 
+- LP_.keyState
+- --- reserve(String button, EventProcessor ep)
+- --- --- PARAMS:
+- --- --- --- ep: yep
+- --- --- --- button:  (may also be a scan code). Should be formatted in accordance with the value returned by LP_.keyState.format(String)
+- --- --- INTERFACE: 
+- --- --- --- Prior to completing activation, an EventProcessor ep,  should call this to report intent to activate and receive confirmation that no other active EventProcessor is occupying the button, no other EventProcessors started waiting to occupy the button before ep, and the button is not currently down.  If  all those conditions are satisfied, the button becomes occupied by ep and the method returns true.  If the button is not available for immediate occupation, then ep will be added to the waiting list and alerted whenever occupation is acheived. Alert comes as a call to ep.receiveOccupationConfirmation(button)
+- --- --- --- definition:  an EventProcessor is said to "explicitly occupy a button", if it is active and its paradigm explicity modifies the button (I.E. declares a hotkey using the button name or using the scancode if the button is a scancode). 
+- --- --- --- definition:  an EventProcessor, ep, is said to "implicitly occupy a button" if one of the following is true:
+- --- --- --- --- the button is a scancode and ep is active and its paradigm modifies a button that has that scancode
+- --- --- --- --- the button is not a scancode and ep is active and its paradigm modifies the scancode of the button.
+- --- --- IMPLEMENTATION: 
+- --- --- --- there is some complication when it comes to waiting lists and checking due to dependencies
+https://docs.google.com/drawings/d/12P7_ZwgnjDVV47tOwK6IlJ3isOzet8g8UaJhBbN13BA/edit
+- --- --- --- see section below
+- --- relinquish(String button, EventProcessor ep)
+====================Waiting Lists=====================
+-occupied status is organized like below. SC1 represents a Scancode and button1 and button2 represent button names associated with that scancode
+--------------------------
+-SC1 
+- --- occupiers
+- --- --- scancode:
+- --- --- button1:
+- --- --- button2:  
+- --- waiters: array of objects of form: {eventProcessor, button}
+------------------------------
+- if ep modifies a ScanCode explicitly (rather than specifying a button), then we must check if anyone is currently occupying button1 as well as button 2 as well as the scancode
+- if ep  specifies a button then we must check if anyone is currently occupying that button and also check the scancode
+- if no one occupies scan code than someone can wait on button 1 while someone else waits on button 2
+- I think maybe a tree/list would work well in this circumstance. (inventor's paradox?)
+- --- hmmm maybe not. tried to work out example but didnt get very far
+- Let's just go with an array of waiters. When reserve is called push {eventProcessor:ep,button:button} into the array. Then if array.count is one we check if array[1].button is occupied and if not we pop it out of waiting, put ep in occupationByScanCode[<SC>].occupiers[button] and call ep.receiveOccupationConfirmation(button) and if button is a scan code we stop processing, otherwise we continue down the array (scancodes implicitly occupy all associated buttons).- See example of what an element of occupationByScanCode might look like below if we did do an array
+- --- no that's not cool. even if array count is >1 there are still times when the last pushed can be activated (eg. when proceeded by a scancode or another button with just another button occupying). Most likely at this point no one else in the list can occupy, unless this call to reserve interupted a relinquish call or other call to reserve. But the latter won't happen because we have an activation Q. So what if this call to reserve did indeed interupt a relinquish and the relinquish started going through the occupationByScanCode and checking the waiters? Two threads modifying the same array. Sounds like trouble. I say this array business is a waste of time. We have already asserted that the end coder should ensure that active modes should be deactivated before conflicting modes are activated. Furthermore there should be no conflict within the mode itself. Furthermore de/activations are processed in queue and removal from wait requires no callbacks, i.e. removal of all waits associated with a mode is atomic with respect to any adding of waits from subsequent activations. 
+
+=====================EXAMPLE=============================
+Imagine that "button1" and "button2" are actual button names associated with scan code "SC1"
+************0*************
+neither the scancode nor any buttons associated with the scancode are occupied
+-SC1   
+- --- occupiers   
+- --- --- scancode   
+- --- --- button1  
+- --- --- button2  
+- --- waiters: 
+ACTION: LP_.keyState.reserve("SC1",P1)
+************1*************
+-SC1 
+- --- occupiers
+- --- --- scancode: P1
+- --- --- button1  
+- --- --- button2  
+- --- waiters: 
+ACTION: LP_.keyState.reserve("button1",P2)
+************2*************
+P2 must wait for P1
+--------------------------
+-SC1 
+- --- occupiers
+- --- --- scancode: P1
+- --- --- button1  
+- --- --- button2  
+- --- waiters: {eventProcessor:P2, button:"button1"}
+ACTION: LP_.keyState.reserve("button2",P3)
+************3*************
+
+--------------------------
+-SC1 
+- --- occupiers
+- --- --- scancode: P1
+- --- --- button1  
+- --- --- button2  
+- --- waiters: {eventProcessor:P2, button:"button1"} {eventProcessor:P3, button:"button2"}
+ACTION: LP_.keyState.reserve("SC1",P4)
+************4*************
+
+--------------------------
+- SC1 
+- --- occupiers
+- --- --- scancode: P1
+- --- --- button1  
+- --- --- button2  
+- --- waiters: {eventProcessor:P2, button:"button1"} {eventProcessor:P3, button:"button2"} {eventProcessor:P4, button:"SC1"}
+ACTION: LP_.keyState.relinquish("SC1",P1)
+
+************5*************
+
+--------------------------
+- SC1 
+- --- occupiers
+- --- --- scancode:
+- --- --- button1 : P2
+- --- --- button2  : P3
+- --- waiters:   {eventProcessor:P4, button:"SC1"}
+ACTION: LP_.keyState.relinquish("SC1",P1)
