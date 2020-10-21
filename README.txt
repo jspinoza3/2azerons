@@ -148,7 +148,7 @@ LP_.activate(<modeName>)
 Miscellaneous hotkey definitions including those for mode switching 
 
 
-============AHK Level customization general overview============
+============AHK Level customization general notes============
 - an outline of the structure of 2azerons.ahk is in the section above
 
 - the content of 2azerons.ahk can be broken down into 5 main parts
@@ -160,14 +160,21 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- --- --- Any nested class for which the property "LP_buttons" (note this is distinct from "LP_button") is defined will be interpretted to represent the behaviour you wish to define for a set of buttons that can be pressed in various combinations to produce different actions. In this case LP_buttons should be an array of strings matching valid button/key names or scancodes as enumerated in the ahk keylist:  https://www.autohotkey.com/docs/KeyList.htm 
 - --- --- --- The detailed structure of a chording group definition is in the section "defining behaviour of a chording group" below
 - --- 3.  an include statement that references longpressify.ahk
-- --- ---longpressify.ahk contains code that will interpret the behaviour definitions you make LP_modes and bring them to life.  It will define two functions- LP_activate and LP_deactive- which you can use to control on-the-fly which remapping modes are active. The script longpressify.ahk will also define many other classes, functions, and variables, all prefixed with "LP_", many of which are not explained here as you will probably never need to reference them in your code. 
+- --- ---longpressify.ahk contains code that will interpret the behaviour definitions you make LP_modes and bring them to life.  It will perform a deep instantiation of LP_modes and store it in LP_modes.LP_instance. It will define a class LP_. with two important methods for the end-programmer to use- LP_.activate and LP_.deactivate- which you can use to control on-the-fly which remapping modes are active. The script longpressify.ahk may also define many other classes, functions, methods, and variables, all either members of the LP_ class or named with prefix "LP_", many of which are not explained here as you will probably never need to reference them in your code. 
 - --- --- "LP_" is a reservered prefix. All the identifiers in longpressify.ahk are prefixed by "LP_". You will also need to use this prefix in specific locations in your code when necessary in order to communicate with longpressify.ahk, as detailed in later sections below.
 - --- 4. One or more calls to LP_activate is necessary to specify what mode you wish to be active in the beginning. This function is defined in longpressify.ahk, hence this call(s) comes after the include statement. The function takes one input, as string, which is the name of a nested class in LP_modes, representing the mode you wish to activate.
 - --- 5. Miscellaneous hotkey definitions. Here you put hotkeys used for mode control and whatever other custom hotkey definitions you want which are not well suited to being defined inside of a mode. For example, you may choose to define a simple hotkey for terminating the script.
 - --- --- Control which modes are active with calls to LP_.activate and LP_.deactivate, passing one input- a string - the name of a nested class in LP_modes, representing the mode you wish to activate or deactivate.
 - --- --- multiple modes can be active at the same time. This feature has only been tested in the context of mutually exlusive modes. If two modes modify one or more of the same buttons, I make no garantee as to the practicality of attempting to activate one without deactivating the other first. However, there is a mechanism in place that will automatically handle the situation where a mode is activated which modifies a button that is already held down. In this case, the mode will be activated on all other buttons but not apply to the held down button until it is released. The same waiting principle is applied to deactivation of held down buttons as well.
 - The order of code parts 1-2 above is not important, but part 3-5 are expected to go in order after 1-2.
-- also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk, but the details of that will be covered later.
+- also note that no instantiation of classes is required inside of 2azerons.ahk. It is the name, location, and content of your class definitions that allows them to be properly interpretted as button behaviour paradigms. Instantiation will be performed by longpressify.ahk. Adding some properties to the instances, including the following, which you may find useful in coding complex behaviour:
+- --- LP_eventProcessor.repeatPhaseRepeats
+- --- LP_eventProcessor.longPhaseRepeats
+- --- LP_eventProcessor.shortPhaseRepeats
+- the above are properties of the behaviour paradigm which are automatically updated to reflect how many repeat down events occur during each of the three phases of the button press. See \customization\hello_world.ahk for example of how these can be used. See \customization\stateMachines.svg for an understanding of when these counters are updated and reset
+- note that the counters I just mentioned are properties of LP_eventProcessor. Each paradigm instance will be given a reference to it's own eventProcessor. It is the inner workings of the state machine that realizes the paradigm and is discussed in a previous section. Don't make any modifications to the eventProcessor properties to avoid unexpected results. A bit more about the eventProcessor can be seen in \blueprints\ if you are interested.
+- All paradigm instances are given the property LP_containingClassInstance, which is the instance of the mode within which the paradigm is defined. 
+
 
 
 ===================defining behaviour of a stand-alone button==================
@@ -180,7 +187,7 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- LP_msTillLong: specifies the number of milliseconds the user has to release the button before entering the long press phase (see LP_held and LP_longRepeat below). If the user does not define this, a default value of several hundreds will be used
 - --- LP_msTillRepeat: specifies the duration, in milliseconds, of the long press phase, after which the repeat phase begins if the button has not been released (see LP_repeat below). If the user does not define this, a default value of several hundreds will be used
 - --- LP_prefix: eg: "$", "*", "~". This string specifies the hotkey prefix that is to be used to control what what kind of key presses will activate the behaviour paradigm and whether or not the native behaviour of the button will be stifled. See https://www.autohotkey.com/docs/Hotkeys.htm for more details. Note that 2azerons has not been tested with modifier prefixes.
-- --- the following are some of the methods you can define to specify behaviour of the button
+- --- the following are descriptions of some of the methods you can define to specify behaviour of the button
 - --- --- LP_down: called without delay on the button-down event. Only used in special circumstances
 - --- --- LP_shortUp: called if button is released prior to entering the long press phase
 - --- --- LP_held: called upon entering the long press phase
@@ -188,11 +195,12 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- --- LP_repeat: called if a repeat-down event fires during the repeat phase
 - --- --- LP_shortRepeat: called if a repeat-down event fires prior to the long press phase
 - --- --- LP_longRepeat: called if a repeat-down event fires during the long phase
-- --- you can define all, some, or none of the supported handler methods. However, there are no default handlers, except for the backend ones that merely store and update information. Some examples of that information, which you may find useful in coding complex behaviour:
-- --- --- LP_eventProcessor.repeatPhaseRepeats
-- --- --- LP_eventProcessor.longPhaseRepeats
-- --- --- LP_eventProcessor.shortPhaseRepeats
-- --- the above are properties of the behaviour paradigm which are automatically updated to reflect how many repeat down events occur during each of the three phases of the button press.
+- --- you can define all, some, or none of the supported handler methods. If not defined by you, a default version of LP_repeatUp handler is provided which simply calls LP_longUp:
+
+			LP_repeatUp()
+			{
+				this.LP_longUp(button)
+			}
 
 ============defining behaviour of a chording group================
 - any class defintion which is nested inside a mode and has the key/property, LP_buttons, will be interpretted as the desired behaviour of a chording group, i.e. a set of buttons that when pressed in various combinations produce various actions.
@@ -204,7 +212,27 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- a nested class named "oii" describes the actions associated with pressing just the two buttons, s and d at the same time
 - --- a nested class named "oio" describes the actions associated with pressing just the one button, s 
 - --- ...
+- each of these nested classes representing chords is instantiated and given a reference to the instance of the chording group paradigm that contains it. That reference is stored in the property "LP_containingClassInstance". They are also given direct access to the eventProcessor described in a previous section, so you can for example say oi.LP_eventProcessor.longPhaseRepeats instead of oi.LP_containingClassInstance.LP_eventProcessor.longPhaseRepeats. This is useful because it makes code inside chord handlers and code inside stand alone button handlers more interchangeable. 
+- handlers of chords take the button the was pressed, released, or repeated as input, while handlers of stand alone buttons take no input because the button is always the same.
 - Chording groups define LP_prefixes (array of strings) instead of LP_prefix
+=============default handlers for chording groups=================
+			LP_repeatUp(button)
+			{
+				this.LP_longUp(button)
+			}
+			
 
+			
+			LP_repeatOver(button)
+			{
+				this.LP_repeatUp(button)
+			}
+			
+			
+			
+			LP_longOver(button)
+			{
+				this.LP_longUp(button)
+			}
 ====================Other customization notes=======================
 if you have defined button behaviour for a button on the numpad, then avoid toggling numlock while that key is held down, because doing so may cause the up event not to fire.
