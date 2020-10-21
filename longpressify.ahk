@@ -297,6 +297,8 @@ static buttonByAlias := {one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",sev
 
 /*
 implementation notes:
+\blueprints\
+and online at
 https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/edit
 */
 

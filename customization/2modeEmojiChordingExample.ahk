@@ -1,5 +1,7 @@
 ﻿/*
 This script uses f4 and f5 to send emojis and uses f1 to switch modes. See diagram:
+2modeEmojiChordingExample.svg
+also online at:
 https://docs.google.com/drawings/d/161c4M-Gj9kyPLyaHVzja4ZpBg_vo8d4BV3e1tln-Uu8/edit
 */
 

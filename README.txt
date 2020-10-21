@@ -54,9 +54,9 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. You can also define custom chording groups, modes, and mode switching button. 
 
 ============AHK Level customization kinesthetic learning resources===============
-- since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "hello_world" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
+- since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "customization" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
 - --- these educational examples resemble 2azerons.ahk in essential structure, but the code and functionality is greatly stripped down.
-- --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the hello_world folder and run it. At the top of the code will will see a link to a diagram showing what the code does. Like 2azerons.ahk, these educational scripts also work with regular keyboards, so you dont need an Azeron to use the scripts.
+- --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the customization folder and run it. At the top of the code will will see a link to a diagram showing what the code does. Like 2azerons.ahk, these educational scripts also work with regular keyboards, so you dont need an Azeron to use the scripts.
 - --- note that all of these example scripts, like 2azerons.ahk, consist of these 5 parts:
 
 - --- --- 1. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "LP_" prefix.
@@ -69,7 +69,9 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 At the heart of your ability to customize 2azerons, is the ability to associate custom handlers with buttons and chording groups (groups of buttons that can be pressed in various combinations). There are many different types of handlers (listed in this section below), and each one is called at a specific time in relation to the user's press, hold, and release of buttons. 
 - These handles are defined using autohotkey code. What happens inside of handlers is entirely up to you. Send keystrokes, change variables, gui manipulations, etc...
 - You define these handlers as methods of behaviour paradigms as detailed in the sections below. 
-- When these handlers are called is determined by the state machines shown in the diagram linked here:
+- When these handlers are called is determined by the state machines depicted in:
+\customization\stateMachines.ahk
+or online at:
 https://docs.google.com/drawings/d/1cXL_eKtvFOJAiGCwTwez9lKrTEyWbkvl_wkg0dDBrS4/
 
 These 9 handlers can be used for stand alone buttons and chording groups:
@@ -88,10 +90,12 @@ These 3 handlers can also be used for chording groups:
 - LP_longOver
 - LP_repeatOver
 
-For a more flattened, concrete state machine diagram, see this link:
+For a more flattened, concrete state machine diagram, see:
+\customization\hello_world.svg
+or online at:
 https://docs.google.com/drawings/d/1JijpUo575Bc2RLW65jbtVsHNbFz341wYJE1maVM_MEE/
-(or \Diagrams\hello_world_flowchart.svg)
-It describes the behaviour defined by a two button chording group paradigm consisting of the the buttons "H" and "W", an example of which is coded in hello_world\hello_world.ahk
+
+It describes the behaviour defined by a two button chording group paradigm consisting of the the buttons "H" and "W", an example of which is coded in \customization\hello_world.ahk
 	
 ============AHK Level customization: structure of 2azerons.ahk from a distance========================
 Inert Library

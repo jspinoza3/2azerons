@@ -2,7 +2,9 @@
 
 This script is designed to familiarize you with all the different handlers that can be defined in a behaviour paradigm. Run the script and use H and W on your keyboard in various combinations and durations of pressing to see when the handlers get called.  
 
-The handlers are methods of classes nested inside of thisIsAChordingGroup, which is a chordingGroup behaviour paradigm and describes an instance of the state machine in this diagram:
+The handlers are methods of classes nested inside of thisIsAChordingGroup, which is a chordingGroup behaviour paradigm and describes an instance of the state machine depicted in:
+hello_world.svg
+and also online:
 https://docs.google.com/drawings/d/1JijpUo575Bc2RLW65jbtVsHNbFz341wYJE1maVM_MEE/edit
 */
 
