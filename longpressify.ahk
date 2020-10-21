@@ -309,6 +309,10 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 		
 		__New(paradigmName,paradigm, modeName,mode) 
 		{
+			this.shortPhaseRepeats:=0
+			this.longPhaseRepeats:=0
+			this.repeatPhaseRepeats:=0
+		
 			this.paradigm := paradigm
 			
 			
@@ -440,15 +444,18 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 		
 		heldDecide()
 		{
-			LP_msTillRepeat:=this.paradigm.LP_msTillRepeat
-			if(LP_msTillRepeat>=0)
+			ms:=this.paradigm.LP_msTillRepeat
+			if(ms>=0)
 			{
 				this.base:=this.longStateWithTimer
 				this.paradigm.LP_held()
-				fn:=ObjBindMethod(this,"enterRepeat")
-				this.timer := fn
-				SetTimer, %fn%, -%LP_msTillRepeat%	
-				;msgbox howdy
+				
+				
+				;gotta push these timeout events in the queue or else LP_enterRepeatPhase might not finish prior to calls to LP_repeat	
+				processor:=objBindMethod(this,"enterRepeat")
+				pusher:= objBindMethod(this,"add2Q", processor)
+				this.timer := pusher
+				SetTimer, %pusher%, -%ms%
 			}
 			else
 			{
@@ -484,9 +491,13 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 					
 					this.base := this.shortStateWithTimer
 					this.callDownHandlerAndResetRepeatCounters()
-					fn:=objBindMethod(this,"heldDecide")
-					this.timer := fn
-					SetTimer, %fn%, -%ms%
+					
+					;gotta push these timeout events in the queue or else LP_held might not finish prior to calls to LP_longRepeat
+					processor:=objBindMethod(this,"heldDecide")
+					pusher:= objBindMethod(this,"add2Q", processor)
+					this.timer := pusher
+					SetTimer, %pusher%, -%ms%
+					
 				}
 				else
 				{
@@ -660,8 +671,12 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 		
 		__New(paradigm, modeName,mode) 
 		{
+			this.shortPhaseRepeats:=0
+			this.longPhaseRepeats:=0
+			this.repeatPhaseRepeats:=0
+		
+		
 			this.paradigm := paradigm
-			
 			paradigm.LP_containingClassInstance := mode
 			this.mode:=mode
 			this.modeName:=modeName
@@ -822,7 +837,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 				c := new chord
 				this.chords[chordIndex]:= c
 				c.LP_containingClassInstance := this.paradigm
-				
+				c.LP_eventProcessor := this
 				this.paradigm[chordName] := c
 				;this[chordName] := c
 				if (c.LP_init)
@@ -882,14 +897,14 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 				if(ms>=0)
 				{
 					
-					;c:=this.__Class
-					;debugappend(c . ": enter")
 					this.base := this.shortStateWithTimer
 					this.callDownHandlerAndResetRepeatCounters(button)
-					;debugappend(c . ": enter:chord: " . this.chord.__Class)
-					fn:=objBindMethod(this,"heldDecide",button)
-					this.timer := fn
-					SetTimer, %fn%, -%ms%
+					
+					;gotta push these timeout events in the queue or else LP_held might not finish prior to calls to LP_longRepeat
+					processor:=objBindMethod(this,"heldDecide",button)
+					pusher:= objBindMethod(this,"add2Q", processor)
+					this.timer := pusher
+					SetTimer, %pusher%, -%ms%
 				}
 				else
 				{
@@ -915,19 +930,22 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			LP_msTillRepeat:=this.chord.LP_msTillRepeat
 			if(LP_msTillRepeat>=0)
 			{
-				;c:=this.__Class
-				;debugappend(c . ": enter")
+
 				this.base:=this.longStateWithTimer
 				this.chord.LP_held(button)
-				fn:=ObjBindMethod(this,"enterRepeat",button)
-				this.timer := fn
-				SetTimer, %fn%, -%LP_msTillRepeat%	
-				;msgbox howdy
+		
+				;gotta push these timeout events in the queue or else LP_enterRepeatPhase might not finish prior to calls to LP_repeat
+				processor:=objBindMethod(this,"enterRepeat",button)
+				pusher:= objBindMethod(this,"add2Q", processor)
+				this.timer := pusher
+				SetTimer, %pusher%, -%LP_msTillRepeat%	
+				
 			}
 			else
 			{
 				this.base:= this.longState
 				this.chord.LP_held(button)
+				
 			}
 		
 		}	
@@ -998,7 +1016,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 				;c:=this.__Class
 				;debugappend(c . ": down")
 				this.clearTimer()
-				this.chord.LP_shortOver()
+				this.chord.LP_shortOver(button)
 				this.downDecide(button)
 			}
 
@@ -1011,7 +1029,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			{
 				;c:=this.__Class
 				;debugappend(c . ": down")
-				this.chord.LP_shortOver()
+				this.chord.LP_shortOver(button)
 				this.downDecide(button)
 			}
 			

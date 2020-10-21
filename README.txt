@@ -87,6 +87,11 @@ These 3 handlers can also be used for chording groups:
 - LP_shortOver
 - LP_longOver
 - LP_repeatOver
+
+For a more flattened, concrete state machine diagram, see this link:
+https://docs.google.com/drawings/d/1JijpUo575Bc2RLW65jbtVsHNbFz341wYJE1maVM_MEE/
+(or \Diagrams\hello_world_flowchart.svg)
+It describes the behaviour defined by a two button chording group paradigm consisting of the the buttons "H" and "W", an example of which is coded in hello_world\hello_world.ahk
 	
 ============AHK Level customization: structure of 2azerons.ahk from a distance========================
 Inert Library
