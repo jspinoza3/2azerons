@@ -1,8 +1,0 @@
-add another example to hello_world
-- helloWorld.ahk
-- modifies h and w
-- uses all 12 (or close to it) handler types
-- accompanied with this flattened out and tailored state machine
-https://docs.google.com/drawings/d/1JijpUo575Bc2RLW65jbtVsHNbFz341wYJE1maVM_MEE/edit
-
-change to a more sophisticated mode switching system as detailed in modeSwitchingRemarks.txt
