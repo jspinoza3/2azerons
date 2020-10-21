@@ -1,7 +1,7 @@
 Thanks for you interest in 2azerons, a productivity tool that turns your two Azerons into an all in one keyboard/mouse replacement!
 =================Usage Instructions=======================
 - Goal: make your two azerons function as shown in:
-2azerons.svg
+2azerons.png
 also online at
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - How-to overview:
