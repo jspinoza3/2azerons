@@ -2,34 +2,38 @@
 write comments here
 */
 
-class abstractButton
+class simpleButton
 {
-	
 	LP_msTillLong := -1 
-	LP_msTillRepeat := -1
+	LP_down()
+	{
+		b := this.remap
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+	}
+	LP_shortUp()
+	{
+		b := this.remap
+		tosend := "{blind}{" . b . " up}"	
+		send %tosend%
+	}  
+
+	LP_shortRepeat()
+	{
+		b := this.remap
+		tosend := "{blind}{" . b . " down}"	
+		send %tosend%
+	}
 }
-   
+  
 class LP_modes 
 {
 
   class creatureMode
   {
-            class u extends abstractButton
+            class u extends simpleButton
             {
-                LP_down()
-                {
-                  send {2 down}
-                }
-                LP_shortUp()
-                {
-                  send {2 up}
-                }  
-
-				LP_shortRepeat()
-				{
-					send {2 down}
-				}
-                                                        
+               remap := "2"                                        
             }    
 	}
         
@@ -40,7 +44,7 @@ class LP_modes
 #include ..\longpressify.ahk
 
 *f1::
-if (LP_modes.LP_instance.creatureMode.LPisActive)
+if (LP_modes.LP_instance.creatureMode.LP_isActive)
 {
 
     LP_.deactivate("creatureMode")
