@@ -613,7 +613,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			
 			LP_longUp()
 			{
-			
+				this.LP_up()
 			}
 			
 			LP_longRepeat()
@@ -636,7 +636,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			
 			LP_shortUp()
 			{
-				
+				this.LP_up()
 			}
 			LP_shortRepeat()
 			{
