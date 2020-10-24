@@ -29,12 +29,16 @@ class simpleButton
 class LP_modes 
 {
 
-  class creatureMode
+  class mode
   {
             class u extends simpleButton
             {
                remap := "2"                                        
-            }    
+            }  
+            class capslock extends simpleButton
+            {
+               remap := "1"                                        
+            } 			
 	}
         
  }
@@ -44,14 +48,14 @@ class LP_modes
 #include ..\longpressify.ahk
 
 *f1::
-if (LP_modes.LP_instance.creatureMode.LP_isActive)
+if (LP_modes.LP_instance.mode.LP_isActive)
 {
 
-    LP_.deactivate("creatureMode")
+    LP_.deactivate("mode")
 }
 else
 {
-    LP_.activate("creatureMode")
+    LP_.activate("mode")
 
 }
 
