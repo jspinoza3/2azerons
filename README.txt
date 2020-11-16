@@ -5,12 +5,12 @@ Thanks for you interest in 2azerons, a productivity tool that turns your two Aze
 also online at
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - How-to overview:
-- --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run cursor.ahk and 2azerons.ahk to activate software remappings which will enable longpress and chording abilities
+- --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run 2azerons.ahk to activate software remappings which will enable longpress and chording abilities as well as let you control the mouse cursor with the joystick.
 - How-to: detailed steps:  
 - --- Part A: initial installation and setup (where you install some things on your computer and load some things on to your Azeron)
 - --- --- You only have to do this part once assuming you are ok with leaving the azeron profiles loaded on to your Azerons
 - --- --- 1. Make sure AHK is installed on your computer. The latest version can be found at https://www.autohotkey.com/
-- --- --- 2. get the 2azerons source code (the entire folder containing this readme) on to your computer. In the steps that follow you will need to work directly with some of the files inside this folder
+- --- --- 2. get the 2azerons source code (the entire folder containing this readme) on to your computer. In the steps that follow you will need to work directly with two of the files (2azerons.ahk and azeron-profiles.json) inside this folder
 - --- --- 3. plug in your left (i.e. right-handed) Azeron
 - --- --- 4. make sure your right (i.e. left-handed) Azeron is unplugged
 - --- --- 5. launch Azeron software
@@ -34,7 +34,7 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- Option I: simply press Win+Alt+comma to deactivate keyboard remapping but leave joystick cursor control active
 - --- --- --- note that this will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key and pgup and pgdn
 - --- --- --- simply press Win+Alt+comma again to reactivate
-- --- --- Option II: simply press Win+Alt+period to turn off both 2azerons.ahk entirely
+- --- --- Option II: simply press Win+Alt+period to turn off  2azerons.ahk entirely
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 
 =============Troubleshooting===========
@@ -48,7 +48,6 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - The remainder of this readme is aimed at giving you an understanding of how you can edit 2azerons.ahk to customize how your 2 azerons act. 
 
 ===========Customization Overview============
-- longpressify.ahk is relatively set in stone and users have been given alot of customization power without the need to change this file.
 - There are two recommended places for making changes to customize behaviour:
 - --- Profile Level: you may be able to relocate the actions shown in 2Azerons.png by moving bindings around in the Azeron profiles. However many customizations will require you make changes on the AHK level as well.
 - --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. You can also define custom chording groups, modes, and mode switching button. 
