@@ -45,7 +45,7 @@ class LP_modes
 		
  
 
-#include ..\longpressify.ahk
+#include ..\underTheHood\longpressify.ahk
 
 *f1::
 if (LP_modes.LP_instance.mode.LP_isActive)

@@ -106,7 +106,7 @@ class LP_modes
  }
 }
 
-#include ..\longpressify.ahk
+#include ..\underTheHood\longpressify.ahk
 
 LP_.activate("creatureMode")
 *f1::

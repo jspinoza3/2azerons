@@ -913,7 +913,7 @@ class LP_modes
 		
 	}
 	
-	
+/*	
 	class test
 	{
 		class p
@@ -924,33 +924,110 @@ class LP_modes
 			}
 		}
 	}
-	
+*/	
 
 }
 
-#include longpressify.ahk
+#include underTheHood\longpressify.ahk
 LP_.activate("default")
 
-/*
-*f12::
+
+
+
+
+
+
+
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;cursor stuff;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+f:=1
+down:=false
+
+press()
+{
+	global down
+	if(!down)
+		toggle()
+	down:=true
+}
+
+release()
+{
+	global down
+	down:=false
+	toggle()
+}
+
+hotkey,pause, press
+
+
+hotkey, pause up, release
+
+hotkey, AppsKey, toggle
+
+
+
+
+SetTimer, WatchAxis, 20
+return
+
+
+
+WatchAxis:
+JoyX := GetKeyState("JoyX")  ; Get position of X axis.
+JoyY := GetKeyState("JoyY")  ; Get position of Y axis.
+;tooltip, %JoyR%
+deadx := 0
+deady := 0
+;e := 1.4
+x := JoyX - 50 
+y := JoyY - 50
+
+x:=f*x/4
+y:=f*y/4
+SetMouseDelay, -1
+DllCall("mouse_event",uint,1,int, x ,int, y,uint,0,int,0)
+return
+
+
+
+toggle()
+{
+	global f
+	if (f==1)
+		f:=5
+	else
+		f:=1
+}
+             
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+pgup::WheelUp
+pgdn::WheelDown
+
+
+
+
+~!#,::
 if (LP_modes.LP_instance.default.LP_isActive)
 {
 	LP_.deactivate("default")
-	LP_.activate("test")
 }
 else
 {
-	LP_.deactivate("test")
 	LP_.activate("default")
 }
 return
-*/
+
+
+
 
 
 ~!#.::
 ExitApp
 return 
-
-~!#,::
-ExitApp
-return

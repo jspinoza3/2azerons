@@ -22,21 +22,19 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 11. launch Azeron software
 - --- --- 12. load "workCursor" onto the  Azeron, similar to step 5.  
 - --- --- 13. (optional) you may now close Azeron software
-- --- Part B: activate AHK remappings (where you run some autohotkey scripts and enjoy)
+- --- Part B: activate AHK remappings (where you run the ahk script and enjoy)
 - --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
-- --- --- 1. run cursor.ahk (as admin if possible)
+- --- --- 1. run 2azerons.ahk (as admin if possible)
 - --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in with the workCursor on board profile active, and your left Azeron should be unplugged.
 - --- --- 2. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (pulling your right ring finger speeds up the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
-- --- --- 3. run 2azerons.ahk (as admin if possible)
-- --- --- 4. plug in the left Azeron
-- --- --- 5. enjoy
+- --- --- 3. plug in the left Azeron
+- --- --- 4. enjoy
 - --- Part C: deactivate remapping (where you turn off 2azerons, like when you want to use your Azerons or keyboard for something else)
-- --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the remappings as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example.
-- --- --- Option I: simply press Win+Alt+comma to turn off 2azerons.ahk and leave cursor.ahk running
-- --- --- --- use this option when you want to return your keyboard to normal behaviour while still leaving the thumbstick cursor control active.
-- --- --- --- note that cursor.ahk will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key
-- --- --- --- simply run 2azerons.ahk again when you are ready to start using it again
-- --- --- Option II: simply press Win+Alt+period to turn off both 2azerons.ahk and cursor.ahk
+- --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the remappings as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example. 
+- --- --- Option I: simply press Win+Alt+comma to deactivate keyboard remapping but leave joystick cursor control active
+- --- --- --- note that this will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key and pgup and pgdn
+- --- --- --- simply press Win+Alt+comma again to reactivate
+- --- --- Option II: simply press Win+Alt+period to turn off both 2azerons.ahk entirely
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 
 =============Troubleshooting===========
@@ -172,7 +170,7 @@ Miscellaneous hotkey definitions including those for mode switching
 - --- LP_eventProcessor.longPhaseRepeats
 - --- LP_eventProcessor.shortPhaseRepeats
 - the above are properties of the behaviour paradigm which are automatically updated to reflect how many repeat down events occur during each of the three phases of the button press. See \customization\hello_world.ahk for example of how these can be used. See \customization\stateMachines.svg for an understanding of when these counters are updated and reset
-- note that the counters I just mentioned are properties of LP_eventProcessor. Each paradigm instance will be given a reference to it's own eventProcessor. It is the inner workings of the state machine that realizes the paradigm and is discussed in a previous section. Don't make any modifications to the eventProcessor properties to avoid unexpected results. A bit more about the eventProcessor can be seen in \blueprints\ if you are interested.
+- note that the counters I just mentioned are properties of LP_eventProcessor. Each paradigm instance will be given a reference to it's own eventProcessor. It is the inner workings of the state machine that realizes the paradigm and is discussed in a previous section. Don't make any modifications to the eventProcessor properties to avoid unexpected results. A bit more about the eventProcessor can be seen in \underTheHood\ folder if you are interested.
 - All paradigm instances are given the property LP_containingClassInstance, which is the instance of the mode within which the paradigm is defined. 
 
 
