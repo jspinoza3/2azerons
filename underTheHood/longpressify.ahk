@@ -87,7 +87,7 @@ class LP_
 	
 		freakout(sc,button)
 		{
-			msgbox freaky
+			;msgbox freaky
 			hotkey, *%button% up, off
 			this.checkWaiters(sc)
 		}

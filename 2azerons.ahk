@@ -453,14 +453,6 @@ class stringChord
 }
 
 
-active:="default"
-LP_getActiveMode()
-{
-	global active
-	
-	return active
-}
-
 
 class LP_modes 
 {
