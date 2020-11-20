@@ -1,0 +1,102 @@
+body .hero {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: url("images/slide3.jpg");
+  background-size: cover;
+  height: 80vh;
+  width: 100vw;
+}
+body .hero:before {
+  content: '';
+  height: 100%;
+  width: 100%;
+  height: 170vh;
+  width: 100vw;
+  background: rgba(44, 123, 183, 0.5);
+  position: absolute;
+}
+body .hero h1 {
+  position: relative;
+  z-index: 1;
+  font-family: 'Roboto Condensed', sans-serif;
+  color: white;
+  text-align: center;
+  font-size: 4rem;
+  line-height: 4rem;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.35);
+  max-width: 25rem;
+  margin: 30vh auto 0;
+}
+body .content {
+  position: absolute;
+  z-index: 1000;
+  top: 80vh;
+  background: #faf8f8;
+  width: 100%;
+  box-shadow: 0 -2px 1px rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ct_icon_box {
+  margin-bottom: 50px;
+}
+
+.ct_icon_box_section {
+  margin-bottom: 60px;
+}
+
+.ct-section_header {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.ct-section_header h2 {
+  font-size: 65px;
+  font-size: 6.5rem;
+  color: #291b07;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.ct-section_header.ct-section_header--type2 h2 {
+  font-size: 50px;
+  font-size: 5rem;
+  padding-bottom: 17px;
+  padding-bottom: 1.7rem;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.ct-section_header.ct-section_header--type2 .ct-section_header-description {
+  font-size: 18px;
+  font-size: 1.8rem;
+  color: #2e2e2e;
+  font-weight: 400;
+  padding-bottom: 5px;
+  padding-bottom: 0.5rem;
+  font-family: 'Roboto Condensed', sans-serif;
+  text-align: center;
+}
+
+.ct-section_header.ct-section_header--type2 .ct-section_header-separator {
+  background-color: #0BB3E1;
+}
+
+.ct-section_header-separator {
+  background-color: #924399;
+  height: 2px;
+  height: 0.2rem;
+  display: inline-block;
+  width: 171px;
+  width: 17.1rem;
+  margin: 15px 0 10px;
+  margin: 1.5rem 0 1rem;
+}
+
+.ct-icon_box {
+  margin-bottom: 3rem;
+}
