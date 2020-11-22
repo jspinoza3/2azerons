@@ -31,6 +31,10 @@ svg {
   background-color:black;
 }
 
+svg:nth-of-type(n+2) {
+	height:150%;
+}
+
 #svgcon{
 	height:100%;
 	width:100%;
