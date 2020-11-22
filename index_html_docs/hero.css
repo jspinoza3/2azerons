@@ -4,8 +4,18 @@
 
 
 
-@media(max-width:60em){
-	
+/*
+
+@media(min-width:60em){
+
+body {
+	background: url(slide3.jpg) no-repeat;
+	background-size: 100% 100%;
+	background-attachment:fixed;
+	font-size: 16px;
+}
+}
+	*/
 	
 	body:before {
   content: "";
@@ -21,24 +31,33 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-}
-	
-	
-	
-	
 	}
 
 
 
-@media(min-width:60em){
 
-body {
-	background: url(slide3.jpg) no-repeat;
-	background-size: 100% 100%;
-	background-attachment:fixed;
-	font-size: 16px;
-}
-}
+/*
+	
+	
+	
+		body:before {
+  content: "";
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  background: url(slide3.jpg) no-repeat center center;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+	}
+*/
+
+
 
 
 body, html{
@@ -56,18 +75,19 @@ body {
 
 svg {
 	width:100%;
- height:100%;
+ height:100vh;
   background-color:black;
+
 }
 
-svg:nth-of-type(n+2) {
-	height:150%;
+.svgcon > svg {
+
 }
 
-#svgcon{
-	height:100%;
+.svgcon{
+	height:160%;
 	width:100%;
- 
+  
   background-color:black;
 }
 
@@ -145,7 +165,7 @@ iframe{
 	object-fit:contain;
 }
 
-.columnflex
+.columnflex, .svgcon
 {
   display: flex;
   flex-direction: column;
