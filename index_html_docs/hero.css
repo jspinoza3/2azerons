@@ -5,7 +5,7 @@ html{font-size:110%;}
 @media(min-width:60em){html{font-size: 90%}}
 
 body {
-	background: url(index_html_docs/slide3.jpg) no-repeat;
+	background: url(slide3.jpg) no-repeat;
 	background-size: 100% 100%;
 	background-attachment:fixed;
 	font-size: 16px;
