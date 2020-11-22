@@ -82,15 +82,17 @@ svg {
 
 }
 
-.svgcon > svg {
-
+.svgcon {
+ height:100vh;
+   background-color:black;
+   width:100vw;
 }
 
-.svgcon{
+ .svgconlater{
 	height:160vh;
-	width:100vw;
+	
   
-  background-color:black;
+
 }
 
 
