@@ -25,7 +25,7 @@
   
     <text fill="url(#rainbow)" >
       <tspan textLength="190" lengthAdjust="spacingAndGlyphs"
-        font-size="30" 
+        font-size="50" 
         x="2" 
         y="60">AUGMENT</tspan>
       <tspan textLength="183" lengthAdjust="spacingAndGlyphs"
