@@ -23,7 +23,7 @@
       <stop stop-color="#f8f9d9" offset="80%"/>
     </linearGradient>
   </defs>
-    <text fill="url(#rainbow)" textLength="190" lengthAdjust="spacingAndGlyphs">
+    <text  textLength="190" lengthAdjust="spacingAndGlyphs">
       <tspan textLength="190" lengthAdjust="spacingAndGlyphs"
         font-size="30" 
         x="2" 
