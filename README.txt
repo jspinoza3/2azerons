@@ -1,6 +1,6 @@
-Thanks for you interest in 2azerons, a productivity tool that turns your two Azerons into an all in one keyboard/mouse replacement!
+Welcome to 2azerons, a customizable tool that turns your two Azerons into an all in one keyboard/mouse replacement!
 =================Usage Instructions=======================
-- Goal: make your two azerons function as shown in:
+- In this short how-to, you will familiarize yourself with the process of using two azerons at the same time and customizing the behaviour beyond what is available in the official Azeron software. When you complete the steps, your Azerons should function as shown in:
 2azerons.png
 also online at
 https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
@@ -24,8 +24,8 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- --- 13. (optional) you may now close Azeron software
 - --- Part B: activate AHK remappings (where you run the ahk script and enjoy)
 - --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
+- --- --- prep:  at this point, your right Azeron should be plugged in with the workCursor on board profile active, and your left Azeron should be unplugged.
 - --- --- 1. run 2azerons.ahk (as admin if possible)
-- --- --- --- note: before you run cursor.ahk, your right Azeron should be plugged in with the workCursor on board profile active, and your left Azeron should be unplugged.
 - --- --- 2. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (pulling your right ring finger speeds up the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
 - --- --- 3. plug in the left Azeron
 - --- --- 4. enjoy
@@ -49,8 +49,8 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 
 ===========Customization Overview============
 - There are two recommended places for making changes to customize behaviour:
-- --- Profile Level: you may be able to relocate the actions shown in 2Azerons.png by moving bindings around in the Azeron profiles. However many customizations will require you make changes on the AHK level as well.
-- --- AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. You can also define custom chording groups, modes, and mode switching button. 
+- --- 1. Profile Level: you may be able to relocate the actions shown in 2Azerons.png by moving bindings around in the Azeron profiles. However many customizations will require you make changes on the AHK level as well.
+- --- 2. AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. You can also define custom chording groups, modes, and mode switching button. 
 
 ============AHK Level customization kinesthetic learning resources===============
 - since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "customization" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
