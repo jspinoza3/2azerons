@@ -322,8 +322,8 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			{
 					paradigm.LP_button := paradigmName	
 			}
-			if (LP_.buttonByAlias.hasKey(this.LP_button))
-				paradigm.LP_button := LP_.buttonByAlias[paradigmName]
+			if (LP_.buttonByAlias.hasKey(paradigm.LP_button))
+				paradigm.LP_button := LP_.buttonByAlias[paradigm.LP_button]
 				
 			button := paradigm.LP_button
 			;msgbox %paradigmName%
