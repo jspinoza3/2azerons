@@ -1,4 +1,5 @@
 Welcome to 2azerons, a customizable tool that turns your two Azerons into an all in one keyboard/mouse replacement!
+There are a number of reasons you might want to do this, ergonomics and posture being one of them. See https://spinoza.je/2azerons for visual inspiration along those lines.
 =================Usage Instructions=======================
 - In this short how-to, you will familiarize yourself with the process of using two azerons at the same time and customizing the behaviour beyond what is available in the official Azeron software. When you complete the steps, your Azerons should function as shown in:
 2azerons.png
