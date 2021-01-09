@@ -438,7 +438,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 		
 		callDownHandlerAndResetRepeatCounters()
 		{
-			this.paradigm.LP_down()
+			this.paradigm.LP_down(this.paradigm.LP_Button)
 			this.shortPhaseRepeats:=0
 			this.longPhaseRepeats:=0
 			this.repeatPhaseRepeats:=0
@@ -450,7 +450,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			if(ms>=0)
 			{
 				this.base:=this.longStateWithTimer
-				this.paradigm.LP_held()
+				this.paradigm.LP_held(this.paradigm.LP_Button)
 				
 				
 				;gotta push these timeout events in the queue or else LP_enterRepeatPhase might not finish prior to calls to LP_repeat	
@@ -462,7 +462,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			else
 			{
 				this.base:= this.longState
-				this.paradigm.LP_held()
+				this.paradigm.LP_held(this.paradigm.LP_Button)
 			}
 		
 		}	
@@ -470,7 +470,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 		{
 	
 			this.base := this.repeatState
-			this.paradigm.LP_enterRepeatPhase()
+			this.paradigm.LP_enterRepeatPhase(this.paradigm.LP_Button)
 		}
 
 
@@ -514,7 +514,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			up()
 			{
 				this.clearTimer()
-				this.paradigm.LP_shortUp()
+				this.paradigm.LP_shortUp(this.paradigm.LP_Button)
 				this.enterRest()
 			}
 		}
@@ -527,12 +527,12 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			down()
 			{
 				this.shortPhaseRepeats++
-				this.paradigm.LP_shortRepeat()
+				this.paradigm.LP_shortRepeat(this.paradigm.LP_Button)
 			}
 
 			up()
 			{
-				this.paradigm.LP_shortUp()
+				this.paradigm.LP_shortUp(this.paradigm.LP_Button)
 				this.enterRest()
 			}
 		}
@@ -543,7 +543,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			up()
 			{
 				this.clearTimer()
-				this.paradigm.LP_longUp()
+				this.paradigm.LP_longUp(this.paradigm.LP_Button)
 				this.enterRest()
 			}
 			
@@ -556,12 +556,12 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			down()
 			{
 				this.longPhaseRepeats++
-				this.paradigm.LP_longRepeat()
+				this.paradigm.LP_longRepeat(this.paradigm.LP_Button)
 			}
 
 			up()
 			{
-				this.paradigm.LP_longUp()
+				this.paradigm.LP_longUp(this.paradigm.LP_Button)
 				this.enterRest()
 			}
 		}
@@ -575,12 +575,12 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			down()
 			{
 				this.repeatPhaseRepeats++
-				this.paradigm.LP_repeat()
+				this.paradigm.LP_repeat(this.paradigm.LP_Button)
 			}
 
 			up()
 			{
-				this.paradigm.LP_repeatUp()
+				this.paradigm.LP_repeatUp(this.paradigm.LP_Button)
 				this.enterRest()
 			}
 		}
@@ -591,17 +591,17 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			static LP_msTillLong := 300 
 			static LP_msTillRepeat := 400
 			static LP_prefix := "*"
-			LP_repeatUp()
+			LP_repeatUp(button)
 			{
-				this.LP_longUp()
+				this.LP_longUp(button)
 			}
 			
-			LP_repeat()
+			LP_repeat(button)
 			{
 			
 			}
 			
-			LP_enterRepeatPhase()
+			LP_enterRepeatPhase(button)
 			{
 			
 			}
@@ -611,17 +611,17 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			
 
 			
-			LP_longUp()
+			LP_longUp(button)
 			{
 				
 			}
 			
-			LP_longRepeat()
+			LP_longRepeat(button)
 			{
 			
 			}
 			
-			LP_held()
+			LP_held(button)
 			{
 			
 			}
@@ -629,16 +629,16 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			
 	
 			
-			LP_shortUp()
+			LP_shortUp(button)
 			{
 				
 			}
-			LP_shortRepeat()
+			LP_shortRepeat(button)
 			{
 
 			}
 			
-			LP_down()
+			LP_down(button)
 			{
 			
 			}
@@ -1126,7 +1126,7 @@ https://docs.google.com/drawings/d/10ANSzFFevo6t3euTuVNjSGXll8fylYxbjK8Y5oy_es8/
 			{
 				;c:=this.__Class
 				;debugappend(c . ": up")
-				this.chord.LP_repeatUp()
+				this.chord.LP_repeatUp(button)
 				this.enterRestUp(button)
 			}
 		}

@@ -2,7 +2,7 @@
 {
 	LP_msTillLong := -1
 	LP_msTillRepeat := -1
-	LP_prefix := "~"
+	LP_prefix := "*"
 }
 
 
@@ -13,14 +13,159 @@ class cursor
 				static normal:=3
 				static f:=3
 }
-
+; reset bfv binds to default and then on soldier delete mouse binds for "FIRE" "PRIMARY WEAPON" "SECONDARY WEAPON" 
 class LP_modes 
 {
 
 	class default
 	{
 
+	 
+
+	
+
+
+
+
+
+	
+		class r extends clay ;left #16 index flick
+		{
+			;SOLDIER: FIRE
+			LP_down()
+			{
+				send 2
+				send {7 down}
+				send {space down}
+			}
+			LP_shortUp()
+			{
+				send {7 up}
+				send {space up}
+			}
+		}
 		
+		
+		
+		
+		class leftIndexFinger
+		{
+			LP_buttons := ["f", "g"] ;[left #15 index click, left #19 index side]
+			LP_prefixes := ["*", "*"] 
+					
+			class oi extends clay
+			{
+				LP_shortUp(button) 
+				{
+					send {space up}
+					send {v}
+				}	
+				LP_down()
+				{
+					send {4}
+					send {space down}
+				}				
+			}
+			class io extends clay
+			{
+				LP_shortUp(button) 
+				{
+					send {space up}
+					send {6}
+				}	
+				LP_down()
+				{
+					send {4}
+				}
+			}
+			class ii extends clay
+			{
+				LP_down()
+				{
+					send {5}
+					send {space down}
+					send {r down}
+				}
+				LP_shortUp(button) 
+				{
+					send {space up}
+					send {r up}
+				}
+			}					
+		}
+		
+		
+		
+		
+		class b extends clay ;left #14 index pull
+		{
+			LP_down()
+			{
+				send 1
+				send {LButton down}
+			}
+			LP_shortUp()
+			{
+				send {LButton up}
+			}
+		}
+		
+		class leftMiddleFinger
+		{
+			LP_buttons := ["e", "d", "v"] ;[left #11 middle flick, left #10 middle click, left #9 middle pull]
+			LP_prefixes := ["*", "*", "*"] 
+			
+			class ooi extends clay
+			{
+				;ALL: ZOOM MINIMAP
+				LP_shortUp(button) 
+				{
+					send n
+				}			
+			}
+			class oio extends clay
+			{
+				;ALL: FULL MAP
+				LP_shortUp(button) 
+				{
+					send m
+				}
+			}
+			class oii extends clay
+			{
+				;SOLDIER: SQUAD LEADER RADIO
+				LP_down()
+				{
+					send {b down}
+				}
+				LP_shortUp(button) 
+				{
+					send {b up}
+				}
+			}
+			class ioo extends clay
+			{
+				LP_shortUp(button) 
+				{
+					toggleVoip()
+				}			
+			}
+			class iio extends clay
+			{
+				;ALL: DANGER PING/COMMO ROSE
+				LP_down()
+				{
+					send {q down}
+				}
+				LP_shortUp(button) 
+				{
+					send {q up}
+				}			
+			}
+			
+		}
+
+/*		
 		class j extends clay
 		{
 			LP_down()
@@ -120,7 +265,7 @@ class LP_modes
 					this.goLeft := !this.goLeft
 				}	
 			}
-			
+	*/		
 
 		}
 		
@@ -142,6 +287,7 @@ class LP_modes
 */	
 
 }
+
 
 left180()
 {
@@ -183,25 +329,23 @@ forward(down)
 	
 }
 
-toggleVoip()
+;ALL: VOIP
+toggleVoip() 
 {
-		if (getKeyState("f17"))
+		if (getKeyState("f9"))
 		{
-			send {f17 up}
+			send {f9 up}
 			SoundPlay, off.wav
 		}
 		else
 		{
-			send {f17 down}
+			send {f9 down}
 			SoundPlay, on.wav
 		}
 }
 
 #include ..\..\underTheHood\longpressify.ahk
 LP_.activate("default")
-
-
-
 
 
 
@@ -270,12 +414,7 @@ f5::f17
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 *pgup::wheelup
 *pgdn::wheeldown
-~i::scope()
-~e::return
 
-~e up::
-toggleVoip()
-return
 
 
 ~!#,::

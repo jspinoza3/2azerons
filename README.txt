@@ -1,41 +1,44 @@
 Welcome to 2azerons, a customizable tool that turns your two Azerons into an all in one keyboard/mouse replacement!
-There are a number of reasons you might want to do this, ergonomics and posture being one of them. See https://spinoza.je/2azerons for visual inspiration along those lines.
+
+Compared to a traditional keyboard and mouse, using two Azerons puts more functions directly at your finger tips with no need to look down or constantly shift your hands all around. This increases speed, reduces fatigue and opens up a world of possibilities in terms of ergonomics and posture. See https://spinoza.je/2azerons for visual inspiration along those lines.
+
 If you have questions, or just want to chat. I invite you to join my discord server: https://discord.gg/kJ2wmH9xJw
+
 =================Usage Instructions=======================
 - In this short how-to, you will familiarize yourself with the process of using two azerons at the same time and customizing the behaviour beyond what is available in the official Azeron software. When you complete the steps, your Azerons should function as shown in:
-2azerons.png
-also online at
-https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
+remappings\QWERTY\2azerons.png
+also veiwable online at
+https://docs.google.com/drawings/d/1nfmfB8XYtXwBMC0SAEqFaePudB1Ig7Cl_IqYu-jdOvg/edit
 - How-to overview:
-- --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run 2azerons.ahk to activate software remappings which will enable longpress and chording abilities as well as let you control the mouse cursor with the joystick.
+- --- azeron-profiles.json contains profiles that you will need to load onto your Azerons. You will then run 2azerons.ahk to activate software remappings which will enable mode switching as well as longpress and chording abilities, and let you control the mouse cursor with the joystick.
 - How-to: detailed steps:  
 - --- Part A: initial installation and setup (where you install some things on your computer and load some things on to your Azeron)
 - --- --- You only have to do this part once assuming you are ok with leaving the azeron profiles loaded on to your Azerons
 - --- --- 1. Make sure AHK is installed on your computer. The latest version can be found at https://www.autohotkey.com/
-- --- --- 2. get the 2azerons source code (the entire folder containing this readme) on to your computer. In the steps that follow you will need to work directly with two of the files (2azerons.ahk and azeron-profiles.json) inside this folder
+- --- --- 2. get the 2azerons source code (the entire folder containing this readme) on to your computer. 
 - --- --- 3. plug in your left (i.e. right-handed) Azeron
 - --- --- 4. make sure your right (i.e. left-handed) Azeron is unplugged
 - --- --- 5. launch Azeron software
 - --- --- 6. import azeron-profiles.json into the Azeron software. 
-- --- --- 7. in the Azeron software, select software profile "workClick" and then load it to on board memory on the Azeron 
+- --- --- 7. in the Azeron software, select software profile "QWERTYleft" and then load it to on board memory on the Azeron 
 - --- --- 8. close Azeron software
 - --- --- 9. unplug the left Azeron
 - --- --- 10. plug in the right Azeron
 - --- --- 11. launch Azeron software
-- --- --- 12. load "workCursor" onto the  Azeron, similar to step 5.  
+- --- --- 12. load "QWERTYright" onto the  Azeron, similar to step 5.  
 - --- --- 13. (optional) you may now close Azeron software
 - --- Part B: activate AHK remappings (where you run the ahk script and enjoy)
 - --- --- to use 2azerons you will need to repeat this part at least every time you restart your computer
-- --- --- prep:  at this point, your right Azeron should be plugged in with the workCursor on board profile active, and your left Azeron should be unplugged.
-- --- --- 1. run 2azerons.ahk (as admin if possible)
-- --- --- 2. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (pulling your right ring finger speeds up the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
-- --- --- 3. plug in the left Azeron
-- --- --- 4. enjoy
+- --- --- prep:  at this point, your right Azeron should be plugged in with the QWERTYright onboard profile active, and your left Azeron should be unplugged.
+- --- --- 1. navigate to remappings\QWERTY
+- --- --- 2. in that folder, run 2azerons.ahk (as admin if possible)
+- --- --- 3. Move the thumbstick around to test.  It should now cause the mouse cursor to move. (use your right ring finger to change the speed of the cursor). If the cursor does not move, see troubleshooting below to get it working before proceeding.
+- --- --- 4. plug in the left Azeron
+- --- --- 5. enjoy
 - --- Part C: deactivate remapping (where you turn off 2azerons, like when you want to use your Azerons or keyboard for something else)
-- --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the remappings as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example. 
-- --- --- Option I: simply press Win+Alt+comma to deactivate keyboard remapping but leave joystick cursor control active
-- --- --- --- note that this will continue to remap the joystick on your right Azeron as well as your "menu" key (aka "AppsKey") and pause/break key and pgup and pgdn
-- --- --- --- simply press Win+Alt+comma again to reactivate
+- --- --- note that the software remapping also affects any other keyboards you have. Although I have designed the QWERTY remapping as to not drasticly interfere with using your regular keyboard, you may still notice unfamiliar behaviour on a regular keyboard if you tend to activate multiple keys at a time while typing quickly. For this reason you may want to disable software remapping at times, like when you want to type with your regular keyboard for example. 
+- --- --- Option I: simply click the left joystick to deactivate remapping temporarily. 
+- --- --- --- simply click again to reactivate
 - --- --- Option II: simply press Win+Alt+period to turn off  2azerons.ahk entirely
 - --- --- --- Thanks for using 2azerons! Feel free to leave the profiles loaded on you Azerons and just repeat part B above whenever you are ready to use 2azerons again!
 
@@ -55,10 +58,10 @@ https://docs.google.com/drawings/d/1PFI0aIbMsL4FF6Snv8nXBqh_3spjvcGP_ZaFcOm-rbU/
 - --- 2. AHK Level: 2azerons.ahk works by remapping keyboard and mouse signals with complete ignorance to which physical button or which device they are coming from. Changing behaviour from that which is shown in the google drawing requires editing the source code in 2azerons.ahk in most cases. Make changes to 2azerons.ahk to redefine the shortpress and longpress actions associated with each button or chording set on your Azeron. Within this script you will reference azeron buttons by the AHK name of the keyboard or mouse action that the button is binded to in the profile level. AHK Level changes are required for most customizations. You can also define custom chording groups, modes, and mode switching button. 
 
 ============AHK Level customization kinesthetic learning resources===============
-- since 2azerons.ahk is a lengthly and complex file, I have also provided a folder called "customization" with some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
+- since QWERTY\2azerons.ahk is a lengthly and complex file, I have also provided some educational example scripts that will help you gain a more fundamental understanding of the object oriented system of defining button behaviour in longpressify.ahk environment.
 - --- these educational examples resemble 2azerons.ahk in essential structure, but the code and functionality is greatly stripped down.
-- --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the customization folder and run it. At the top of the code will will see a link to a diagram showing what the code does. Like 2azerons.ahk, these educational scripts also work with regular keyboards, so you dont need an Azeron to use the scripts.
-- --- note that all of these example scripts, like 2azerons.ahk, consist of these 5 parts:
+- --- the example scripts only modify the behaviour of a few keys. All you need to do is find one inside the customization folder and run it. At the top of the code will will see a link to a diagram showing what the code does. Like QWERTY\2azerons.ahk, these educational scripts also work with regular keyboards, so you dont need an Azeron to use the scripts.
+- --- note that all of these example scripts, like QWERTY\2azerons.ahk, consist of these 5 parts:
 
 - --- --- 1. (optional) a helper library of functions, classes, and/or variables that are named as not to conflict with the reserved "LP_" prefix.
 - --- --- 2. a global class named "LP_modes" which is properly structured as detialed in section below
@@ -92,7 +95,7 @@ These 3 handlers can also be used for chording groups:
 - LP_repeatOver
 
 For a more flattened, concrete state machine diagram, see:
-\customization\hello_world.svg
+remappings\hello_world.svg
 or online at:
 https://docs.google.com/drawings/d/1JijpUo575Bc2RLW65jbtVsHNbFz341wYJE1maVM_MEE/
 
