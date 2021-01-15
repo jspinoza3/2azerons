@@ -270,13 +270,9 @@ class LP_modes
 
 				LP_shortUp(button)
 				{
-					
+					send {rctrl down}
 					send  {LButton}
-					if (LP_modes.LP_instance.mouse.LP_isActive)
-					{
-						LP_.deactivate("mouse")
-						LP_.activate("typing")
-					}
+					send {rctrl up}
 				}
 		}
 		
@@ -496,9 +492,7 @@ class LP_modes
 
 				LP_shortUp(button)
 				{
-					send {rctrl down}
-					send  {LButton}
-					send {rctrl up}
+                     send ^x
 				}
 				 
 			}	
@@ -959,6 +953,7 @@ return
 
 
 
+
 WatchAxis:
 JoyX := GetKeyState("JoyX")  ; Get position of X axis.
 JoyY := GetKeyState("JoyY")  ; Get position of Y axis.
@@ -972,15 +967,19 @@ x:=cursorSpeed.current*x
 y:=cursorSpeed.current*y
 if (x<.5 && x>-.5 && y<.5 && y>-.5)
 	return
-	
+
 if (!LP_modes.LP_instance.mouse.LP_isActive && cursorSpeed.coolDown==0)
 {
+;ListVars
+;Pause
+	cursorSpeed.coolDown :=40
 	LP_.deactivate("typing")
 	LP_.activate("mouse")
-	cursorSpeed.coolDown :=20
 }
 else if (cursorSpeed.coolDown>0)
 {
+;ListVars
+;Pause
 	cursorSpeed.coolDown--
 }
 
@@ -1041,7 +1040,12 @@ return
 */
 
 
-
+numpad5::
+aaa:=LP_modes.LP_instance.mouse.LP_isActive
+msgbox %aaa%
+aaa:=LP_modes.LP_instance.typing.LP_isActive
+msgbox %aaa%
+return
 
 ~!#.::
 ExitApp
