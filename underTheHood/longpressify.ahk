@@ -212,9 +212,12 @@ class LP_
 
 	activate(modeName)
 	{
+		Critical ON
 		mode:=LP_modes.LP_instance[modeName]
 		mode.LP_isActive := true	
-		this.activationQueue.addTask(objBindMethod(this,"doActivation",mode))
+		;this.activationQueue.addTask(objBindMethod(this,"doActivation",mode))
+		this.doActivation(mode)
+		Critical Off
 	}
 	
 	doActivation(mode)
@@ -223,14 +226,25 @@ class LP_
 		{
 			p.LP_eventProcessor.activate()
 		}	
-		this.activationQueue.taskComplete()
+		;this.activationQueue.taskComplete()
 	}
 
 	deactivate(modeName)
 	{
+		Critical ON
 		mode:=LP_modes.LP_instance[modeName]
 		mode.LP_isActive := false
-		this.activationQueue.addTask(objBindMethod(this,"doDeactivation",mode))
+		;this.activationQueue.addTask(objBindMethod(this,"doDeactivation",mode))
+		this.doDeactivation(mode)
+		Critical Off
+	}
+
+	modeSwap(m1,m2)
+	{
+		Critical ON
+		this.deactivate(m1)
+		this.activate(m2)
+		Critical Off
 	}
 
 	doDeactivation(mode)
@@ -239,7 +253,7 @@ class LP_
 		{
 			p.LP_eventProcessor.deactivate()
 		}	
-		this.activationQueue.taskComplete()
+		;this.activationQueue.taskComplete()
 	}
 
 

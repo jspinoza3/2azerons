@@ -797,16 +797,14 @@ class LP_modes
 			{
 				if (LP_modes.LP_instance.mouse.LP_isActive)
 				{
-					LP_.deactivate("mouse")
-					LP_.activate("typing")
+					LP_.modeSwap("mouse","typing")
 				}
 			}
 			LP_held()
 			{
 				if (!LP_modes.LP_instance.mouse.LP_isActive)
 				{
-					LP_.deactivate("typing")
-					LP_.activate("mouse")
+					LP_.modeSwap("typing","mouse")
 				}
 			}
 
@@ -968,20 +966,13 @@ y:=cursorSpeed.current*y
 if (x<.5 && x>-.5 && y<.5 && y>-.5)
 	return
 
-if (!LP_modes.LP_instance.mouse.LP_isActive && cursorSpeed.coolDown==0)
+if (!LP_modes.LP_instance.mouse.LP_isActive )
 {
-;ListVars
-;Pause
-	cursorSpeed.coolDown :=40
-	LP_.deactivate("typing")
-	LP_.activate("mouse")
+
+	LP_.modeSwap("typing","mouse")
+
 }
-else if (cursorSpeed.coolDown>0)
-{
-;ListVars
-;Pause
-	cursorSpeed.coolDown--
-}
+
 
 SetMouseDelay, -1
 DllCall("mouse_event",uint,1,int, x ,int, y,uint,0,int,0)
@@ -1013,13 +1004,11 @@ setFKeysState(b)
 		return
 	if (b)
 	{
-		LP_.deactivate("left13")
-		LP_.activate("left13FunctionKeys")
+		LP_.modeSwap("left13","left13FunctionKeys")
 	}
 	else
 	{
-		LP_.deactivate("left13FunctionKeys")
-		LP_.activate("left13")
+		LP_.modeSwap("left13FunctionKeys","left13")
 	}
 }
 
@@ -1039,13 +1028,15 @@ else
 return
 */
 
-
+/*
 numpad5::
 aaa:=LP_modes.LP_instance.mouse.LP_isActive
 msgbox %aaa%
 aaa:=LP_modes.LP_instance.typing.LP_isActive
 msgbox %aaa%
 return
+*/
+
 
 ~!#.::
 ExitApp
