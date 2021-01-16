@@ -220,6 +220,16 @@ class LP_
 		Critical Off
 	}
 	
+	noCriticalActivate(modeName)
+	{
+	
+		mode:=LP_modes.LP_instance[modeName]
+		mode.LP_isActive := true	
+		;this.activationQueue.addTask(objBindMethod(this,"doActivation",mode))
+		this.doActivation(mode)
+		
+	}
+	
 	doActivation(mode)
 	{	
 		for name,p in mode.LP_paradigms 
@@ -238,12 +248,22 @@ class LP_
 		this.doDeactivation(mode)
 		Critical Off
 	}
+	
+	noCriticalDeactivate(modeName)
+	{
+		
+		mode:=LP_modes.LP_instance[modeName]
+		mode.LP_isActive := false
+		;this.activationQueue.addTask(objBindMethod(this,"doDeactivation",mode))
+		this.doDeactivation(mode)
+		
+	}
 
 	modeSwap(m1,m2)
 	{
 		Critical ON
-		this.deactivate(m1)
-		this.activate(m2)
+		this.noCriticalDeactivate(m1)
+		this.noCriticalActivate(m2)
 		Critical Off
 	}
 
